@@ -97,7 +97,7 @@ class BombeRLeWorld(object):
         self.round_id = f'Replay {datetime.now().strftime("%Y-%m-%d %H:%M:%S")}'
 
         # Arena with wall and crate layout
-        self.arena = (np.random.rand(s.cols, s.rows) > 0.25).astype(int)
+        self.arena = (np.random.rand(s.cols, s.rows) > 1).astype(int)  # NO CRATES
         self.arena[:1, :] = -1
         self.arena[-1:,:] = -1
         self.arena[:, :1] = -1
@@ -121,13 +121,13 @@ class BombeRLeWorld(object):
             for j in range(3):
                 while True:
                     x, y = np.random.randint(1+5*i,6+5*i), np.random.randint(1+5*j,6+5*j)
-                    if self.arena[x,y] == 1:
-                        self.coins.append(Coin((x,y)))
 
-                        #SPAWN VISIBLE COINS
-                        self.coins[-1].collectable=True
-                        self.arena[x,y] = 0
-                        break
+                    self.coins.append(Coin((x,y)))
+
+                    #SPAWN VISIBLE COINS
+                    self.coins[-1].collectable=True
+                    self.arena[x,y] = 0
+                    break
 
         # Reset agents and distribute starting positions
         for agent in self.agents:

@@ -1,0 +1,76 @@
+2019-02-14 15:22:34,778 [random_agent_3_wrapper] INFO: Import agent code from "agent_code/random_agent/callbacks.py"
+2019-02-14 15:22:34,825 [random_agent_3_wrapper] INFO: Initialize agent code
+2019-02-14 15:22:34,843 [random_agent_3_wrapper] INFO: STARTING ROUND #1
+2019-02-14 15:22:34,945 [random_agent_3_wrapper] INFO: STARTING STEP 1
+2019-02-14 15:22:34,945 [random_agent_3_code] INFO: Pick action at random
+2019-02-14 15:22:34,946 [random_agent_3_wrapper] INFO: Chose action RIGHT after 0.001s of thinking
+2019-02-14 15:22:35,057 [random_agent_3_wrapper] INFO: STARTING STEP 2
+2019-02-14 15:22:35,058 [random_agent_3_code] INFO: Pick action at random
+2019-02-14 15:22:35,058 [random_agent_3_wrapper] INFO: Chose action RIGHT after 0.000s of thinking
+2019-02-14 15:22:35,165 [random_agent_3_wrapper] INFO: STARTING STEP 3
+2019-02-14 15:22:35,166 [random_agent_3_code] INFO: Pick action at random
+2019-02-14 15:22:35,167 [random_agent_3_wrapper] INFO: Chose action LEFT after 0.002s of thinking
+2019-02-14 15:22:35,265 [random_agent_3_wrapper] INFO: STARTING STEP 4
+2019-02-14 15:22:35,266 [random_agent_3_code] INFO: Pick action at random
+2019-02-14 15:22:35,266 [random_agent_3_wrapper] INFO: Chose action UP after 0.000s of thinking
+2019-02-14 15:22:35,367 [random_agent_3_wrapper] INFO: STARTING STEP 5
+2019-02-14 15:22:35,367 [random_agent_3_code] INFO: Pick action at random
+2019-02-14 15:22:35,368 [random_agent_3_wrapper] INFO: Chose action UP after 0.001s of thinking
+2019-02-14 15:22:35,471 [random_agent_3_wrapper] INFO: STARTING STEP 6
+2019-02-14 15:22:35,471 [random_agent_3_code] INFO: Pick action at random
+2019-02-14 15:22:35,472 [random_agent_3_wrapper] INFO: Chose action RIGHT after 0.000s of thinking
+2019-02-14 15:22:35,569 [random_agent_3_wrapper] INFO: STARTING STEP 7
+2019-02-14 15:22:35,569 [random_agent_3_code] INFO: Pick action at random
+2019-02-14 15:22:35,570 [random_agent_3_wrapper] INFO: Chose action UP after 0.001s of thinking
+2019-02-14 15:22:35,678 [random_agent_3_wrapper] INFO: STARTING STEP 8
+2019-02-14 15:22:35,679 [random_agent_3_code] INFO: Pick action at random
+2019-02-14 15:22:35,680 [random_agent_3_wrapper] INFO: Chose action BOMB after 0.001s of thinking
+2019-02-14 15:22:35,773 [random_agent_3_wrapper] INFO: STARTING STEP 9
+2019-02-14 15:22:35,774 [random_agent_3_code] INFO: Pick action at random
+2019-02-14 15:22:35,774 [random_agent_3_wrapper] INFO: Chose action UP after 0.000s of thinking
+2019-02-14 15:22:35,874 [random_agent_3_wrapper] INFO: STARTING STEP 10
+2019-02-14 15:22:35,874 [random_agent_3_code] INFO: Pick action at random
+2019-02-14 15:22:35,875 [random_agent_3_wrapper] INFO: Chose action LEFT after 0.001s of thinking
+2019-02-14 15:22:35,977 [random_agent_3_wrapper] INFO: STARTING STEP 11
+2019-02-14 15:22:35,978 [random_agent_3_code] INFO: Pick action at random
+2019-02-14 15:22:35,978 [random_agent_3_wrapper] INFO: Chose action LEFT after 0.000s of thinking
+2019-02-14 15:22:36,080 [random_agent_3_wrapper] INFO: STARTING STEP 12
+2019-02-14 15:22:36,081 [random_agent_3_code] INFO: Pick action at random
+2019-02-14 15:22:36,082 [random_agent_3_wrapper] INFO: Chose action LEFT after 0.000s of thinking
+2019-02-14 15:22:36,181 [random_agent_3_wrapper] INFO: STARTING STEP 13
+2019-02-14 15:22:36,182 [random_agent_3_code] INFO: Pick action at random
+2019-02-14 15:22:36,183 [random_agent_3_wrapper] INFO: Chose action LEFT after 0.001s of thinking
+2019-02-14 15:22:36,193 [random_agent_3_wrapper] INFO: Received exit message for round
+2019-02-14 15:22:36,194 [random_agent_3_wrapper] INFO: Round #1 finished
+2019-02-14 15:22:42,139 [random_agent_3_wrapper] INFO: STARTING ROUND #2
+2019-02-14 15:22:42,260 [random_agent_3_wrapper] INFO: STARTING STEP 1
+2019-02-14 15:22:42,260 [random_agent_3_code] INFO: Pick action at random
+2019-02-14 15:22:42,261 [random_agent_3_wrapper] INFO: Chose action DOWN after 0.001s of thinking
+2019-02-14 15:22:42,360 [random_agent_3_wrapper] INFO: STARTING STEP 2
+2019-02-14 15:22:42,360 [random_agent_3_code] INFO: Pick action at random
+2019-02-14 15:22:42,361 [random_agent_3_wrapper] INFO: Chose action RIGHT after 0.001s of thinking
+2019-02-14 15:22:42,467 [random_agent_3_wrapper] INFO: STARTING STEP 3
+2019-02-14 15:22:42,468 [random_agent_3_code] INFO: Pick action at random
+2019-02-14 15:22:42,468 [random_agent_3_wrapper] INFO: Chose action LEFT after 0.000s of thinking
+2019-02-14 15:22:42,582 [random_agent_3_wrapper] INFO: STARTING STEP 4
+2019-02-14 15:22:42,582 [random_agent_3_code] INFO: Pick action at random
+2019-02-14 15:22:42,582 [random_agent_3_wrapper] INFO: Chose action BOMB after 0.000s of thinking
+2019-02-14 15:22:42,681 [random_agent_3_wrapper] INFO: STARTING STEP 5
+2019-02-14 15:22:42,681 [random_agent_3_code] INFO: Pick action at random
+2019-02-14 15:22:42,682 [random_agent_3_wrapper] INFO: Chose action UP after 0.001s of thinking
+2019-02-14 15:22:42,790 [random_agent_3_wrapper] INFO: STARTING STEP 6
+2019-02-14 15:22:42,790 [random_agent_3_code] INFO: Pick action at random
+2019-02-14 15:22:42,791 [random_agent_3_wrapper] INFO: Chose action DOWN after 0.001s of thinking
+2019-02-14 15:22:42,894 [random_agent_3_wrapper] INFO: STARTING STEP 7
+2019-02-14 15:22:42,895 [random_agent_3_code] INFO: Pick action at random
+2019-02-14 15:22:42,895 [random_agent_3_wrapper] INFO: Chose action LEFT after 0.000s of thinking
+2019-02-14 15:22:43,003 [random_agent_3_wrapper] INFO: STARTING STEP 8
+2019-02-14 15:22:43,003 [random_agent_3_code] INFO: Pick action at random
+2019-02-14 15:22:43,004 [random_agent_3_wrapper] INFO: Chose action DOWN after 0.001s of thinking
+2019-02-14 15:22:43,102 [random_agent_3_wrapper] INFO: STARTING STEP 9
+2019-02-14 15:22:43,103 [random_agent_3_code] INFO: Pick action at random
+2019-02-14 15:22:43,103 [random_agent_3_wrapper] INFO: Chose action RIGHT after 0.000s of thinking
+2019-02-14 15:22:43,112 [random_agent_3_wrapper] INFO: Received exit message for round
+2019-02-14 15:22:43,112 [random_agent_3_wrapper] INFO: Round #2 finished
+2019-02-14 15:22:52,720 [random_agent_3_wrapper] INFO: Received global exit message
+2019-02-14 15:22:52,720 [random_agent_3_wrapper] INFO: SHUT DOWN

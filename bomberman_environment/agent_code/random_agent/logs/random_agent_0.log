@@ -1,0 +1,70 @@
+2019-02-14 15:22:33,720 [random_agent_0_wrapper] INFO: Import agent code from "agent_code/random_agent/callbacks.py"
+2019-02-14 15:22:33,723 [random_agent_0_wrapper] INFO: Initialize agent code
+2019-02-14 15:22:34,842 [random_agent_0_wrapper] INFO: STARTING ROUND #1
+2019-02-14 15:22:34,944 [random_agent_0_wrapper] INFO: STARTING STEP 1
+2019-02-14 15:22:34,945 [random_agent_0_code] INFO: Pick action at random
+2019-02-14 15:22:34,945 [random_agent_0_wrapper] INFO: Chose action BOMB after 0.000s of thinking
+2019-02-14 15:22:35,056 [random_agent_0_wrapper] INFO: STARTING STEP 2
+2019-02-14 15:22:35,057 [random_agent_0_code] INFO: Pick action at random
+2019-02-14 15:22:35,057 [random_agent_0_wrapper] INFO: Chose action UP after 0.000s of thinking
+2019-02-14 15:22:35,163 [random_agent_0_wrapper] INFO: STARTING STEP 3
+2019-02-14 15:22:35,163 [random_agent_0_code] INFO: Pick action at random
+2019-02-14 15:22:35,165 [random_agent_0_wrapper] INFO: Chose action UP after 0.002s of thinking
+2019-02-14 15:22:35,265 [random_agent_0_wrapper] INFO: STARTING STEP 4
+2019-02-14 15:22:35,265 [random_agent_0_code] INFO: Pick action at random
+2019-02-14 15:22:35,265 [random_agent_0_wrapper] INFO: Chose action LEFT after 0.000s of thinking
+2019-02-14 15:22:35,365 [random_agent_0_wrapper] INFO: STARTING STEP 5
+2019-02-14 15:22:35,366 [random_agent_0_code] INFO: Pick action at random
+2019-02-14 15:22:35,366 [random_agent_0_wrapper] INFO: Chose action DOWN after 0.000s of thinking
+2019-02-14 15:22:35,469 [random_agent_0_wrapper] INFO: STARTING STEP 6
+2019-02-14 15:22:35,470 [random_agent_0_code] INFO: Pick action at random
+2019-02-14 15:22:35,471 [random_agent_0_wrapper] INFO: Chose action UP after 0.001s of thinking
+2019-02-14 15:22:35,479 [random_agent_0_wrapper] INFO: Received exit message for round
+2019-02-14 15:22:35,479 [random_agent_0_wrapper] INFO: Round #1 finished
+2019-02-14 15:22:42,139 [random_agent_0_wrapper] INFO: STARTING ROUND #2
+2019-02-14 15:22:42,246 [random_agent_0_wrapper] INFO: STARTING STEP 1
+2019-02-14 15:22:42,246 [random_agent_0_code] INFO: Pick action at random
+2019-02-14 15:22:42,247 [random_agent_0_wrapper] INFO: Chose action DOWN after 0.001s of thinking
+2019-02-14 15:22:42,353 [random_agent_0_wrapper] INFO: STARTING STEP 2
+2019-02-14 15:22:42,353 [random_agent_0_code] INFO: Pick action at random
+2019-02-14 15:22:42,354 [random_agent_0_wrapper] INFO: Chose action LEFT after 0.001s of thinking
+2019-02-14 15:22:42,461 [random_agent_0_wrapper] INFO: STARTING STEP 3
+2019-02-14 15:22:42,461 [random_agent_0_code] INFO: Pick action at random
+2019-02-14 15:22:42,462 [random_agent_0_wrapper] INFO: Chose action RIGHT after 0.001s of thinking
+2019-02-14 15:22:42,567 [random_agent_0_wrapper] INFO: STARTING STEP 4
+2019-02-14 15:22:42,567 [random_agent_0_code] INFO: Pick action at random
+2019-02-14 15:22:42,568 [random_agent_0_wrapper] INFO: Chose action DOWN after 0.001s of thinking
+2019-02-14 15:22:42,674 [random_agent_0_wrapper] INFO: STARTING STEP 5
+2019-02-14 15:22:42,675 [random_agent_0_code] INFO: Pick action at random
+2019-02-14 15:22:42,675 [random_agent_0_wrapper] INFO: Chose action DOWN after 0.001s of thinking
+2019-02-14 15:22:42,783 [random_agent_0_wrapper] INFO: STARTING STEP 6
+2019-02-14 15:22:42,783 [random_agent_0_code] INFO: Pick action at random
+2019-02-14 15:22:42,784 [random_agent_0_wrapper] INFO: Chose action LEFT after 0.001s of thinking
+2019-02-14 15:22:42,890 [random_agent_0_wrapper] INFO: STARTING STEP 7
+2019-02-14 15:22:42,891 [random_agent_0_code] INFO: Pick action at random
+2019-02-14 15:22:42,892 [random_agent_0_wrapper] INFO: Chose action RIGHT after 0.001s of thinking
+2019-02-14 15:22:43,001 [random_agent_0_wrapper] INFO: STARTING STEP 8
+2019-02-14 15:22:43,001 [random_agent_0_code] INFO: Pick action at random
+2019-02-14 15:22:43,002 [random_agent_0_wrapper] INFO: Chose action LEFT after 0.001s of thinking
+2019-02-14 15:22:43,102 [random_agent_0_wrapper] INFO: STARTING STEP 9
+2019-02-14 15:22:43,102 [random_agent_0_code] INFO: Pick action at random
+2019-02-14 15:22:43,103 [random_agent_0_wrapper] INFO: Chose action BOMB after 0.001s of thinking
+2019-02-14 15:22:43,208 [random_agent_0_wrapper] INFO: STARTING STEP 10
+2019-02-14 15:22:43,209 [random_agent_0_code] INFO: Pick action at random
+2019-02-14 15:22:43,210 [random_agent_0_wrapper] INFO: Chose action UP after 0.001s of thinking
+2019-02-14 15:22:43,309 [random_agent_0_wrapper] INFO: STARTING STEP 11
+2019-02-14 15:22:43,310 [random_agent_0_code] INFO: Pick action at random
+2019-02-14 15:22:43,310 [random_agent_0_wrapper] INFO: Chose action DOWN after 0.000s of thinking
+2019-02-14 15:22:43,415 [random_agent_0_wrapper] INFO: STARTING STEP 12
+2019-02-14 15:22:43,416 [random_agent_0_code] INFO: Pick action at random
+2019-02-14 15:22:43,417 [random_agent_0_wrapper] INFO: Chose action RIGHT after 0.001s of thinking
+2019-02-14 15:22:43,515 [random_agent_0_wrapper] INFO: STARTING STEP 13
+2019-02-14 15:22:43,516 [random_agent_0_code] INFO: Pick action at random
+2019-02-14 15:22:43,516 [random_agent_0_wrapper] INFO: Chose action LEFT after 0.000s of thinking
+2019-02-14 15:22:43,621 [random_agent_0_wrapper] INFO: STARTING STEP 14
+2019-02-14 15:22:43,622 [random_agent_0_code] INFO: Pick action at random
+2019-02-14 15:22:43,622 [random_agent_0_wrapper] INFO: Chose action LEFT after 0.000s of thinking
+2019-02-14 15:22:43,633 [random_agent_0_wrapper] INFO: Received exit message for round
+2019-02-14 15:22:43,633 [random_agent_0_wrapper] INFO: Round #2 finished
+2019-02-14 15:22:52,719 [random_agent_0_wrapper] INFO: Received global exit message
+2019-02-14 15:22:52,720 [random_agent_0_wrapper] INFO: SHUT DOWN

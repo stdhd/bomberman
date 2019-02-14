@@ -120,9 +120,8 @@ class BombeRLeWorld(object):
         for i in range(3):
             for j in range(3):
                 while True:
-                    if not self.arena[x,y] == -1:
-                        x, y = np.random.randint(1+5*i,6+5*i), np.random.randint(1+5*j,6+5*j)
-
+                    x, y = np.random.randint(1+5*i,6+5*i), np.random.randint(1+5*j,6+5*j)
+                    if not self.arena[x, y] == -1:
                         self.coins.append(Coin((x,y)))
 
                         #SPAWN VISIBLE COINS

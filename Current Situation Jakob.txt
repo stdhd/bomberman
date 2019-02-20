@@ -98,7 +98,7 @@ But how do we expand our knowledge of gameplay to consider moves the simple agen
 First idea: 
 
 
-Use old episodes e € X and select random points in the game as "seed" states. Initialize a new game set to seed state s$, but choose as first move for one agent a random move. Play the rest of the game as usual. Goal: Learn what happens when new moves are chosen and followed by potentially suboptimal decisions. 
+Use old episodes e € X and select random points in the game as "seed" states. Initialize a new game set to seed state s$, but choose as first move for one agent a random move. Play the rest of the game as usual. Goal: Learn what happens when new moves are chosen and followed by known optimal decisions. 
 
 
 Further consideration needed to learn better policies once simple agent behavior is learned!

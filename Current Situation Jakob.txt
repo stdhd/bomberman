@@ -25,7 +25,7 @@ Observations:
 Problem: 
 
 
-How to we learn how many points a board state + move is expected to result in, i.e. how can we learn about f? 
+How do we learn how many points a board state + move is expected to result in, i.e. how can we learn about f? 
 
 Given (s, d) € S x D , define g(s_ | s, d) as probability mass function over board states resultant from executing move d in state s. Interpret this as a mapping g: S x S x D -> R, and this is clearly an extremely high-dimensional task. 
 

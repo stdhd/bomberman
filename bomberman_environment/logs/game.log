@@ -488,3 +488,5 @@
 2019-02-14 16:21:45,379 [BombeRLeWorld] INFO: Agent <simple_agent> picked up coin at (14, 4) and receives 1 point
 2019-02-14 16:21:45,379 [BombeRLeWorld] INFO: One agent left alive with nothing to do, wrap up round
 2019-02-14 16:21:45,479 [BombeRLeWorld] INFO: WRAPPING UP ROUND #4
+2019-02-14 16:39:58,924 [BombeRLeWorld] WARNING: End-of-round requested while no round was running
+2019-02-14 16:39:58,925 [BombeRLeWorld] INFO: SHUT DOWN

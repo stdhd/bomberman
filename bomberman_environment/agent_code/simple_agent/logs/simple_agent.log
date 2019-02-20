@@ -1113,3 +1113,5 @@
 2019-02-14 16:21:45,378 [simple_agent_wrapper] INFO: Chose action LEFT after 0.002s of thinking
 2019-02-14 16:21:45,480 [simple_agent_wrapper] INFO: Received exit message for round
 2019-02-14 16:21:45,481 [simple_agent_wrapper] INFO: Round #4 finished
+2019-02-14 16:39:58,926 [simple_agent_wrapper] INFO: Received global exit message
+2019-02-14 16:39:58,926 [simple_agent_wrapper] INFO: SHUT DOWN

@@ -1,4 +1,4 @@
-
+﻿
 
 
 Current situation: 
@@ -61,13 +61,13 @@ Define the stripped state strip: A x S -> S'; (a, s) -> strip(a, s) ("observatio
 
 Each episode terminates after a finite number of steps Tau (assumed to be constant for all episodes). 
 
-The step number of a game state s is given by step(s). The number of points ("score") of a player A up to and including step t is given by score(A, t).
+The step number of a game state s is given by step(s). The number of points ("score") of a player a up to and including step t is given by score(a, t), with score(a, 0) := 0 for all a € A. 
 
 
 The decision a player made in state s is given by decision(a, s). 
 
 
-Define f_train: A x S -> R; (a, s) --> (score(a, Tau) - score(a, step(s))) / (Tau - step(s)) for step(s) != Tau, otherwise define f_train(a, s) as 0 
+Define f_train: A x S -> R; (a, s) --> (score(a, Tau) - score(a, step(s)-1)) / (Tau - step(s)) for 
 
 
 

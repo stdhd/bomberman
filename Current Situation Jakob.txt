@@ -5,7 +5,7 @@ Current situation:
 ----------------
 
 
-We want to design an agent (function) a: S -> D which, given a board state s € S, chooses among actions ("decisions") D to select the action with the highest expected placement at the end of the game. Each board state is (in the case of Bomberman strictly deterministically) associated with a number of points p(s) € R. Points are collected over the course of the game, and the agent with the highest number of points at the end wins the game. Player placements are in decreasing order of number of points scored. 
+We want to design an agent (function) a: S -> D which, given an observation s' â‚¬ S' of a board state s â‚¬ S, chooses among actions ("decisions") D to select the action with the highest expected placement at the end of the game. Each board state is (in the case of Bomberman strictly deterministically) associated with a number of points p(s) â‚¬ R. Points are collected over the course of the game, and the agent with the highest number of points at the end wins the game. Player placements are in decreasing order of number of points scored. 
 
 
 
@@ -19,7 +19,7 @@ Observations:
 
 #  => Define value function f(s, d) := "Expected number of points won per move until the end of the game from board state s given move d"
 
-#  Per observation 1), argmax (d € D) f(s, d) =: a(s) is the optimal move in board state s. 
+#  Per observation 1), argmax (d â‚¬ D) f(s, d) =: a(s) is the optimal move in board state s. 
 
 
 Problem: 
@@ -27,7 +27,7 @@ Problem:
 
 How to we learn how many points a board state + move is expected to result in, i.e. how can we learn about f? 
 
-Given (s, d) € S x D , define g(s_ | s, d) as probability mass function over board states resultant from executing move d in state s. Interpret this as a mapping g: S x S x D -> R, and this is clearly an extremely high-dimensional task. 
+Given (s, d) â‚¬ S x D , define g(s_ | s, d) as probability mass function over board states resultant from executing move d in state s. Interpret this as a mapping g: S x S x D -> R, and this is clearly an extremely high-dimensional task. 
 
 Note on notation: g(s_ | s, d) written as g(s) where board state and decision (s, d) are implicit. 
 
@@ -53,9 +53,9 @@ Procedure:
 
 Note: Due to dimensionality considerations, it may be sensible to reduce the number of features agents are exposed to. Proposal: Restrict vision of the board to a 13*13 square centered on the agent, with additional hand-designed features added. Fields outside the map would be rendered as walls. Motivation-> Maintain useful information, reduce extraneous information to simplify training. 
 
-Define an episode e € E as an observed game played by a group of agents ("players") A under some policy p. 
+Define an episode e â‚¬ E as an observed game played by a group of agents ("players") A under some policy p. 
 
-Define the stripped state strip: A x S -> S'; (a, s) -> strip(a, s) ("observation") as "game state s as seen by player a € A, without knowledge of the decision made by player a during s". 
+Define the stripped state strip: A x S -> S'; (a, s) -> strip(a, s) ("observation") as "game state s as seen by player a â‚¬ A, without knowledge of the decision made by player a during s". 
 
 
 
@@ -72,10 +72,10 @@ Define f_train: A x S -> R; (a, s) --> (score(a, Tau) - score(a, step(s))) / (Ta
 
 
 
-Observe many episodes between simple agents and create training dataset X subset of (A x S' x D x R) where x € X is a training datum consisting of: A given player a € A, observation s' € S' = strip(a, s) and decision(a, s) for each s € S in each episode, and the target value f_train(a, s). 
+Observe many episodes between simple agents and create training dataset X subset of (A x S' x D x R) where x â‚¬ X is a training datum consisting of: A given player a â‚¬ A, observation s' â‚¬ S' = strip(a, s) and decision(a, s) for each s â‚¬ S in each episode, and the target value f_train(a, s). 
 
 
-Once we have approximated this mapping with a new function act: (A x S' x D) -> R (regression task), the predicted best move is given by argmax d € D act(a, s', d) for known agent (self) and stripped ("undecided") board state s'. 
+Once we have approximated this mapping with a new function act: (A x S' x D) -> R (regression task), the predicted best move is given by argmax d â‚¬ D act(a, s', d) for known agent (self) and observed board state s'. 
 
 
 
@@ -98,7 +98,7 @@ But how do we expand our knowledge of gameplay to consider moves the simple agen
 First idea: 
 
 
-Use old episodes e € X and select random points in the game as "seed" states. Initialize a new game set to seed state s$, but choose as first move for one agent a random move. Play the rest of the game as usual. Goal: Learn what happens when new moves are chosen and followed by potentially suboptimal decisions. 
+Use old episodes e â‚¬ X and select random points in the game as "seed" states. Initialize a new game set to seed state s$, but choose as first move for one agent a random move. Play the rest of the game as usual. Goal: Learn what happens when new moves are chosen and followed by potentially suboptimal decisions. 
 
 
 Further consideration needed to learn better policies once simple agent behavior is learned!

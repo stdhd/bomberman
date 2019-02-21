@@ -4,4 +4,15 @@
 16:34 14-Feb-19
 
 
-The team worked on setting up the first training case. Steps taken: Creating a new main function and modifying the environment file. 
+The team worked on setting up the first training case. Steps taken: Creating a new main function and modifying the environment file.
+
+
+12:11 21-Feb-19
+
+
+Jakob wrote a document outlining the general situation and outlook so far. Jakob and Stephan began outlining first tasks to complete and began work on state capturing system to generate training data. 
+
+
+Agenda: 
+
+

@@ -67,7 +67,7 @@ The step number of a game state s is given by step(s). The number of points ("sc
 The decision a player made in state s is given by decision(a, s). 
 
 
-Define f_train: A x S -> R; (a, s) --> (score(a, Tau) - score(a, step(s)-1)) / (Tau - step(s)) for 
+Define f_train: A x S -> R; (a, s) --> (score(a, Tau) - score(a, step(s))) / (Tau - step(s)) for step(s) != Tau. Else: f_train(a, s) = 0. 
 
 
 

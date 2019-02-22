@@ -33,7 +33,12 @@ def game_logic(world, user_inputs):
                     raise
 
 
-def main():
+def main(savepath):
+    """
+    Run a game using environment_save_states.py. Save the resultant episodes in a file.
+    :param savepath: Filepath to save directory for episodes
+    :return:
+    """
     pygame.init()
 
     # Emulate Windows process spawning behaviour under Unix (for testing)
@@ -53,7 +58,7 @@ def main():
             #('random_agent', False),
             #('random_agent', False)
 
-        ])
+        ], savepath)
     # world = ReplayWorld('Replay 2019-01-30 16:57:42')
     user_inputs = []
 

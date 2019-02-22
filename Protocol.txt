@@ -10,7 +10,7 @@ The team worked on setting up the first training case (coins only). Steps taken:
 12:11 21-Feb-19
 
 
-Jakob wrote a document outlining the general situation and outlook so far. The team began outlining first tasks to complete and began work on state capturing system to generate training data. 
+Jakob wrote a document outlining the general situation and outlook so far. The team began outlining first tasks to complete and began work on state capturing system to generate training data. Drafted a state vector representation format for use in training. 
 
 
 Agenda: 
@@ -20,3 +20,6 @@ Agenda:
 - Create system to generate training data from saved games
 
 - Further research reinforcement learning to understand how to apply it properly
+
+
+

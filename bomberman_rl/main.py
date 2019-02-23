@@ -10,7 +10,7 @@ import numpy as np
 import multiprocessing as mp
 import threading
 
-from environment_only_coins import BombeRLeWorld, ReplayWorld
+from environment import BombeRLeWorld, ReplayWorld
 from settings import s
 
 
@@ -41,9 +41,7 @@ def main():
 
     # Initialize environment and agents
     world = BombeRLeWorld([
-    
-            ('simple_agent', False)
-
+            ('eike_agent', False)
         ])
     # world = ReplayWorld('Replay 2019-01-30 16:57:42')
     user_inputs = []

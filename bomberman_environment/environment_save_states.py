@@ -17,9 +17,11 @@ from settings import s, e
 
 def x_y_to_index(x, y, ncols, nrows):
     """
-    Return the index of a grid from x, y coordinates. Indices start at 1 !
+    Return the index of a free grid from x, y coordinates. Indices start at 1 !
 
     Indexing starts at x, y = 0, 0 and increases row by row. Higher y value => Higher index
+
+    Raises ValueError for wall coordinates!
     :param x: x coordinate
     :param y: y coordinate
     :return: Index of square x, y coords point to
@@ -28,7 +30,7 @@ def x_y_to_index(x, y, ncols, nrows):
     if x >= ncols or x <= 0 or y >= nrows or y <= 0:
         raise ValueError("Coordinates outside of game grid")
     if (x + 1) * (y + 1) % 2 == 1:
-        raise ValueError("x y coordinates point to wall square")
+        raise ValueError("Received wall coordinates!")
 
     else:
         # find full and half full rows below x, y coords
@@ -39,7 +41,7 @@ def x_y_to_index(x, y, ncols, nrows):
         ind += full_rows * (ncols - 2)
         ind += half_rows * ((ncols - 2) // 2)
 
-        ind += (x + 1) // 2
+        ind += (x + 1) // 2 if (full_rows + half_rows) % 2 == 1 else x
 
         return ind
 
@@ -53,27 +55,25 @@ def index_to_x_y(ind, ncols, nrows):
     :return: x, y coordinates
     """
 
-    y = 0
-
-    x = 0
+    y = 1
 
     full = True
 
-    while ind >= ncols - 2 and full == True:
+    while ind > ncols - 2 and full == True:
         ind -= ncols - 2
-        y += ncols - 2
+        y += 1
         full = False
 
-        while ind >= (ncols - 2) // 2 and full == False:
+        while ind > (ncols - 2) // 2 and full == False:
             ind -= ncols - 2
-            y += ncols - 2
+            y += 1
             full = True
 
     if full:
         x = ind
 
     else:
-        x = 2 * ind
+        x = 2 * ind - 1
 
     return x, y
 
@@ -95,20 +95,65 @@ class BombeRLeWorld(object):
         self.ready_for_restart_flag = mp.Event()
         self.new_round()
         self.savepath = savepath
+        self.FILEHANDLE = open(self.savepath, 'a')
 
-    def capture_state(self, savepath):
+        self.free_grids = x_y_to_index(s.cols - 2, s.rows - 2, s.cols, s.rows) if (s.cols - 1) * (s.rows - 1) % 2 == 0 \
+            else x_y_to_index(s.cols - 3, s.rows - 2, s.cols, s.rows)  # number of free states (used to reserve memory)
+
+
+    def capture_state(self):
         """
-        Capture and append the current game state to the file at savepath.
-        :param savepath: File path to save to
+        Capture and append the current game state to the file at self.savepath.
+
+        Format:
+
+        (board indices, 4*[Player block], step number)
+
+        Player block of the form:
+
+        (Player location index, player point number, bomb index, bomb timer, explosion index, explosion timer,
+        [17 Event booleans])
         :return:
         """
 
-        free_grids = x_y_to_index(s.cols - 2, s.rows - 2, s.cols, s.rows) if (s.cols - 1) * (s.rows - 1) % 2 == 0 \
-            else x_y_to_index(s.cols - 3, s.rows - 2, s.cols, s.rows)
+        state = np.zeros(self.free_grids + 4 * (6 + 17) + 1)
 
-        state = np.zeros(free_grids + 4 * (4 + 17) + 1)
+        state[-1] = self.step
 
-        # TODO Add agent, coin, bomb information here
+        for i in range(self.free_grids):
+            state[i] = -1*self.arena[index_to_x_y(i+1, s.cols, s.rows)]
+
+        for coin in self.coins:
+            state[x_y_to_index(coin.x, coin.y, s.cols, s.rows) - 1] = 1
+
+        for ind, agent in self.agents:
+
+            # note agent living status
+            state[self.free_grids + ind * 21 + 0] = 0 if agent.dead else x_y_to_index(agent.x, agent.y, s.cols, s.rows)
+
+            # note agent points
+            state[self.free_grids + ind * 21 + 1] = agent.score
+
+            # note events
+            for event in agent.events:
+                state[self.free_grids + ind * 21 + 6 + s.events.index(event)] = 1
+
+        for bomb in self.bombs:
+            # note bomb position
+            state[self.free_grids + self.agents.index(bomb.owner) * 21 + 2] = x_y_to_index(bomb.x, bomb.y, s.cols,
+                                                                                           s.rows)
+            # note bomb timer
+            state[self.free_grids + self.agents.index(bomb.owner) * 21 + 3] = bomb.timer
+
+        for explosion in self.explosions:
+            # note explosion position
+            state[self.free_grids + self.agents.index(explosion.owner) * 21 + 4] = x_y_to_index(explosion.x,
+                                                                                            explosion.y, s.cols, s.rows)
+            # note explosion timer
+            state[self.free_grids + self.agents.index(explosion.owner) * 21 + 5] = explosion.timer
+
+        #  save the state
+        np.save(state, self.FILEHANDLE)
 
     def setup_logging(self):
         self.logger = logging.getLogger('BombeRLeWorld')
@@ -287,6 +332,11 @@ class BombeRLeWorld(object):
             agent.events.append(e.INVALID_ACTION)
 
     def poll_and_run_agents(self):
+        """
+        Note: This method has been modified to call state-saving function at the beginning of the step.
+        :return:
+        """
+        self.capture_state()
         # Send world state to all agents
         for a in self.active_agents:
             self.logger.debug(f'Sending game state to agent <{a.name}>')

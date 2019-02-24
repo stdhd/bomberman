@@ -47,7 +47,7 @@ def main():
 
     # Initialize environment and agents
     filename = 'data/games/'
-    filename += datetime.datetime.fromtimestamp(time()).strftime('%Y-%m-%d %H-%M-%S') + '.txt'
+    filename += datetime.datetime.fromtimestamp(time()).strftime('%Y-%m-%d %H-%M-%S')
     world = BombeRLeWorld([
     
             ('simple_agent', False),

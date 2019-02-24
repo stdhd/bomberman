@@ -89,17 +89,20 @@ class BombeRLeWorld(object):
         self.colors = ['blue', 'green', 'yellow', 'pink']
         self.setup_agents(agents)
 
+
+        self.savepath = savepath
+        #self.FILEHANDLE = open(self.savepath, 'a')
+        self.increment = 0
+
+        self.free_grids = x_y_to_index(s.cols - 2, s.rows - 2, s.cols, s.rows) if (s.cols - 1) * (s.rows - 1) % 2 == 0 \
+            else x_y_to_index(s.cols - 3, s.rows - 2, s.cols, s.rows)  # number of free states (used to reserve memory)
+
+
         # Get the game going
         self.round = 0
         self.running = False
         self.ready_for_restart_flag = mp.Event()
         self.new_round()
-        self.savepath = savepath
-        self.FILEHANDLE = open(self.savepath, 'a')
-
-        self.free_grids = x_y_to_index(s.cols - 2, s.rows - 2, s.cols, s.rows) if (s.cols - 1) * (s.rows - 1) % 2 == 0 \
-            else x_y_to_index(s.cols - 3, s.rows - 2, s.cols, s.rows)  # number of free states (used to reserve memory)
-
 
     def capture_state(self):
         """
@@ -116,7 +119,9 @@ class BombeRLeWorld(object):
         :return:
         """
 
-        state = np.zeros(self.free_grids + 4 * (6 + 17) + 1)
+        player_block = 6 + 17
+
+        state = np.zeros(self.free_grids + 4 * player_block + 1)
 
         state[-1] = self.step
 
@@ -126,34 +131,35 @@ class BombeRLeWorld(object):
         for coin in self.coins:
             state[x_y_to_index(coin.x, coin.y, s.cols, s.rows) - 1] = 1
 
-        for ind, agent in self.agents:
+        for ind, agent in enumerate(self.agents):
 
             # note agent living status
-            state[self.free_grids + ind * 21 + 0] = 0 if agent.dead else x_y_to_index(agent.x, agent.y, s.cols, s.rows)
+            state[self.free_grids + ind * player_block + 0] = 0 if agent.dead else x_y_to_index(agent.x, agent.y, s.cols, s.rows)
 
             # note agent points
-            state[self.free_grids + ind * 21 + 1] = agent.score
+            state[self.free_grids + ind * player_block + 1] = agent.score
 
             # note events
             for event in agent.events:
-                state[self.free_grids + ind * 21 + 6 + s.events.index(event)] = 1
+                state[self.free_grids + ind * player_block + 6 + s.events.index(event)] = 1
 
         for bomb in self.bombs:
             # note bomb position
-            state[self.free_grids + self.agents.index(bomb.owner) * 21 + 2] = x_y_to_index(bomb.x, bomb.y, s.cols,
+            state[self.free_grids + self.agents.index(bomb.owner) * player_block + 2] = x_y_to_index(bomb.x, bomb.y, s.cols,
                                                                                            s.rows)
             # note bomb timer
-            state[self.free_grids + self.agents.index(bomb.owner) * 21 + 3] = bomb.timer
+            state[self.free_grids + self.agents.index(bomb.owner) * player_block + 3] = bomb.timer
 
         for explosion in self.explosions:
             # note explosion position
-            state[self.free_grids + self.agents.index(explosion.owner) * 21 + 4] = x_y_to_index(explosion.x,
+            state[self.free_grids + self.agents.index(explosion.owner) * player_block + 4] = x_y_to_index(explosion.x,
                                                                                             explosion.y, s.cols, s.rows)
             # note explosion timer
-            state[self.free_grids + self.agents.index(explosion.owner) * 21 + 5] = explosion.timer
+            state[self.free_grids + self.agents.index(explosion.owner) * player_block + 5] = explosion.timer
 
         #  save the state
-        np.save(state, self.FILEHANDLE)
+        save = self.savepath + ' ' + self.increment
+        np.save(save , state)
 
     def setup_logging(self):
         self.logger = logging.getLogger('BombeRLeWorld')
@@ -337,6 +343,7 @@ class BombeRLeWorld(object):
         :return:
         """
         self.capture_state()
+        self.increment += 1
         # Send world state to all agents
         for a in self.active_agents:
             self.logger.debug(f'Sending game state to agent <{a.name}>')

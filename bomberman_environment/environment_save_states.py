@@ -54,6 +54,8 @@ class BombeRLeWorld(object):
 
         (Player location index, player point number, bomb index, bomb timer, explosion index, explosion timer,
         [17 Event booleans])
+
+        Board indices contain: -1 if coin, 1 if crate, 0 otherwise
         :return:
         """
 
@@ -64,10 +66,10 @@ class BombeRLeWorld(object):
         state[-1] = self.step
 
         for i in range(self.free_grids):
-            state[i] = -1*self.arena[index_to_x_y(i+1, s.cols, s.rows)]
+            state[i] = self.arena[index_to_x_y(i+1, s.cols, s.rows)]
 
         for coin in self.coins:
-            state[x_y_to_index(coin.x, coin.y, s.cols, s.rows) - 1] = 1
+            state[x_y_to_index(coin.x, coin.y, s.cols, s.rows) - 1] = -1
 
         for ind, agent in enumerate(self.agents):
 

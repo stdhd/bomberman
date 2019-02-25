@@ -10,73 +10,11 @@ from pygame.transform import smoothscale
 
 import logging
 
-from agents import *
+from agents_save_states import *
 from items import *
 from settings import s, e
 
-
-def x_y_to_index(x, y, ncols, nrows):
-    """
-    Return the index of a free grid from x, y coordinates. Indices start at 1 !
-
-    Indexing starts at x, y = 0, 0 and increases row by row. Higher y value => Higher index
-
-    Raises ValueError for wall coordinates!
-    :param x: x coordinate
-    :param y: y coordinate
-    :return: Index of square x, y coords point to
-    """
-
-    if x >= ncols or x <= 0 or y >= nrows or y <= 0:
-        raise ValueError("Coordinates outside of game grid")
-    if (x + 1) * (y + 1) % 2 == 1:
-        raise ValueError("Received wall coordinates!")
-
-    else:
-        # find full and half full rows below x, y coords
-        ind = 0
-        full_rows = y // 2
-        half_rows = (y - 1) // 2
-
-        ind += full_rows * (ncols - 2)
-        ind += half_rows * ((ncols - 2) // 2)
-
-        ind += (x + 1) // 2 if (full_rows + half_rows) % 2 == 1 else x
-
-        return ind
-
-
-def index_to_x_y(ind, ncols, nrows):
-    """
-    Convert a given coordinate index into its x, y representation. Indices start at 1 !
-    :param ind: Index of coordinate to represent as x, y
-    :param ncols: Number of
-    :param nrows:
-    :return: x, y coordinates
-    """
-
-    y = 1
-
-    full = True
-
-    while ind > ncols - 2 and full == True:
-        ind -= ncols - 2
-        y += 1
-        full = False
-
-        while ind > (ncols - 2) // 2 and full == False:
-            ind -= ncols - 2
-            y += 1
-            full = True
-
-    if full:
-        x = ind
-
-    else:
-        x = 2 * ind - 1
-
-    return x, y
-
+from indices import *
 
 class BombeRLeWorld(object):
 
@@ -91,7 +29,7 @@ class BombeRLeWorld(object):
 
 
         self.savepath = savepath
-        #self.FILEHANDLE = open(self.savepath, 'a')
+        # self.FILEHANDLE = open(self.savepath, 'a')
         self.increment = 0
 
         self.free_grids = x_y_to_index(s.cols - 2, s.rows - 2, s.cols, s.rows) if (s.cols - 1) * (s.rows - 1) % 2 == 0 \
@@ -151,15 +89,20 @@ class BombeRLeWorld(object):
             state[self.free_grids + self.agents.index(bomb.owner) * player_block + 3] = bomb.timer
 
         for explosion in self.explosions:
+            x = explosion.blast_coords[0][0]
+            y = explosion.blast_coords[0][1]
             # note explosion position
-            state[self.free_grids + self.agents.index(explosion.owner) * player_block + 4] = x_y_to_index(explosion.x,
-                                                                                            explosion.y, s.cols, s.rows)
+            state[self.free_grids + self.agents.index(explosion.owner) * player_block + 4] = x_y_to_index(x,
+                                                                                            y, s.cols, s.rows)
             # note explosion timer
             state[self.free_grids + self.agents.index(explosion.owner) * player_block + 5] = explosion.timer
 
         #  save the state
-        save = self.savepath + ' ' + self.increment
-        np.save(save , state)
+        save = self.savepath + ' ' + str(self.step)
+        np.save(save, state)
+
+        # self.FILEHANDLE.close()
+        # self.FILEHANDLE = open(self.savepath, 'a')
 
     def setup_logging(self):
         self.logger = logging.getLogger('BombeRLeWorld')
@@ -342,8 +285,6 @@ class BombeRLeWorld(object):
         Note: This method has been modified to call state-saving function at the beginning of the step.
         :return:
         """
-        self.capture_state()
-        self.increment += 1
         # Send world state to all agents
         for a in self.active_agents:
             self.logger.debug(f'Sending game state to agent <{a.name}>')
@@ -361,6 +302,9 @@ class BombeRLeWorld(object):
                 a.ready_flag.wait()
                 self.logger.debug(f'Clearing flag for agent <{a.name}>')
                 a.ready_flag.clear()
+
+        self.capture_state()
+        #  self.increment += 1  #  use for naming capture_state output files
 
         # Give agents time to decide and set their ready flags; interrupt after time limit
         deadline = time() + s.timeout

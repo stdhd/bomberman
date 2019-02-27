@@ -113,6 +113,8 @@ class BombeRLeWorld(object):
                 explosion_map[x,y] = max(explosion_map[x,y], e.timer)
                 if explosion_map[x, y] == 0:
                     continue
+
+                    # FIXME Finish drawing explosions
                 state[x_y_to_index(x, y, s.cols, s.rows) - 1] = 2**explosion_map[x,y]
 
         #for explosion in self.explosions:

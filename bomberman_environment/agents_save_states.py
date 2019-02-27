@@ -79,7 +79,8 @@ class AgentProcess(mp.Process):
                 # Receive new game state and check for exit message
                 self.wlogger.debug('Receive game state')
 
-                try:  # TODO Fix multiprocessing error here
+                try:  # FIXME Using try-catch to address multiprocessing error here
+                    # FIXME (game_state is sometimes not initialized properly)
 
                     self.fake_self.game_state = self.pipe_to_world.recv()
                     if self.fake_self.game_state['exit']:

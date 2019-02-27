@@ -13,6 +13,6 @@ def derive_state_representation(self):
 
     state[-1] = self.game_state['step']
 
-    
+
 
 

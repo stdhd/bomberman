@@ -52,14 +52,31 @@ class BombeRLeWorld(object):
 
         Player block of the form:
 
-        (Player location index, player point number, bomb index, bomb timer, explosion index, explosion timer,
+        (Player location index, player point number, bomb index, bomb timer,
         [17 Event booleans])
 
-        Board indices contain: -1 if coin, 1 if crate, 0 otherwise
+        Board indices contain:
+
+         3 if coin
+
+         1 if crate
+
+         0 if empty or player
+
+         -1 * 3^(coin_is_present) * 2^(explosion timer if explosion timer is greater than 0)
+
+         Note: When constructing sight in observation ("Sichtfeld"), add additional values:
+
+         5 if enemy and no explosion
+
+         2**(bomb_timer) if bomb
+
+         -1 if wall
+
         :return:
         """
 
-        player_block = 6 + 17
+        player_block = 4 + 17
 
         state = np.zeros(self.free_grids + 4 * player_block + 1)
 
@@ -69,7 +86,7 @@ class BombeRLeWorld(object):
             state[i] = self.arena[index_to_x_y(i+1, s.cols, s.rows)]
 
         for coin in self.coins:
-            state[x_y_to_index(coin.x, coin.y, s.cols, s.rows) - 1] = -1
+            state[x_y_to_index(coin.x, coin.y, s.cols, s.rows) - 1] = 3
 
         for ind, agent in enumerate(self.agents):
 
@@ -90,14 +107,22 @@ class BombeRLeWorld(object):
             # note bomb timer
             state[self.free_grids + self.agents.index(bomb.owner) * player_block + 3] = bomb.timer
 
-        for explosion in self.explosions:
-            x = explosion.blast_coords[0][0]
-            y = explosion.blast_coords[0][1]
+        explosion_map = np.zeros(self.arena.shape)
+        for e in self.explosions:
+            for (x, y) in e.blast_coords:
+                explosion_map[x,y] = max(explosion_map[x,y], e.timer)
+                if explosion_map[x, y] == 0:
+                    continue
+                state[x_y_to_index(x, y, s.cols, s.rows) - 1] = 2**explosion_map[x,y]
+
+        #for explosion in self.explosions:
+         #   x = explosion.blast_coords[0][0]
+          #  y = explosion.blast_coords[0][1]
             # note explosion position
-            state[self.free_grids + self.agents.index(explosion.owner) * player_block + 4] = x_y_to_index(x,
-                                                                                            y, s.cols, s.rows)
+           # state[self.free_grids + self.agents.index(explosion.owner) * player_block + 4] = x_y_to_index(x,
+                                                                                            #y, s.cols, s.rows)
             # note explosion timer
-            state[self.free_grids + self.agents.index(explosion.owner) * player_block + 5] = explosion.timer
+            #state[self.free_grids + self.agents.index(explosion.owner) * player_block + 5] = explosion.timer
 
         #  save the state
         save = self.savepath + ' ' + str(self.step)

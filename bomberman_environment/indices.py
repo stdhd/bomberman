@@ -1,4 +1,4 @@
-
+import numpy as np
 
 def x_y_to_index(x, y, ncols, nrows):
     """
@@ -24,13 +24,13 @@ def x_y_to_index(x, y, ncols, nrows):
         half_rows = (y - 1) // 2
 
         ind += full_rows * (ncols - 2)
-        ind += half_rows * ((ncols - 2) // 2)
+        ind += half_rows * np.ceil((ncols - 2) / 2)
 
         ind += (x + 1) // 2 if (full_rows + half_rows) % 2 == 1 else x
 
-        return ind
+        return int(ind)
 
-
+    
 def index_to_x_y(ind, ncols, nrows):
     """
     Convert a given coordinate index into its x, y representation. Indices start at 1 !
@@ -42,22 +42,18 @@ def index_to_x_y(ind, ncols, nrows):
 
     y = 1
 
-    full = True
-
-    while ind > ncols - 2 and full == True:
+    while True:
+        # Volle Reihe
+        if ind <= ncols - 2:
+            x = ind
+            return x, y
         ind -= ncols - 2
         y += 1
-        full = False
+        
+        # Halbe Reihe
+        if ind <= ((ncols - 2) // 2 + 1):
+            x = 2 * ind - 1
+            return x, y
+        ind -= ((ncols - 2) // 2 + 1)
+        y += 1
 
-        while ind > (ncols - 2) // 2 and full == False:
-            ind -= ncols - 2
-            y += 1
-            full = True
-
-    if full:
-        x = ind
-
-    else:
-        x = 2 * ind - 1
-
-    return x, y

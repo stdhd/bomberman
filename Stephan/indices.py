@@ -1,3 +1,6 @@
+
+import numpy as np
+
 def x_y_to_index(x, y, ncols, nrows):
     """
     Return the index of a free grid from x, y coordinates. Indices start at 1 !
@@ -10,7 +13,7 @@ def x_y_to_index(x, y, ncols, nrows):
     :return: Index of square x, y coords point to
     """
 
-    if x >= ncols or x <= 0 or y >= nrows or y <= 0:
+    if x >= ncols-1 or x <= 0 or y >= nrows or y <= 0:
         raise ValueError("Coordinates outside of game grid")
     if (x + 1) * (y + 1) % 2 == 1:
         raise ValueError("Received wall coordinates!")

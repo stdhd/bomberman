@@ -1,5 +1,7 @@
 
 
+import numpy as np
+
 def x_y_to_index(x, y, ncols, nrows):
     """
     Return the index of a free grid from x, y coordinates. Indices start at 1 !
@@ -24,7 +26,7 @@ def x_y_to_index(x, y, ncols, nrows):
         half_rows = (y - 1) // 2
 
         ind += full_rows * (ncols - 2)
-        ind += half_rows * ((ncols - 2) // 2)
+        ind += half_rows * np.ceil((ncols - 2) / 2)
 
         ind += (x + 1) // 2 if (full_rows + half_rows) % 2 == 1 else x
 
@@ -49,8 +51,8 @@ def index_to_x_y(ind, ncols, nrows):
         y += 1
         full = False
 
-        while ind > (ncols - 2) // 2 and full == False:
-            ind -= ncols - 2
+        while ind > np.ceil((ncols - 2) / 2) and full == False:
+            ind -= np.ceil((ncols - 2) / 2)
             y += 1
             full = True
 

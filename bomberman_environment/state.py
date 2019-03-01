@@ -1,5 +1,6 @@
 import numpy as np
 
+
 def derive_state_representation(self):
     """
     From provided game_state, extract array state representation.
@@ -19,16 +20,63 @@ def derive_state_representation(self):
 
     explosions = self.game_state['explosions']
 
-    for x in range(arena.shape[0] - 1):
-        if x == 0:
-            continue
-        for y in range(arena.shape[1] - 1):
-            if y == 0:
-                continue
-            if (x + 1) * (y + 1) % 2 == 1:
-                state[self.x_y_to_index(x, y, 17, 17)] = -1
+    coins = self.game_state['coins']
 
-            elif explosions[x, y] != 0:
+    players = self.game_state['others']
+
+    bombs = self.game_state['bombs']
+
+    me = self.game_state['self']
+
+    for x, y in coins:
+
+        ind = self.x_y_to_index(x, y, 17, 17) - 1
+
+        state[ind] = 3
+
+    for x in range(arena.shape[0] ):
+        if x == 0 or arena.shape[0] - 1:
+            continue
+        for y in range(arena.shape[1]):
+            if y == 0 or arena.shape[1] - 1 or (x + 1) * (y + 1) % 2 == 1:
+                continue
+
+            ind = self.x_y_to_index(x, y, 17, 17) - 1
+
+            coin = state[ind] == 3
+
+            if not coin:
+
+                state[ind] = arena[x, y]  #  replace '17' with values from settings.py
+
+            if explosions[x, y] != 0:
+
+                state[ind] = -1 * 3**int(coin) * 2**explosions[x, y]
+
+    startplayers = self.x_y_to_index(15, 15, 17, 17)  #  player blocks start here
+
+    players.insert(0, me)
+
+    player_ind = 0
+
+    bomb_ind = 1
+
+    for player in players:  # keep track of player locations and bombs
+        state[startplayers + player_block * player_ind] = self.x_y_to_index(player[0], player[1], 17, 17)
+
+        if player[3] == 0:
+
+            player_bomb = bombs[-1 * bomb_ind]
+
+            state[startplayers + player_block*player_ind + 2] = self.x_y_to_index(player_bomb[0], player_bomb[1], 17, 17)
+
+            state[startplayers + player_block * player_ind + 3] = player_bomb[2]
+
+            bomb_ind += 1
+
+        player_ind += 1
+
+    return state
 
 
 

@@ -35,6 +35,10 @@ class BombeRLeWorld(object):
         self.free_grids = x_y_to_index(s.cols - 2, s.rows - 2, s.cols, s.rows) if (s.cols - 1) * (s.rows - 1) % 2 == 0 \
             else x_y_to_index(s.cols - 3, s.rows - 2, s.cols, s.rows)  # number of free states (used to reserve memory)
 
+        self.free_grids = int(self.free_grids)
+
+        self.save_list = []
+
 
         # Get the game going
         self.round = 0
@@ -77,13 +81,13 @@ class BombeRLeWorld(object):
         """
 
         player_block = 4 + 17
-
         state = np.zeros(self.free_grids + 4 * player_block + 1)
 
         state[-1] = self.step
 
-        for i in range(self.free_grids):
-            state[i] = self.arena[index_to_x_y(i+1, s.cols, s.rows)]
+        for i in range(self.free_grids):  # get crates
+            x, y = index_to_x_y(i+1, s.cols, s.rows)
+            state[i] = self.arena[x, y]
 
         for coin in self.coins:
             state[x_y_to_index(coin.x, coin.y, s.cols, s.rows) - 1] = 3
@@ -98,7 +102,7 @@ class BombeRLeWorld(object):
 
             # note events
             for event in agent.events:
-                state[self.free_grids + ind * player_block + 6 + s.events.index(event)] = 1
+                state[self.free_grids + ind * player_block + 6 + event] = 1
 
         for bomb in self.bombs:
             # note bomb position
@@ -114,24 +118,16 @@ class BombeRLeWorld(object):
                 if explosion_map[x, y] == 0:
                     continue
 
-                    # FIXME Finish drawing explosions
-                state[x_y_to_index(x, y, s.cols, s.rows) - 1] = 2**explosion_map[x,y]
-
-        #for explosion in self.explosions:
-         #   x = explosion.blast_coords[0][0]
-          #  y = explosion.blast_coords[0][1]
-            # note explosion position
-           # state[self.free_grids + self.agents.index(explosion.owner) * player_block + 4] = x_y_to_index(x,
-                                                                                            #y, s.cols, s.rows)
-            # note explosion timer
-            #state[self.free_grids + self.agents.index(explosion.owner) * player_block + 5] = explosion.timer
+                ind = x_y_to_index(x, y, s.cols, s.rows) - 1
+                coin = int(state[ind] == 3)
+                state[ind] = -1 * 3**coin * 2**explosion_map[x,y]  #  note explosions
 
         #  save the state
-        save = self.savepath + ' ' + str(self.step)
-        np.save(save, state)
+        # save = self.savepath + ' ' + str(self.step)
+        # np.save(save, state)
 
-        # self.FILEHANDLE.close()
-        # self.FILEHANDLE = open(self.savepath, 'a')
+        self.save_list.append(state)
+
 
     def setup_logging(self):
         self.logger = logging.getLogger('BombeRLeWorld')
@@ -514,6 +510,12 @@ class BombeRLeWorld(object):
                 self.replay['n_steps'] = self.step
                 with open(f'replays/{self.round_id}.pt', 'wb') as f:
                     pickle.dump(self.replay, f)
+
+            #  TODO Save games from here
+            save = self.savepath+'_'+str(self.round)
+            np.save(save, np.asarray(self.save_list))
+            self.save_list = []
+
         else:
             self.logger.warn('End-of-round requested while no round was running')
 

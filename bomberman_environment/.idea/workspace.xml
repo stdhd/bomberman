@@ -2,29 +2,34 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="8281fd87-bacf-4f99-9ff1-cd15d1389165" name="Default Changelist" comment="">
-      <change afterPath="$PROJECT_DIR$/../Stephan/Q-learning_V2.ipynb" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/../Stephan/Q-learning_V3.ipynb" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/../Stephan/Q-learning_V4.ipynb" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/../Stephan/Q-learning_V5_Simple_Finish.ipynb" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/../Stephan/Q-learning_V6.ipynb" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/../Stephan/Q-learning_V7.ipynb" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/../Stephan/Q-learning_V8.ipynb" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/../Stephan/create_observation_V5.ipynb" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../Stephan/.ipynb_checkpoints/create_observation_V3-checkpoint.ipynb" beforeDir="false" afterPath="$PROJECT_DIR$/../Stephan/.ipynb_checkpoints/create_observation_V3-checkpoint.ipynb" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../Stephan/create_observation_V3.ipynb" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../Stephan/create_trainingset.ipynb" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../Stephan/create_trainingset_V2.ipynb" beforeDir="false" />
+      <change afterPath="$PROJECT_DIR$/.gitignore" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/.vscode/launch.json" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/.vscode/settings.json" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/agent_code/eike_agent/callbacks.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../not_bomberman/.ipynb_checkpoints/Q-learning_V2-checkpoint.ipynb" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../not_bomberman/Q-learning_V2.ipynb" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../Current Situation Jakob.txt" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../Jakob.txt" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../Protocol.txt" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../Stephan/Untitled.ipynb" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../Stephan/find_equivalent.ipynb" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/../Stephan/indices.py" beforeDir="false" afterPath="$PROJECT_DIR$/../Stephan/indices.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../Stephan/monte_carlo.ipynb" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/../Stephan/test_daten.npy" beforeDir="false" afterPath="$PROJECT_DIR$/../Stephan/test_daten.npy" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/bomberman_environment.iml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/bomberman_environment.iml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/agent_code/marathon/callbacks.py" beforeDir="false" afterPath="$PROJECT_DIR$/agent_code/marathon/callbacks.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/agent_code/simple_agent/logs/simple_agent_0.log" beforeDir="false" afterPath="$PROJECT_DIR$/agent_code/simple_agent/logs/simple_agent_0.log" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/agent_code/simple_agent/logs/simple_agent_1.log" beforeDir="false" afterPath="$PROJECT_DIR$/agent_code/simple_agent/logs/simple_agent_1.log" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/agent_code/simple_agent/logs/simple_agent_2.log" beforeDir="false" afterPath="$PROJECT_DIR$/agent_code/simple_agent/logs/simple_agent_2.log" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/agent_code/simple_agent/logs/simple_agent_3.log" beforeDir="false" afterPath="$PROJECT_DIR$/agent_code/simple_agent/logs/simple_agent_3.log" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/indices.py" beforeDir="false" afterPath="$PROJECT_DIR$/indices.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/logs/game.log" beforeDir="false" afterPath="$PROJECT_DIR$/logs/game.log" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../bomberman ideas.txt" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/agent_code/simple_agent/callbacks.py" beforeDir="false" afterPath="$PROJECT_DIR$/agent_code/simple_agent/callbacks.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/agent_code/user_agent/callbacks.py" beforeDir="false" afterPath="$PROJECT_DIR$/agent_code/user_agent/callbacks.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/agents.py" beforeDir="false" afterPath="$PROJECT_DIR$/agents.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/environment.py" beforeDir="false" afterPath="$PROJECT_DIR$/environment.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/environment_only_coins.py" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/items.py" beforeDir="false" afterPath="$PROJECT_DIR$/items.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/main.py" beforeDir="false" afterPath="$PROJECT_DIR$/main.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/main_only_coins.py" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/replays/.gitkeep" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/settings.py" beforeDir="false" afterPath="$PROJECT_DIR$/settings.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../features.txt" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../final_project.pdf" beforeDir="false" afterPath="$PROJECT_DIR$/../final_project.pdf" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../readme.md" beforeDir="false" />
     </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="SHOW_DIALOG" value="false" />
@@ -40,7 +45,7 @@
     <session id="1954803866">
       <usages-collector id="statistics.lifecycle.project">
         <counts>
-          <entry key="project.closed" value="3" />
+          <entry key="project.closed" value="4" />
           <entry key="project.open.time.14" value="1" />
           <entry key="project.open.time.16" value="1" />
           <entry key="project.open.time.36" value="2" />
@@ -50,12 +55,12 @@
       </usages-collector>
       <usages-collector id="statistics.file.extensions.open">
         <counts>
-          <entry key="py" value="13" />
+          <entry key="py" value="14" />
         </counts>
       </usages-collector>
       <usages-collector id="statistics.file.types.open">
         <counts>
-          <entry key="Python" value="13" />
+          <entry key="Python" value="14" />
         </counts>
       </usages-collector>
       <usages-collector id="statistics.file.extensions.edit">
@@ -78,7 +83,7 @@
         <entry file="file://$PROJECT_DIR$/environment_save_states.py">
           <provider selected="true" editor-type-id="text-editor">
             <state relative-caret-position="544">
-              <caret line="77" column="19" lean-forward="true" selection-start-line="77" selection-start-column="19" selection-end-line="77" selection-end-column="19" />
+              <caret line="77" column="19" selection-start-line="77" selection-start-column="19" selection-end-line="77" selection-end-column="19" />
               <folding>
                 <element signature="e#0#21#0" expanded="true" />
               </folding>
@@ -87,15 +92,15 @@
         </entry>
       </file>
       <file pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/environment_only_coins.py">
+        <entry file="file://$PROJECT_DIR$/indices.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="333">
-              <caret line="130" lean-forward="true" selection-start-line="130" selection-end-line="130" />
+            <state relative-caret-position="555">
+              <caret line="65" selection-start-line="65" selection-end-line="65" />
             </state>
           </provider>
         </entry>
       </file>
-      <file pinned="false" current-in-tab="false">
+      <file pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/agent_code/marathon/callbacks.py">
           <provider selected="true" editor-type-id="text-editor">
             <state relative-caret-position="-856">
@@ -103,15 +108,6 @@
               <folding>
                 <element signature="e#2#20#0" expanded="true" />
               </folding>
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/../Stephan/indices.py">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="1020">
-              <caret line="63" selection-start-line="63" selection-end-line="63" />
             </state>
           </provider>
         </entry>
@@ -127,11 +123,11 @@
           </provider>
         </entry>
       </file>
-      <file pinned="false" current-in-tab="true">
+      <file pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/settings.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="374">
-              <caret line="25" column="39" lean-forward="true" selection-start-line="25" selection-start-column="39" selection-end-line="25" selection-end-column="39" />
+            <state relative-caret-position="51">
+              <caret line="6" selection-start-line="6" selection-end-line="6" />
             </state>
           </provider>
         </entry>
@@ -149,7 +145,7 @@
         <entry file="file://$PROJECT_DIR$/agents.py">
           <provider selected="true" editor-type-id="text-editor">
             <state relative-caret-position="3859">
-              <caret line="238" selection-start-line="238" selection-end-line="238" />
+              <caret line="240" selection-start-line="240" selection-end-line="240" />
             </state>
           </provider>
         </entry>
@@ -450,7 +446,6 @@
   </component>
   <component name="ToolWindowManager">
     <frame x="-7" y="-7" width="1550" height="838" extended-state="6" />
-    <editor active="true" />
     <layout>
       <window_info active="true" content_ui="combo" id="Project" order="0" visible="true" weight="0.1671141" />
       <window_info id="Structure" order="1" side_tool="true" weight="0.25" />
@@ -557,13 +552,6 @@
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/state.py" />
-    <entry file="file://$PROJECT_DIR$/indices.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="1105">
-          <caret line="65" selection-start-line="65" selection-end-line="65" />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/main_save_states.py">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="459">
@@ -588,7 +576,7 @@
     <entry file="file://$PROJECT_DIR$/agents.py">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="3859">
-          <caret line="238" selection-start-line="238" selection-end-line="238" />
+          <caret line="240" selection-start-line="240" selection-end-line="240" />
         </state>
       </provider>
     </entry>
@@ -605,38 +593,11 @@
     <entry file="file://$PROJECT_DIR$/items.py">
       <provider selected="true" editor-type-id="text-editor" />
     </entry>
-    <entry file="file://$PROJECT_DIR$/../Stephan/indices.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="1020">
-          <caret line="63" selection-start-line="63" selection-end-line="63" />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/agent_code/simple_agent/callbacks.py">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="-3287">
           <folding>
             <element signature="e#1#19#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/agent_code/marathon/callbacks.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="-856">
-          <caret line="9" column="107" selection-start-line="9" selection-start-column="107" selection-end-line="9" selection-end-column="107" />
-          <folding>
-            <element signature="e#2#20#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/environment_save_states.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="544">
-          <caret line="77" column="19" lean-forward="true" selection-start-line="77" selection-start-column="19" selection-end-line="77" selection-end-column="19" />
-          <folding>
-            <element signature="e#0#21#0" expanded="true" />
           </folding>
         </state>
       </provider>
@@ -650,8 +611,42 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/settings.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="374">
-          <caret line="25" column="39" lean-forward="true" selection-start-line="25" selection-start-column="39" selection-end-line="25" selection-end-column="39" />
+        <state relative-caret-position="51">
+          <caret line="6" selection-start-line="6" selection-end-line="6" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/environment_save_states.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="544">
+          <caret line="77" column="19" selection-start-line="77" selection-start-column="19" selection-end-line="77" selection-end-column="19" />
+          <folding>
+            <element signature="e#0#21#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/indices.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="555">
+          <caret line="65" selection-start-line="65" selection-end-line="65" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/../Stephan/indices.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="1071">
+          <caret line="63" selection-start-line="63" selection-end-line="63" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/agent_code/marathon/callbacks.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="-856">
+          <caret line="9" column="107" selection-start-line="9" selection-start-column="107" selection-end-line="9" selection-end-column="107" />
+          <folding>
+            <element signature="e#2#20#0" expanded="true" />
+          </folding>
         </state>
       </provider>
     </entry>

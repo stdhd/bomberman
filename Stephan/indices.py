@@ -1,5 +1,8 @@
 
+<<<<<<< HEAD
 
+=======
+>>>>>>> 920e9475889a7d406c399b8e4bd4098b350a2dbd
 import numpy as np
 
 def x_y_to_index(x, y, ncols, nrows):
@@ -14,7 +17,7 @@ def x_y_to_index(x, y, ncols, nrows):
     :return: Index of square x, y coords point to
     """
 
-    if x >= ncols or x <= 0 or y >= nrows or y <= 0:
+    if x >= ncols-1 or x <= 0 or y >= nrows or y <= 0:
         raise ValueError("Coordinates outside of game grid")
     if (x + 1) * (y + 1) % 2 == 1:
         raise ValueError("Received wall coordinates!")

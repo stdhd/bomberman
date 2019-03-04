@@ -7,7 +7,7 @@ from settings import s
 
 def derive_state_representation(self):
     """
-    From provided game_state, extract array state representation.
+    From provided game_state, extract array state representation. Use this when playing game (not training)
 
     Final state format specification in environment_save_states.py
     :param self:
@@ -16,7 +16,7 @@ def derive_state_representation(self):
 
     player_block = 4+17
 
-    state = np.zeros(self.x_y_to_index(16, 16, s.cols, s.rows) + 4 * player_block + 1)
+    state = np.zeros(self.x_y_to_index(s.cols - 2, s.rows - 2, s.cols, s.rows) + 4 * player_block + 1)
 
     state[-1] = self.game_state['step']
 
@@ -63,19 +63,20 @@ def derive_state_representation(self):
 
     player_ind = 0
 
-    bomb_ind = 1
+    bomb_ind = 0
 
     for player in players:  # keep track of player locations and bombs
         state[startplayers + player_block * player_ind] = self.x_y_to_index(player[0], player[1], s.cols, s.rows)
 
         if player[3] == 0:
 
-            player_bomb = bombs[-1 * bomb_ind]
+            player_bomb = bombs[bomb_ind]  # count through bombs and assign a dropped bomb to each player
+            # who is not holding a bomb
 
             state[startplayers + player_block*player_ind + 2] = self.x_y_to_index(player_bomb[0], player_bomb[1],
                                                                                   s.cols, s.rows)
 
-            state[startplayers + player_block * player_ind + 3] = player_bomb[2]
+            state[startplayers + player_block * player_ind + 3] = player_bomb[2]  # bomb timer
 
             bomb_ind += 1
 

@@ -9,13 +9,13 @@ settings = {
     # Display
     'width': 1000,
     'height': 600,
-    'gui': True,
+    'gui': False,
     'fps': 15,
 
     # Main loop
-    'update_interval': 1,
+    'update_interval': 0.08, # 0.33,
     'turn_based': False,
-    'n_rounds': 10,
+    'n_rounds': 100,
     'save_replay': False,
     'make_video_from_replay': False,
 
@@ -35,7 +35,7 @@ settings = {
     'explosion_timer': 2,
 
     # Rules for agents
-    'timeout': 5.0,
+    'timeout': 20.0,
     'reward_kill': 5,
     'reward_coin': 1,
     'reward_slow': -1,

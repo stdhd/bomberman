@@ -1,0 +1,56 @@
+
+Features:
+
+
+Direction to move in shortest path to nearest coin
+
+Manhattan distance of nearest coin
+
+
+
+
+Direction to move in shortest path to nearest enemy
+
+Manhattan distance of nearest enemy
+
+
+
+
+Direction to move in shortest path to nearest crate
+
+Manhattan distance of nearest crate
+
+
+
+Shortest Manhattan distance of an enemy to the nearest coin
+
+
+Manhattan distance to nearest enemy
+
+Enemy in explosive line of sight
+
+
+This player is currently in live bomb radius
+
+(and if yes -> direction of escape)
+
+
+Manhattan distance from center of map
+
+
+Number of remaining enemies
+
+
+Number of remaining boxes
+
+
+Total distance to all remaining boxes
+
+Total distance to all remaining enemies
+
+
+Smallest total distance ---"--- among all enemies
+
+
+
+This player is the last remaining player

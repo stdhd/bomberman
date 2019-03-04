@@ -1,0 +1,44 @@
+
+
+
+16:34 14-Feb-19
+
+
+The team worked on setting up the first training case (coins only). Steps taken: Creating a new main function and modifying the environment file.
+
+
+12:11 21-Feb-19
+
+
+Jakob wrote a document outlining the general situation and outlook so far. The team began outlining first tasks to complete and began work on state capturing system to generate training data. Drafted a state vector representation format for use in training. 
+
+Agenda: 
+
+- Create state capturing system for episodes
+- Create system to generate training data from saved games
+- Further research reinforcement learning to understand how to apply it properly
+
+
+16:34 25-Feb-19
+
+The team has completed the first step in saving game states to disk. -> Some multiprocessing errors encountered. 
+
+Now working on completing observation function from saved game states. Discussion: Should we use reinforcement learning or regression to estimate game state values directly (e.g. kernel ridge regression)?
+
+Agenda: 
+
+- Add new hand-selected features for observation function
+- Working on system to generate training data from saved games and observation function
+- Considered how to identify rotated or mirrored states in training data (speed up training)
+
+
+
+
+
+
+
+
+
+
+
+

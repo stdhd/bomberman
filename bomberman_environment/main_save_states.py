@@ -1,6 +1,7 @@
 
 from time import time, sleep
 import contextlib
+import datetime
 from time import time
 
 with contextlib.redirect_stdout(None):
@@ -10,7 +11,7 @@ import numpy as np
 import multiprocessing as mp
 import threading
 
-from environment import BombeRLeWorld, ReplayWorld
+from environment_save_states import BombeRLeWorld, ReplayWorld
 from settings import s
 
 
@@ -34,19 +35,33 @@ def game_logic(world, user_inputs):
 
 
 def main():
+    """
+    Run a game using environment_save_states.py. Save the resultant episodes in a file.
+    :param filename: Filepath to save directory for episodes
+    :return:
+    """
     pygame.init()
 
     # Emulate Windows process spawning behaviour under Unix (for testing)
     # mp.set_start_method('spawn')
 
     # Initialize environment and agents
+    filename = 'data/games/'
+    filename += datetime.datetime.fromtimestamp(time()).strftime('%Y-%m-%d %H-%M-%S')
     world = BombeRLeWorld([
-   
+    
             ('simple_agent', False),
             ('simple_agent', False),
             ('simple_agent', False),
             ('simple_agent', False)
+            
 
+            #('random_agent', False),
+            #('random_agent', False),
+            #('random_agent', False),
+            #('random_agent', False)
+
+        ], filename)
     # world = ReplayWorld('Replay 2019-01-30 16:57:42')
     user_inputs = []
 

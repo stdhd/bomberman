@@ -1,5 +1,5 @@
 # Byte-compiled / optimized / DLL files
-__pycache__/
+__pycache__
 *.py[cod]
 *$py.class
 
@@ -108,3 +108,8 @@ venv.bak/
 screenshots/*.png
 screenshots/*.mp4
 screenshots/*.webm
+
+# visual studio code
+.vscode
+
+/agent_code/../logs

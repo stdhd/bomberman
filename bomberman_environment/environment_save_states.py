@@ -10,7 +10,7 @@ from pygame.transform import smoothscale
 
 import logging
 
-from agents_save_states import *
+from agents import *
 from items import *
 from settings import s, e
 
@@ -298,9 +298,6 @@ class BombeRLeWorld(object):
                 self.logger.debug(f'Clearing flag for agent <{a.name}>')
                 a.ready_flag.clear()
 
-        self.capture_state()
-        #  self.increment += 1  #  use for naming capture_state output files
-
         # Give agents time to decide and set their ready flags; interrupt after time limit
         deadline = time() + s.timeout
         for a in self.active_agents:
@@ -328,6 +325,8 @@ class BombeRLeWorld(object):
             self.replay['actions'][a.name].append(action)
 
             self.perform_agent_action(a, action)
+
+        self.capture_state()
 
         # Reset agent flags
         for a in self.active_agents:

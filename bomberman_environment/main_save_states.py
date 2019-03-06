@@ -46,6 +46,8 @@ def main():
     # mp.set_start_method('spawn')
 
     # Initialize environment and agents
+
+    # for saving games
     filename = 'data/games/'
     filename += datetime.datetime.fromtimestamp(time()).strftime('%Y-%m-%d %H-%M-%S')
     world = BombeRLeWorld([

@@ -2,9 +2,120 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="8281fd87-bacf-4f99-9ff1-cd15d1389165" name="Default Changelist" comment="">
-      <change afterPath="$PROJECT_DIR$/indices_OLD_JAKOB.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/agents_save_states.py" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/data/games/2019-03-02 13-05-43_10.npy" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/data/games/2019-03-02 13-05-43_2.npy" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/data/games/2019-03-02 13-05-43_3.npy" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/data/games/2019-03-02 13-05-43_4.npy" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/data/games/2019-03-02 13-05-43_5.npy" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/data/games/2019-03-02 13-05-43_6.npy" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/data/games/2019-03-02 13-05-43_7.npy" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/data/games/2019-03-02 13-05-43_8.npy" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/data/games/2019-03-02 13-05-43_9.npy" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/data/games/2019-03-02 13-49-46_1.npy" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/data/games/2019-03-02 13-49-46_10.npy" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/data/games/2019-03-02 13-49-46_100.npy" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/data/games/2019-03-02 13-49-46_11.npy" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/data/games/2019-03-02 13-49-46_12.npy" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/data/games/2019-03-02 13-49-46_13.npy" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/data/games/2019-03-02 13-49-46_14.npy" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/data/games/2019-03-02 13-49-46_15.npy" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/data/games/2019-03-02 13-49-46_16.npy" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/data/games/2019-03-02 13-49-46_17.npy" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/data/games/2019-03-02 13-49-46_18.npy" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/data/games/2019-03-02 13-49-46_19.npy" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/data/games/2019-03-02 13-49-46_2.npy" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/data/games/2019-03-02 13-49-46_20.npy" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/data/games/2019-03-02 13-49-46_21.npy" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/data/games/2019-03-02 13-49-46_22.npy" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/data/games/2019-03-02 13-49-46_23.npy" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/data/games/2019-03-02 13-49-46_24.npy" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/data/games/2019-03-02 13-49-46_25.npy" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/data/games/2019-03-02 13-49-46_26.npy" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/data/games/2019-03-02 13-49-46_27.npy" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/data/games/2019-03-02 13-49-46_28.npy" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/data/games/2019-03-02 13-49-46_29.npy" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/data/games/2019-03-02 13-49-46_3.npy" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/data/games/2019-03-02 13-49-46_30.npy" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/data/games/2019-03-02 13-49-46_31.npy" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/data/games/2019-03-02 13-49-46_32.npy" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/data/games/2019-03-02 13-49-46_33.npy" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/data/games/2019-03-02 13-49-46_34.npy" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/data/games/2019-03-02 13-49-46_35.npy" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/data/games/2019-03-02 13-49-46_36.npy" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/data/games/2019-03-02 13-49-46_37.npy" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/data/games/2019-03-02 13-49-46_38.npy" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/data/games/2019-03-02 13-49-46_39.npy" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/data/games/2019-03-02 13-49-46_4.npy" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/data/games/2019-03-02 13-49-46_40.npy" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/data/games/2019-03-02 13-49-46_41.npy" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/data/games/2019-03-02 13-49-46_42.npy" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/data/games/2019-03-02 13-49-46_43.npy" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/data/games/2019-03-02 13-49-46_44.npy" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/data/games/2019-03-02 13-49-46_45.npy" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/data/games/2019-03-02 13-49-46_46.npy" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/data/games/2019-03-02 13-49-46_47.npy" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/data/games/2019-03-02 13-49-46_48.npy" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/data/games/2019-03-02 13-49-46_49.npy" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/data/games/2019-03-02 13-49-46_5.npy" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/data/games/2019-03-02 13-49-46_50.npy" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/data/games/2019-03-02 13-49-46_51.npy" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/data/games/2019-03-02 13-49-46_52.npy" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/data/games/2019-03-02 13-49-46_53.npy" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/data/games/2019-03-02 13-49-46_54.npy" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/data/games/2019-03-02 13-49-46_55.npy" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/data/games/2019-03-02 13-49-46_56.npy" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/data/games/2019-03-02 13-49-46_57.npy" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/data/games/2019-03-02 13-49-46_58.npy" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/data/games/2019-03-02 13-49-46_59.npy" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/data/games/2019-03-02 13-49-46_6.npy" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/data/games/2019-03-02 13-49-46_60.npy" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/data/games/2019-03-02 13-49-46_61.npy" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/data/games/2019-03-02 13-49-46_62.npy" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/data/games/2019-03-02 13-49-46_63.npy" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/data/games/2019-03-02 13-49-46_64.npy" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/data/games/2019-03-02 13-49-46_65.npy" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/data/games/2019-03-02 13-49-46_66.npy" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/data/games/2019-03-02 13-49-46_67.npy" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/data/games/2019-03-02 13-49-46_68.npy" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/data/games/2019-03-02 13-49-46_69.npy" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/data/games/2019-03-02 13-49-46_7.npy" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/data/games/2019-03-02 13-49-46_70.npy" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/data/games/2019-03-02 13-49-46_71.npy" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/data/games/2019-03-02 13-49-46_72.npy" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/data/games/2019-03-02 13-49-46_73.npy" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/data/games/2019-03-02 13-49-46_74.npy" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/data/games/2019-03-02 13-49-46_75.npy" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/data/games/2019-03-02 13-49-46_76.npy" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/data/games/2019-03-02 13-49-46_77.npy" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/data/games/2019-03-02 13-49-46_78.npy" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/data/games/2019-03-02 13-49-46_79.npy" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/data/games/2019-03-02 13-49-46_8.npy" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/data/games/2019-03-02 13-49-46_80.npy" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/data/games/2019-03-02 13-49-46_81.npy" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/data/games/2019-03-02 13-49-46_82.npy" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/data/games/2019-03-02 13-49-46_83.npy" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/data/games/2019-03-02 13-49-46_84.npy" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/data/games/2019-03-02 13-49-46_85.npy" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/data/games/2019-03-02 13-49-46_86.npy" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/data/games/2019-03-02 13-49-46_87.npy" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/data/games/2019-03-02 13-49-46_88.npy" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/data/games/2019-03-02 13-49-46_89.npy" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/data/games/2019-03-02 13-49-46_9.npy" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/data/games/2019-03-02 13-49-46_90.npy" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/data/games/2019-03-02 13-49-46_91.npy" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/data/games/2019-03-02 13-49-46_92.npy" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/data/games/2019-03-02 13-49-46_93.npy" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/data/games/2019-03-02 13-49-46_94.npy" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/data/games/2019-03-02 13-49-46_95.npy" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/data/games/2019-03-02 13-49-46_96.npy" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/data/games/2019-03-02 13-49-46_97.npy" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/data/games/2019-03-02 13-49-46_98.npy" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/data/games/2019-03-02 13-49-46_99.npy" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/data/games/2019-03-02_13-05-43_1.npy" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/environment_save_states.py" beforeDir="false" afterPath="$PROJECT_DIR$/environment_save_states.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/main_save_states.py" beforeDir="false" afterPath="$PROJECT_DIR$/main_save_states.py" afterDir="false" />
     </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="SHOW_DIALOG" value="false" />
@@ -13,8 +124,8 @@
     <option name="LAST_RESOLUTION" value="IGNORE" />
   </component>
   <component name="CoverageDataManager">
-    <SUITE FILE_PATH="coverage/bomberman_environment$main.coverage" NAME="main Coverage Results" MODIFIED="1551878730766" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />
-    <SUITE FILE_PATH="coverage/bomberman_environment$main_save_states.coverage" NAME="main_save_states Coverage Results" MODIFIED="1551880811822" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />
+    <SUITE FILE_PATH="coverage/bomberman_environment$main.coverage" NAME="main Coverage Results" MODIFIED="1551881968563" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />
+    <SUITE FILE_PATH="coverage/bomberman_environment$main_save_states.coverage" NAME="main_save_states Coverage Results" MODIFIED="1551883163166" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />
   </component>
   <component name="FUSProjectUsageTrigger">
     <session id="1954803866">
@@ -64,37 +175,37 @@
       <usages-collector id="statistics.file.extensions.open">
         <counts>
           <entry key="ipynb" value="1" />
-          <entry key="py" value="9" />
+          <entry key="py" value="11" />
         </counts>
       </usages-collector>
       <usages-collector id="statistics.file.types.open">
         <counts>
           <entry key="IPNB" value="1" />
-          <entry key="Python" value="9" />
+          <entry key="Python" value="11" />
         </counts>
       </usages-collector>
       <usages-collector id="statistics.file.extensions.edit">
         <counts>
           <entry key="dummy" value="62" />
-          <entry key="py" value="4454" />
-          <entry key="txt" value="61" />
+          <entry key="py" value="4500" />
+          <entry key="txt" value="102" />
         </counts>
       </usages-collector>
       <usages-collector id="statistics.file.types.edit">
         <counts>
-          <entry key="PLAIN_TEXT" value="123" />
-          <entry key="Python" value="4454" />
+          <entry key="PLAIN_TEXT" value="164" />
+          <entry key="Python" value="4500" />
         </counts>
       </usages-collector>
     </session>
   </component>
   <component name="FileEditorManager">
     <leaf SIDE_TABS_SIZE_LIMIT_KEY="300">
-      <file pinned="false" current-in-tab="true">
+      <file pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/environment_save_states.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="-4016">
-              <caret line="30" column="32" selection-start-line="30" selection-start-column="32" selection-end-line="30" selection-end-column="32" />
+            <state relative-caret-position="158">
+              <caret line="82" selection-start-line="82" selection-end-line="82" />
               <folding>
                 <element signature="e#0#21#0" expanded="true" />
               </folding>
@@ -105,26 +216,26 @@
       <file pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/main_save_states.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="-561">
+            <state>
               <caret line="30" selection-start-line="30" selection-end-line="30" />
             </state>
           </provider>
         </entry>
       </file>
       <file pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/indices_OLD_JAKOB.py">
+        <entry file="file://$USER_HOME$/Anaconda3/Lib/threading.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="255">
-              <caret line="15" selection-start-line="15" selection-end-line="15" />
+            <state>
+              <caret line="915" selection-start-line="915" selection-end-line="915" />
             </state>
           </provider>
         </entry>
       </file>
       <file pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/Q/Q-learning_V11.ipynb">
-          <provider selected="true" editor-type-id="ipnb-editor">
-            <state>
-              <selected id="3" />
+        <entry file="file://$PROJECT_DIR$/indices.py">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="288">
+              <caret line="54" selection-start-line="54" selection-end-line="54" />
             </state>
           </provider>
         </entry>
@@ -132,7 +243,7 @@
       <file pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/agent_code/simple_agent/callbacks.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="-3287">
+            <state relative-caret-position="-1757">
               <folding>
                 <element signature="e#1#19#0" expanded="true" />
               </folding>
@@ -140,11 +251,11 @@
           </provider>
         </entry>
       </file>
-      <file pinned="false" current-in-tab="false">
+      <file pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/settings.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="136">
-              <caret line="11" column="16" selection-start-line="11" selection-start-column="16" selection-end-line="11" selection-end-column="16" />
+            <state relative-caret-position="878">
+              <caret line="57" column="10" selection-start-line="57" selection-start-column="10" selection-end-line="57" selection-end-column="10" />
             </state>
           </provider>
         </entry>
@@ -189,8 +300,8 @@
       <file pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/main.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="742">
-              <caret line="54" column="19" selection-start-line="54" selection-start-column="19" selection-end-line="54" selection-end-column="19" />
+            <state relative-caret-position="155">
+              <caret line="42" column="27" selection-start-line="42" selection-start-column="27" selection-end-line="42" selection-end-column="27" />
             </state>
           </provider>
         </entry>
@@ -206,13 +317,7 @@
   </component>
   <component name="FindInProjectRecents">
     <findStrings>
-      <find>look_for_targets</find>
-      <find>pipe</find>
-      <find>coll</find>
-      <find>collectable=True</find>
-      <find>state</find>
       <find>get_state_for_agent</find>
-      <find>event</find>
       <find>even</find>
       <find>bombs</find>
       <find>agent</find>
@@ -236,6 +341,12 @@
       <find>events.</find>
       <find>round</find>
       <find>increm</find>
+      <find>get_sta</find>
+      <find>event</find>
+      <find>Except</find>
+      <find>bomb</find>
+      <find>bomb_exp</find>
+      <find>do_step</find>
     </findStrings>
   </component>
   <component name="Git.Settings">
@@ -246,7 +357,6 @@
       <list>
         <option value="$PROJECT_DIR$/environment_only_coins.py" />
         <option value="$PROJECT_DIR$/environment.py" />
-        <option value="$PROJECT_DIR$/main_save_states.py" />
         <option value="$PROJECT_DIR$/agents.py" />
         <option value="$PROJECT_DIR$/agents_save_states.py" />
         <option value="$PROJECT_DIR$/features.txt" />
@@ -256,10 +366,11 @@
         <option value="$PROJECT_DIR$/Q/q_train_from_games.py" />
         <option value="$PROJECT_DIR$/Q/manage_training_data.py" />
         <option value="$PROJECT_DIR$/Q/rewards.py" />
-        <option value="$PROJECT_DIR$/settings.py" />
         <option value="$PROJECT_DIR$/agent_code/marathon/callbacks.py" />
         <option value="$PROJECT_DIR$/agent_code/marathon/kernel_regression.py" />
         <option value="$PROJECT_DIR$/main.py" />
+        <option value="$PROJECT_DIR$/main_save_states.py" />
+        <option value="$PROJECT_DIR$/settings.py" />
         <option value="$PROJECT_DIR$/environment_save_states.py" />
       </list>
     </option>
@@ -271,10 +382,9 @@
     <sorting>DEFINITION_ORDER</sorting>
   </component>
   <component name="ProjectFrameBounds" extendedState="6">
-    <option name="x" value="-5" />
-    <option name="y" value="80" />
-    <option name="width" value="1280" />
-    <option name="height" value="730" />
+    <option name="x" value="-8" />
+    <option name="width" value="977" />
+    <option name="height" value="1038" />
   </component>
   <component name="ProjectLevelVcsManager" settingsEditedManually="true">
     <ConfirmationsSetting value="2" id="Add" />
@@ -509,7 +619,21 @@
       <option name="project" value="LOCAL" />
       <updated>1551879962351</updated>
     </task>
-    <option name="localTasksCounter" value="13" />
+    <task id="LOCAL-00013" summary="Added indices_OLD_JAKOB">
+      <created>1551881196178</created>
+      <option name="number" value="00013" />
+      <option name="presentableId" value="LOCAL-00013" />
+      <option name="project" value="LOCAL" />
+      <updated>1551881196178</updated>
+    </task>
+    <task id="LOCAL-00014" summary="Renamed indices">
+      <created>1551881293284</created>
+      <option name="number" value="00014" />
+      <option name="presentableId" value="LOCAL-00014" />
+      <option name="project" value="LOCAL" />
+      <updated>1551881293284</updated>
+    </task>
+    <option name="localTasksCounter" value="15" />
     <servers />
   </component>
   <component name="TimeTrackingManager">
@@ -523,9 +647,9 @@
       <window_info id="Structure" order="1" side_tool="true" weight="0.25" />
       <window_info id="Favorites" order="2" side_tool="true" />
       <window_info anchor="bottom" id="Message" order="0" />
-      <window_info anchor="bottom" id="Find" order="1" weight="0.78723407" />
-      <window_info anchor="bottom" id="Run" order="2" sideWeight="0.4986577" weight="1.0" />
-      <window_info active="true" anchor="bottom" id="Debug" order="3" sideWeight="0.88322145" visible="true" weight="0.16595745" />
+      <window_info anchor="bottom" id="Find" order="1" weight="0.7106383" />
+      <window_info active="true" anchor="bottom" id="Run" order="2" sideWeight="0.4986577" visible="true" weight="0.2638298" />
+      <window_info anchor="bottom" id="Debug" order="3" sideWeight="0.88322145" weight="0.3858156" />
       <window_info anchor="bottom" id="Cvs" order="4" weight="0.25" />
       <window_info anchor="bottom" id="Inspection" order="5" weight="0.4" />
       <window_info anchor="bottom" id="TODO" order="6" />
@@ -583,20 +707,22 @@
     <MESSAGE value="Adding methods to callbacks.py" />
     <MESSAGE value="Working on act(self)" />
     <MESSAGE value="Merge branch 'jakob' of https://github.com/stdhd/bomberman into jakob&#10;&#10;# Conflicts:&#10;#&#9;bomberman_environment/main.py" />
-    <option name="LAST_COMMIT_MESSAGE" value="Merge branch 'jakob' of https://github.com/stdhd/bomberman into jakob&#10;&#10;# Conflicts:&#10;#&#9;bomberman_environment/main.py" />
+    <MESSAGE value="Added indices_OLD_JAKOB" />
+    <MESSAGE value="Renamed indices" />
+    <option name="LAST_COMMIT_MESSAGE" value="Renamed indices" />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>
       <breakpoints>
         <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
           <url>file://$PROJECT_DIR$/environment_save_states.py</url>
-          <line>74</line>
-          <option name="timeStamp" value="2" />
+          <line>368</line>
+          <option name="timeStamp" value="10" />
         </line-breakpoint>
         <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
           <url>file://$PROJECT_DIR$/environment_save_states.py</url>
-          <line>98</line>
-          <option name="timeStamp" value="3" />
+          <line>74</line>
+          <option name="timeStamp" value="11" />
         </line-breakpoint>
       </breakpoints>
     </breakpoint-manager>
@@ -630,13 +756,6 @@
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/state.py" />
-    <entry file="file://$USER_HOME$/Anaconda3/Lib/threading.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="14569">
-          <caret line="863" selection-start-line="863" selection-end-line="863" />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/environment_only_coins.py" />
     <entry file="file://$PROJECT_DIR$/../Stephan/indices.py" />
     <entry file="file://$PROJECT_DIR$/Q/manage_training_data.py">
@@ -660,16 +779,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/agents_save_states.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="238">
-          <caret line="25" column="13" selection-start-line="25" selection-start-column="13" selection-end-line="25" selection-end-column="13" />
-          <folding>
-            <element signature="e#1#29#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/items.py">
       <provider selected="true" editor-type-id="text-editor" />
     </entry>
@@ -680,15 +789,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/agent_code/simple_agent/callbacks.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="-3287">
-          <folding>
-            <element signature="e#1#19#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/Q/rewards.py">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="544">
@@ -696,20 +796,6 @@
           <folding>
             <marker date="1551789594514" expanded="true" signature="67:73" ph="..." />
           </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/main.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="742">
-          <caret line="54" column="19" selection-start-line="54" selection-start-column="19" selection-end-line="54" selection-end-column="19" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/settings.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="136">
-          <caret line="11" column="16" selection-start-line="11" selection-start-column="16" selection-end-line="11" selection-end-column="16" />
         </state>
       </provider>
     </entry>
@@ -739,27 +825,67 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/indices_OLD_JAKOB.py">
+    <entry file="file://$PROJECT_DIR$/indices.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="255">
-          <caret line="15" selection-start-line="15" selection-end-line="15" />
+        <state relative-caret-position="288">
+          <caret line="54" selection-start-line="54" selection-end-line="54" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/agent_code/simple_agent/callbacks.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="-1757">
+          <folding>
+            <element signature="e#1#19#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/agents_save_states.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="34">
+          <caret line="25" column="12" lean-forward="true" selection-start-line="25" selection-start-column="12" selection-end-line="25" selection-end-column="12" />
+          <folding>
+            <element signature="e#1#29#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$USER_HOME$/Anaconda3/Lib/threading.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state>
+          <caret line="915" selection-start-line="915" selection-end-line="915" />
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/main_save_states.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="-561">
+        <state>
           <caret line="30" selection-start-line="30" selection-end-line="30" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/main.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="155">
+          <caret line="42" column="27" selection-start-line="42" selection-start-column="27" selection-end-line="42" selection-end-column="27" />
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/environment_save_states.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="-4016">
-          <caret line="30" column="32" selection-start-line="30" selection-start-column="32" selection-end-line="30" selection-end-column="32" />
+        <state relative-caret-position="158">
+          <caret line="82" selection-start-line="82" selection-end-line="82" />
           <folding>
             <element signature="e#0#21#0" expanded="true" />
           </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/settings.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="878">
+          <caret line="57" column="10" selection-start-line="57" selection-start-column="10" selection-end-line="57" selection-end-column="10" />
         </state>
       </provider>
     </entry>

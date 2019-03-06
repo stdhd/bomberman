@@ -1,6 +1,6 @@
 
 from settings import events
-
+import numpy as np
 
 def get_reward(state, player_index):
 
@@ -17,9 +17,11 @@ def get_reward(state, player_index):
             'KILLED_SELF': -1000,
             'COIN_COLLECTED': 100}
 
-    player = state[-(1 + (4 - player_index)*21): -(1 + (4 - player_index + 1)*21)]
+    begin = state.shape[0]-(1 + (4 - player_index)*21)
+    end = state.shape[0]-(1 + (4 - player_index - 1)*21)
+    player = state[begin: end]
 
-    step_events = events[player[4:]]
+    step_events = np.asarray(events)[player[4:].astype(bool)]
 
     reward = 0
 

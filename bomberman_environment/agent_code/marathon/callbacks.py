@@ -4,7 +4,7 @@ import numpy as np
 
 from settings import s
 
-from observation import create_observation
+from observation import create_observation, find_equivalent
 
 
 def setup(self):
@@ -19,13 +19,21 @@ def setup(self):
 
     self.radius = 3  # radius for view window
 
+    self.ACTIONS = ['WAIT', 'UP', 'DOWN', 'LEFT', 'RIGHT', 'BOMB']
+
     q_table_path = 'agent_code/marathon/tables.npy'
 
+    kernel_matrix_path = 'agent_code/marathon/kernel_matrix.npy'
+
     q_table = np.load(q_table_path)
+
+    kernel_matrix = np.load(kernel_matrix_path)
 
     self.obs = q_table[0]
 
     self.q = q_table[1]
+
+    self.reg_matrix = kernel_matrix
 
     self.isInitialized = True
 
@@ -42,16 +50,29 @@ def act(self):
     try:
         if not self.isInitialized:
             self.logger.error("act: Initialization failed before action. ")
+            setup(self)
     except AttributeError:
         self.logger.error("act: Setup was not called before act(self). ")
+        setup(self)
 
     state = derive_state_representation(self)
 
     observation = create_observation(state, self.radius, [0])
 
-    
+    obs_index = find_equivalent(observation, self.obs)
 
-    choice = np.random.choice(np.flatnonzero(learned[index_current] == learned[index_current].max()))
+    if obs_index == -1:  # state not found, use regression
+
+        choice = regression_action(self, observation)
+
+    else:
+
+        choice = np.random.choice(np.flatnonzero(self.q[obs_index] == self.q[obs_index].max()))
+
+    self.next_action = self.ACTIONS[choice]
+
+
+
 
 def derive_state_representation(self):
     """

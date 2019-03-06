@@ -4,6 +4,54 @@ import numpy as np
 
 from settings import s
 
+from observation import create_observation
+
+
+def setup(self):
+    """
+    Initialize agent using data from q tables.
+    :param self:
+    :param q_tables: filepath to
+    :return:
+    """
+
+    self.isInitialized = False
+
+    self.radius = 3  # radius for view window
+
+    q_table_path = 'agent_code/marathon/tables.npy'
+
+    q_table = np.load(q_table_path)
+
+    self.obs = q_table[0]
+
+    self.q = q_table[1]
+
+    self.isInitialized = True
+
+
+def act(self):
+    """
+    Derives state representation, calls observation function, and selects next action from q table.
+    :param self:
+    :return:
+    """
+
+    self.next_action = 'WAIT'
+
+    try:
+        if not self.isInitialized:
+            self.logger.error("act: Initialization failed before action. ")
+    except AttributeError:
+        self.logger.error("act: Setup was not called before act(self). ")
+
+    state = derive_state_representation(self)
+
+    observation = create_observation(state, self.radius, [0])
+
+    
+
+    choice = np.random.choice(np.flatnonzero(learned[index_current] == learned[index_current].max()))
 
 def derive_state_representation(self):
     """

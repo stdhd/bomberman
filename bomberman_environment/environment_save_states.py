@@ -14,7 +14,7 @@ from agents_save_states import *
 from items import *
 from settings import s, e
 
-from indices_OLD_JAKOB import *
+from indices import *
 
 class BombeRLeWorld(object):
 

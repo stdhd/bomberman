@@ -206,7 +206,6 @@
   </component>
   <component name="FindInProjectRecents">
     <findStrings>
-      <find>reward_</find>
       <find>look_for_targets</find>
       <find>pipe</find>
       <find>coll</find>
@@ -236,6 +235,7 @@
       <find>Event</find>
       <find>events.</find>
       <find>round</find>
+      <find>increm</find>
     </findStrings>
   </component>
   <component name="Git.Settings">

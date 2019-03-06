@@ -14,7 +14,7 @@ from agents_save_states import *
 from items import *
 from settings import s, e
 
-from indices import *
+from indices_OLD_JAKOB import *
 
 class BombeRLeWorld(object):
 
@@ -29,8 +29,6 @@ class BombeRLeWorld(object):
 
 
         self.savepath = savepath
-        # self.FILEHANDLE = open(self.savepath, 'a')
-        self.increment = 0
 
         self.free_grids = x_y_to_index(s.cols - 2, s.rows - 2, s.cols, s.rows) if (s.cols - 1) * (s.rows - 1) % 2 == 0 \
             else x_y_to_index(s.cols - 3, s.rows - 2, s.cols, s.rows)  # number of free states (used to reserve memory)

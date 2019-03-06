@@ -6,6 +6,8 @@ from settings import s
 
 from observation import create_observation, find_equivalent
 
+from agent_code.marathon.kernel_regression import *
+
 
 def setup(self):
     """
@@ -17,23 +19,23 @@ def setup(self):
 
     self.isInitialized = False
 
-    self.radius = 3  # radius for view window
+    q_table_path = 'agent_code/marathon/tables.npy'  # load q table from RL
 
-    self.ACTIONS = ['WAIT', 'UP', 'DOWN', 'LEFT', 'RIGHT', 'BOMB']
+    obs_action_path = 'agent_code/marathon/obs_actions.npy'  # load dataset of observation+action tuples
 
-    q_table_path = 'agent_code/marathon/tables.npy'
-
-    kernel_matrix_path = 'agent_code/marathon/kernel_matrix.npy'
+    kernel_alpha_path = 'agent_code/marathon/alpha.npy'  # load precomputed kernel 'alpha' vector
 
     q_table = np.load(q_table_path)
-
-    kernel_matrix = np.load(kernel_matrix_path)
 
     self.obs = q_table[0]
 
     self.q = q_table[1]
 
-    self.reg_matrix = kernel_matrix
+    self.OBS_ACTIONS = np.load(obs_action_path)
+
+    self.alpha = np.load(kernel_alpha_path)
+
+    self.sig, self.tau = None, None # FIXME
 
     self.isInitialized = True
 
@@ -51,9 +53,13 @@ def act(self):
         if not self.isInitialized:
             self.logger.error("act: Initialization failed before action. ")
             setup(self)
+            if not self.isInitialized:
+                self.logger.error("act: Initialization failed!")
+                raise RuntimeError
     except AttributeError:
-        self.logger.error("act: Setup was not called before act(self). ")
-        setup(self)
+        err = "act: Setup was not called before act(self). "
+        self.logger.error(err)
+        raise RuntimeError(err)
 
     state = derive_state_representation(self)
 
@@ -67,11 +73,36 @@ def act(self):
 
     else:
 
-        choice = np.random.choice(np.flatnonzero(self.q[obs_index] == self.q[obs_index].max()))
+        choice = np.random.choice(np.flatnonzero(self.q[obs_index] == self.q[obs_index].max()))  # choose highest scoring
+        # action from q table
 
     self.next_action = self.ACTIONS[choice]
 
 
+def regression_action(self, observation):
+    """
+    Kernel regression to get highest scoring action from observation.
+    :param self:
+    :param observation:
+    :return: int encoding for action (see CONVENTIONS)
+    """
+
+    obs_and_action = np.copy(observation)
+
+    np.append(obs_and_action, 0)
+
+    q_approx_values = np.zeros(len(s.actions))
+
+    for i in range(len(s.actions)):
+
+        obs_and_action[-1] = i  # find q(s, a) for this observation + action
+
+        kernel_vects = K_sparse_pairwise(np.array([obs_and_action]), self.OBS_ACTIONS, self.sig)
+        # get kernelized distances
+
+        q_approx_values[i] = kernel_vects.dot(self.alpha)[0]  # do kernel regression
+
+    return np.random.choice(np.flatnonzero(q_approx_values == q_approx_values.max()))
 
 
 def derive_state_representation(self):

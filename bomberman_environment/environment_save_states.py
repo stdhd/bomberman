@@ -48,35 +48,7 @@ class BombeRLeWorld(object):
 
     def capture_state(self):
         """
-        Capture and append the current game state to the file at self.savepath.
-
-        Format:
-
-        (board indices, 4*[Player block], step number)
-
-        Player block of the form:
-
-        (Player location index, player point number, bomb index, bomb timer,
-        [17 Event booleans])
-
-        Board indices contain:
-
-         3 if coin
-
-         1 if crate
-
-         0 if empty or player
-
-         -1 * 3^(coin_is_present) * 2^(explosion timer if explosion timer is greater than 0)
-
-         Note: When constructing sight in observation ("Sichtfeld"), add additional values:
-
-         5 if enemy and no explosion
-
-         2**(bomb_timer) if bomb
-
-         -1 if wall
-
+        Capture and append the current game state to the file at self.savepath
         :return:
         """
 
@@ -120,7 +92,7 @@ class BombeRLeWorld(object):
 
                 ind = x_y_to_index(x, y, s.cols, s.rows) - 1
                 coin = int(state[ind] == 3)
-                state[ind] = -1 * 3**coin * 2**explosion_map[x,y]  #  note explosions
+                state[ind] = -1 * 3**coin * 2**explosion_map[x,y]  # note explosions
 
         #  save the state
         # save = self.savepath + ' ' + str(self.step)

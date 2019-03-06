@@ -18,7 +18,8 @@ def act(agent):
     explosions = agent.game_state['explosions']
     step = agent.game_state['step']
 
-    agent.logger.info(explosions)
+    agent.logger.info(others)
+    agent.logger.info(x, y)
     agent.logger.info(arena)
 
     # agent.logger.info(step)

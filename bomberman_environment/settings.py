@@ -13,7 +13,7 @@ settings = {
     'fps': 15,
 
     # Main loop
-    'update_interval': 0.08, # 0.33,
+    'update_interval': 1, # 0.33,
     'turn_based': False,
     'n_rounds': 100,
     'save_replay': False,
@@ -25,7 +25,7 @@ settings = {
     'grid_size': 30,
     #'crate_density': 0.75,
     # For task one no creates are required
-    'crate_density': 0.5,
+    'crate_density': 0,
     'actions': ['UP', 'DOWN', 'LEFT', 'RIGHT', 'BOMB', 'WAIT'],
     'max_agents': 4,
     'max_steps': 400,

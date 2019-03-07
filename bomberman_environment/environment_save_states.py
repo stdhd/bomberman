@@ -60,7 +60,8 @@ class BombeRLeWorld(object):
             state[i] = self.arena[x, y]
 
         for coin in self.coins:
-            state[x_y_to_index(coin.x, coin.y, s.cols, s.rows) - 1] = 3
+            if coin.collectable:
+                state[x_y_to_index(coin.x, coin.y, s.cols, s.rows) - 1] = 3
 
         for ind, agent in enumerate(self.agents):
 
@@ -91,10 +92,6 @@ class BombeRLeWorld(object):
                 ind = x_y_to_index(x, y, s.cols, s.rows) - 1
                 coin = int(state[ind] == 3)
                 state[ind] = -1 * 3**coin * 2**explosion_map[x,y]  # note explosions
-
-        #  save the state
-        # save = self.savepath + ' ' + str(self.step)
-        # np.save(save, state)
 
         self.save_list.append(state)
 
@@ -276,10 +273,6 @@ class BombeRLeWorld(object):
             agent.events.append(e.INVALID_ACTION)
 
     def poll_and_run_agents(self):
-        """
-        Note: This method has been modified to call state-saving function at the beginning of the step.
-        :return:
-        """
         # Send world state to all agents
         for a in self.active_agents:
             self.logger.debug(f'Sending game state to agent <{a.name}>')
@@ -326,7 +319,6 @@ class BombeRLeWorld(object):
 
             self.perform_agent_action(a, action)
 
-        self.capture_state()
 
         # Reset agent flags
         for a in self.active_agents:
@@ -341,13 +333,20 @@ class BombeRLeWorld(object):
         agent.ready_flag.clear()
 
     def do_step(self, user_input='WAIT'):
+        """
+        Note: This method has been modified to call the state-saving function at the end of the step.
+
+        In addition, order of bomb timer decrements and setting bombs/explosions to "inactive" has been slightly altered
+        to enable state capturing.
+        :return:
+        """
         self.step += 1
         self.logger.info(f'STARTING STEP {self.step}')
 
         self.user_input = user_input
         self.logger.debug(f'User input: {self.user_input}')
 
-        self.poll_and_run_agents()
+        self.poll_and_run_agents()  # performs agent actions
 
         # Coins
         for coin in self.coins:
@@ -361,6 +360,7 @@ class BombeRLeWorld(object):
                         a.trophies.append(Agent.coin_trophy)
 
         # Bombs
+        decrement_bombs = []  # TODO: Decrement timer for these bombs
         for bomb in self.bombs:
             # Explode when timer is finished
             if bomb.timer < 0:
@@ -386,8 +386,7 @@ class BombeRLeWorld(object):
                 bomb.owner.bombs_left += 1
             # Progress countdown
             else:
-                bomb.timer -= 1
-        self.bombs = [b for b in self.bombs if b.active]
+                decrement_bombs.append(bomb)  # TODO: Decrement timer
 
         # Explosions
         agents_hit = set()
@@ -421,7 +420,17 @@ class BombeRLeWorld(object):
                 if aa is not a:
                     aa.events.append(e.OPPONENT_ELIMINATED)
             self.put_down_agent(a)
+
+        for bomb in decrement_bombs:  # TODO: Update bomb info
+            bomb.timer -= 1
+
+        self.bombs = [b for b in self.bombs if b.active]
+
+        self.capture_state()  # TODO: Capture state before disabling explosions, but after disabling bombs
         self.explosions = [e for e in self.explosions if e.active]
+
+        # Note: If a bomb has timer == 0, it will explode *after agents have moved in the next step*
+        # Note: However, if an explosion has timer == 0, it is impotent.
 
         if self.time_to_stop():
             self.end_round()

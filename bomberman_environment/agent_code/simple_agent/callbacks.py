@@ -204,6 +204,8 @@ def act(self):
         self.bomb_history.append((x,y))
 
 
+
+
 def reward_update(self):
     """Called once per step to allow intermediate rewards based on game events.
 
@@ -213,7 +215,9 @@ def reward_update(self):
     agent based on these events and your knowledge of the (new) game state. In
     contrast to act, this method has no time limit.
     """
+    print("joojno")
     self.logger.debug(f'Encountered {len(self.events)} game event(s)')
+
 
 
 def end_of_episode(self):

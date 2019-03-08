@@ -28,7 +28,7 @@ def q_train_from_games(reader_path, writer_path):
         temp_observation, temp_action, temp_reward = create_observation(daten[i], 2, np.arange(AGENTS_COUNT))
         for j in range(AGENTS_COUNT):
             observation_db[i, j], action_db[i, j], reward_db[i, j] = temp_observation[j], temp_action[j], temp_reward[j]
-    absd =123
+        absd =123
 
     for k in range(AGENTS_COUNT):
         learned, obs = do_action(learned, obs, 0.8, 0.7, observation_db[:, j], action_db[:, j], reward_db[:, j])

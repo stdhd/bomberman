@@ -129,11 +129,11 @@ def find_equivalent(single, collection, radius):
 
 
 #pass
-#ff = np.load("test_daten.npy")
-#for i in range(400):
-  #  daten = np.load("test_daten.npy")[i]
-    #get_reward(daten, 0)
- #   print(get_reward(daten, 0), get_reward(daten, 1), get_reward(daten, 2), get_reward(daten, 3))
+ff = np.load("test_daten.npy")
+for i in range(400):
+    daten = np.load("test_daten.npy")[i]
+    # get_reward(daten, 0)
+    print(get_reward(daten, 0), get_reward(daten, 1), get_reward(daten, 2), get_reward(daten, 3))
 
 #print(create_window(daten,1, np.array([0,1])))
 

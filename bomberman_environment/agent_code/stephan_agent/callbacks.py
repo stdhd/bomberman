@@ -19,7 +19,8 @@ def setup(self):
     You can also use the self.logger object at any time to write to the log
     file for debugging (see https://docs.python.org/3.7/library/logging.html).
     """
-    self.obs_length = 27
+    self.coin_distance = 0
+    self.obs_length = 10
     self.discount = 0.8
     self.learning_rate = 0.8
     self.epsilon = 0.2
@@ -50,18 +51,8 @@ def act(self):
     """
     self.logger.info('Picking action according to rule set')
 
+    arena = create_arena(self)
     # Gather information about the game state
-    arena = self.game_state['arena']
-    # print(self.game_state['bombs'])
-    for x,y,time in self.game_state['bombs']:
-        arena[x,y] = 9
-
-    for x,y,t,tt,ttt in self.game_state['others']:
-        arena[x,y] = 6
-
-    for x,y in self.game_state['coins']:
-        arena[x,y] = 10
-
 
     x, y, _, bombs_left, score = self.game_state['self']
     #print("x,y:" + str(x)  + "  " + str(y))
@@ -92,6 +83,19 @@ def act(self):
    #  print(actions[choice])
     # print(actions[choice], self.observations, self.learned)
 
+def create_arena(self):
+    arena = self.game_state['arena']
+    # print(self.game_state['bombs'])
+    for x, y, time in self.game_state['bombs']:
+        arena[x, y] = 9
+
+    for x, y, t, tt, ttt in self.game_state['others']:
+        arena[x, y] = 6
+
+    for x, y in self.game_state['coins']:
+        arena[x, y] = 10
+
+    return arena
 
 def reward_update(self):
     """Called once per step to allow intermediate rewards based on game events.
@@ -141,6 +145,18 @@ def reward_update(self):
             self.reward -= 1000
         if event == 14:
             self.reward -= 500
+
+    x, y, _, bombs_left, score = self.game_state['self']
+    arena = create_arena(self)
+    free_tiles = np.where(arena == 0, True, False)
+    targetsX, targetsY = np.where(arena == 10)
+    targets = list(zip(targetsX.tolist(), targetsY.tolist()))
+
+    (tx, ty), new_distance = look_for_targets(free_tiles, (x,y), targets, None)
+
+    if self.coin_distance > new_distance:
+        self.reward += 5
+    self.coin_distance = new_distance
 
     self.logger.debug(f'Encountered {len(self.events)} game event(s)')
 
@@ -204,11 +220,31 @@ def get_observation(self,spielfeld, x, y):
 
     free_tiles = np.where(spielfeld == 0, True, False)
     start = (x,y)
-    targets = np.where(spielfeld == 10)
-    next_target = look_for_targets(free_tiles, start, targets, None)
-    print(next_target)
+    targetsX, targetsY = np.where(spielfeld == 10)
 
-    k = 2
+    targets = list(zip(targetsX.tolist(), targetsY.tolist()))
+
+
+    # print(next_target)
+    (tx,ty), self.coin_distance = look_for_targets(free_tiles, start, targets, None)
+    #print(self.coin_distance)
+    tmp = 0
+    if (tx,ty) == (x+1,y):
+        # move right
+        tmp = 1
+    if (tx,ty) == (x-1,y):
+        # move left
+        tmp = 2
+    if (tx,ty) == (x,y+1):
+        # move up
+        tmp = 3
+    if (tx,ty) == (x,y-1):
+        # move down
+        tmp = 4
+
+    observation[0] = tmp
+
+    k = 1
     radius = 1
     obs = np.zeros([2*radius+1,2*radius+1])
     for i in range(2*radius+1):
@@ -289,6 +325,7 @@ def look_for_targets(free_space, start, targets, logger=None):
     # Determine the first step towards the best found target tile
     current = best
     while True:
-        if parent_dict[current] == start: return current
+        if parent_dict[current] == start:
+            # print(best)
+            return current, best_dist
         current = parent_dict[current]
-

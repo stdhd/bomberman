@@ -73,7 +73,7 @@ class BombeRLeWorld(object):
 
             # note events
             for event in agent.events:
-                state[self.free_grids + ind * player_block + 4 + event] = 1
+                state[self.free_grids + ind * player_block + 4 + event] += 1
 
         for bomb in self.bombs:
             # note bomb position

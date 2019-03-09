@@ -3,8 +3,10 @@
   <component name="ChangeListManager">
     <list default="true" id="8281fd87-bacf-4f99-9ff1-cd15d1389165" name="Default Changelist" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Q/rewards.py" beforeDir="false" afterPath="$PROJECT_DIR$/Q/rewards.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/environment_save_states.py" beforeDir="false" afterPath="$PROJECT_DIR$/environment_save_states.py" afterDir="false" />
     </list>
+    <ignored path=".idea/" />
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -13,7 +15,7 @@
   </component>
   <component name="CoverageDataManager">
     <SUITE FILE_PATH="coverage/bomberman_environment$main.coverage" NAME="main Coverage Results" MODIFIED="1551881968563" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />
-    <SUITE FILE_PATH="coverage/bomberman_environment$main_save_states.coverage" NAME="main_save_states Coverage Results" MODIFIED="1551963778259" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />
+    <SUITE FILE_PATH="coverage/bomberman_environment$main_save_states.coverage" NAME="main_save_states Coverage Results" MODIFIED="1551972326249" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />
   </component>
   <component name="FUSProjectUsageTrigger">
     <session id="1954803866">
@@ -54,11 +56,13 @@
     <session id="-1280577960">
       <usages-collector id="statistics.lifecycle.project">
         <counts>
-          <entry key="project.closed" value="2" />
+          <entry key="project.closed" value="4" />
+          <entry key="project.open.time.13" value="1" />
           <entry key="project.open.time.32" value="1" />
           <entry key="project.open.time.35" value="1" />
           <entry key="project.open.time.36" value="1" />
-          <entry key="project.opened" value="3" />
+          <entry key="project.open.time.40" value="1" />
+          <entry key="project.opened" value="5" />
         </counts>
       </usages-collector>
       <usages-collector id="statistics.file.extensions.open">
@@ -76,25 +80,25 @@
       <usages-collector id="statistics.file.extensions.edit">
         <counts>
           <entry key="dummy" value="62" />
-          <entry key="py" value="5432" />
-          <entry key="txt" value="195" />
+          <entry key="py" value="5595" />
+          <entry key="txt" value="213" />
         </counts>
       </usages-collector>
       <usages-collector id="statistics.file.types.edit">
         <counts>
-          <entry key="PLAIN_TEXT" value="257" />
-          <entry key="Python" value="5432" />
+          <entry key="PLAIN_TEXT" value="275" />
+          <entry key="Python" value="5595" />
         </counts>
       </usages-collector>
     </session>
   </component>
   <component name="FileEditorManager">
     <leaf SIDE_TABS_SIZE_LIMIT_KEY="300">
-      <file pinned="false" current-in-tab="true">
+      <file pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/environment_save_states.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="116">
-              <caret line="95" selection-start-line="95" selection-end-line="95" />
+            <state relative-caret-position="309">
+              <caret line="75" column="76" lean-forward="true" selection-start-line="75" selection-start-column="76" selection-end-line="75" selection-end-column="76" />
               <folding>
                 <element signature="e#0#21#0" expanded="true" />
               </folding>
@@ -105,7 +109,7 @@
       <file pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/main_save_states.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="18">
+            <state relative-caret-position="459">
               <caret line="30" selection-start-line="30" selection-end-line="30" />
             </state>
           </provider>
@@ -114,8 +118,8 @@
       <file pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/environment.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="-2499">
-              <caret line="167" selection-start-line="167" selection-end-line="167" />
+            <state relative-caret-position="141">
+              <caret line="55" column="25" selection-start-line="55" selection-start-column="25" selection-end-line="55" selection-end-column="25" />
             </state>
           </provider>
         </entry>
@@ -123,7 +127,7 @@
       <file pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/indices.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="441">
+            <state relative-caret-position="918">
               <caret line="54" selection-start-line="54" selection-end-line="54" />
             </state>
           </provider>
@@ -132,7 +136,7 @@
       <file pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/agent_code/simple_agent/callbacks.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="1530">
+            <state relative-caret-position="1445">
               <caret line="90" selection-start-line="90" selection-end-line="90" />
               <folding>
                 <element signature="e#1#19#0" expanded="true" />
@@ -144,17 +148,17 @@
       <file pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/settings.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="-474">
+            <state relative-caret-position="493">
               <caret line="32" column="20" selection-start-line="32" selection-start-column="20" selection-end-line="32" selection-end-column="20" />
             </state>
           </provider>
         </entry>
       </file>
-      <file pinned="false" current-in-tab="false">
+      <file pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/Q/rewards.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="561">
-              <caret line="34" selection-start-line="34" selection-end-line="34" />
+            <state relative-caret-position="532">
+              <caret line="34" lean-forward="true" selection-start-line="34" selection-end-line="34" />
             </state>
           </provider>
         </entry>
@@ -239,13 +243,13 @@
         <option value="$PROJECT_DIR$/indices.py" />
         <option value="$PROJECT_DIR$/Q/q_train_from_games.py" />
         <option value="$PROJECT_DIR$/Q/manage_training_data.py" />
-        <option value="$PROJECT_DIR$/Q/rewards.py" />
         <option value="$PROJECT_DIR$/agent_code/marathon/callbacks.py" />
         <option value="$PROJECT_DIR$/agent_code/marathon/kernel_regression.py" />
         <option value="$PROJECT_DIR$/main.py" />
         <option value="$PROJECT_DIR$/main_save_states.py" />
         <option value="$PROJECT_DIR$/settings.py" />
         <option value="$PROJECT_DIR$/environment_save_states.py" />
+        <option value="$PROJECT_DIR$/Q/rewards.py" />
       </list>
     </option>
   </component>
@@ -256,9 +260,9 @@
     <sorting>DEFINITION_ORDER</sorting>
   </component>
   <component name="ProjectFrameBounds">
-    <option name="x" value="-8" />
-    <option name="width" value="977" />
-    <option name="height" value="1038" />
+    <option name="x" value="-10" />
+    <option name="width" value="1708" />
+    <option name="height" value="1040" />
   </component>
   <component name="ProjectLevelVcsManager" settingsEditedManually="true">
     <ConfirmationsSetting value="2" id="Add" />
@@ -268,12 +272,33 @@
       <foldersAlwaysOnTop value="true" />
     </navigator>
     <panes>
+      <pane id="ProjectPane">
+        <subPane>
+          <expand>
+            <path>
+              <item name="bomberman_environment" type="b2602c69:ProjectViewProjectNode" />
+              <item name="bomberman_environment" type="462c0819:PsiDirectoryNode" />
+            </path>
+            <path>
+              <item name="bomberman_environment" type="b2602c69:ProjectViewProjectNode" />
+              <item name="bomberman_environment" type="462c0819:PsiDirectoryNode" />
+              <item name="agent_code" type="462c0819:PsiDirectoryNode" />
+            </path>
+          </expand>
+          <select />
+        </subPane>
+      </pane>
       <pane id="Scope">
         <subPane subId="Scope 'Project Files'; set:Project Files; class com.intellij.psi.search.scope.ProjectFilesScope">
           <expand>
             <path>
               <item name="bomberman_environment" type="3d21c010:ScopeViewTreeModel$ProjectNode" />
               <item name="" type="442cc68d:ScopeViewTreeModel$RootNode" />
+            </path>
+            <path>
+              <item name="bomberman_environment" type="3d21c010:ScopeViewTreeModel$ProjectNode" />
+              <item name="" type="442cc68d:ScopeViewTreeModel$RootNode" />
+              <item name=".idea" type="9f88c78c:ScopeViewTreeModel$FileNode" />
             </path>
             <path>
               <item name="bomberman_environment" type="3d21c010:ScopeViewTreeModel$ProjectNode" />
@@ -301,28 +326,13 @@
           <select />
         </subPane>
       </pane>
-      <pane id="ProjectPane">
-        <subPane>
-          <expand>
-            <path>
-              <item name="bomberman_environment" type="b2602c69:ProjectViewProjectNode" />
-              <item name="bomberman_environment" type="462c0819:PsiDirectoryNode" />
-            </path>
-            <path>
-              <item name="bomberman_environment" type="b2602c69:ProjectViewProjectNode" />
-              <item name="bomberman_environment" type="462c0819:PsiDirectoryNode" />
-              <item name="agent_code" type="462c0819:PsiDirectoryNode" />
-            </path>
-          </expand>
-          <select />
-        </subPane>
-      </pane>
     </panes>
   </component>
   <component name="PropertiesComponent">
     <property name="SearchEverywhereHistoryKey" value="&#9;FILE&#9;file://C:/Users/ASUS-N55S-Laptop/Desktop/WS1819/Bomberman/bomberman/bomberman_environment/settings.py" />
     <property name="WebServerToolWindowFactoryState" value="false" />
-    <property name="settings.editor.selected.configurable" value="preferences.sourceCode.Python" />
+    <property name="last_opened_file_path" value="$PROJECT_DIR$/.idea" />
+    <property name="settings.editor.selected.configurable" value="project.propVCSSupport.Ignored.Files" />
   </component>
   <component name="RecentsManager">
     <key name="CopyFile.RECENT_KEYS">
@@ -521,35 +531,43 @@
       <option name="project" value="LOCAL" />
       <updated>1551959736776</updated>
     </task>
-    <option name="localTasksCounter" value="17" />
+    <task id="LOCAL-00017" summary="Fixed state saving">
+      <created>1551965091588</created>
+      <option name="number" value="00017" />
+      <option name="presentableId" value="LOCAL-00017" />
+      <option name="project" value="LOCAL" />
+      <updated>1551965091588</updated>
+    </task>
+    <option name="localTasksCounter" value="18" />
     <servers />
   </component>
   <component name="TimeTrackingManager">
     <option name="totallyTimeSpent" value="1829000" />
   </component>
   <component name="ToolWindowManager">
-    <frame x="-6" y="0" width="781" height="830" extended-state="0" />
+    <frame x="-8" y="0" width="1366" height="832" extended-state="0" />
+    <editor active="true" />
     <layout>
-      <window_info content_ui="combo" id="Project" order="0" visible="true" weight="0.1997226" />
+      <window_info active="true" content_ui="combo" id="Project" order="0" visible="true" weight="0.17993875" />
       <window_info id="Structure" order="1" side_tool="true" weight="0.25" />
       <window_info id="Favorites" order="2" side_tool="true" />
       <window_info anchor="bottom" id="Message" order="0" />
       <window_info anchor="bottom" id="Find" order="1" weight="0.63829786" />
       <window_info anchor="bottom" id="Run" order="2" sideWeight="0.4986577" weight="0.10921986" />
-      <window_info active="true" anchor="bottom" id="Debug" order="3" sideWeight="0.88322145" visible="true" weight="0.55523676" />
+      <window_info anchor="bottom" id="Debug" order="3" sideWeight="0.88322145" weight="0.55157596" />
       <window_info anchor="bottom" id="Cvs" order="4" weight="0.25" />
       <window_info anchor="bottom" id="Inspection" order="5" weight="0.4" />
       <window_info anchor="bottom" id="TODO" order="6" />
       <window_info anchor="bottom" id="Docker" order="7" show_stripe_button="false" />
-      <window_info anchor="bottom" id="Version Control" order="8" />
+      <window_info anchor="bottom" id="Version Control" order="8" sideWeight="0.7669903" weight="0.15759312" />
       <window_info anchor="bottom" id="Database Changes" order="9" show_stripe_button="false" />
-      <window_info anchor="bottom" id="Event Log" order="10" sideWeight="0.11677852" side_tool="true" weight="0.04255319" />
+      <window_info anchor="bottom" id="Event Log" order="10" sideWeight="0.23300971" side_tool="true" weight="0.15781923" />
       <window_info anchor="bottom" id="Terminal" order="11" sideWeight="0.49798658" weight="0.14751773" />
       <window_info anchor="bottom" id="Python Console" order="12" />
       <window_info anchor="right" id="Commander" internal_type="SLIDING" order="0" type="SLIDING" weight="0.4" />
       <window_info anchor="right" id="Ant Build" order="1" weight="0.25" />
       <window_info anchor="right" content_ui="combo" id="Hierarchy" order="2" weight="0.25" />
-      <window_info anchor="right" id="SciView" order="3" visible="true" weight="0.8002774" />
+      <window_info anchor="right" id="SciView" order="3" weight="0.9156293" />
       <window_info anchor="right" id="R Graphics" order="4" />
       <window_info anchor="right" id="R Packages" order="5" />
       <window_info anchor="right" id="Database" order="6" />
@@ -598,7 +616,8 @@
     <MESSAGE value="Renamed indices" />
     <MESSAGE value="Added training data" />
     <MESSAGE value="Fixed error in environment_save_states for event capturing" />
-    <option name="LAST_COMMIT_MESSAGE" value="Fixed error in environment_save_states for event capturing" />
+    <MESSAGE value="Fixed state saving" />
+    <option name="LAST_COMMIT_MESSAGE" value="Fixed state saving" />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>
@@ -669,10 +688,34 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/Q/rewards.py">
+    <entry file="file://$PROJECT_DIR$/agent_code/marathon/callbacks.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="561">
-          <caret line="34" selection-start-line="34" selection-end-line="34" />
+        <state relative-caret-position="403">
+          <caret line="62" selection-start-line="62" selection-end-line="62" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/indices.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="918">
+          <caret line="54" selection-start-line="54" selection-end-line="54" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/agent_code/simple_agent/callbacks.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="1445">
+          <caret line="90" selection-start-line="90" selection-end-line="90" />
+          <folding>
+            <element signature="e#1#19#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/settings.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="493">
+          <caret line="32" column="20" selection-start-line="32" selection-start-column="20" selection-end-line="32" selection-end-column="20" />
         </state>
       </provider>
     </entry>
@@ -693,62 +736,34 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/settings.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="-474">
-          <caret line="32" column="20" selection-start-line="32" selection-start-column="20" selection-end-line="32" selection-end-column="20" />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/environment.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="-2499">
-          <caret line="167" selection-start-line="167" selection-end-line="167" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/agent_code/marathon/callbacks.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="403">
-          <caret line="62" selection-start-line="62" selection-end-line="62" />
-          <folding>
-            <element signature="e#2#20#0" expanded="true" />
-            <marker date="1551878730657" expanded="true" signature="2039:2770" ph="..." />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/indices.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="441">
-          <caret line="54" selection-start-line="54" selection-end-line="54" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/agent_code/simple_agent/callbacks.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="1530">
-          <caret line="90" selection-start-line="90" selection-end-line="90" />
-          <folding>
-            <element signature="e#1#19#0" expanded="true" />
-          </folding>
+        <state relative-caret-position="141">
+          <caret line="55" column="25" selection-start-line="55" selection-start-column="25" selection-end-line="55" selection-end-column="25" />
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/main_save_states.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="18">
+        <state relative-caret-position="459">
           <caret line="30" selection-start-line="30" selection-end-line="30" />
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/environment_save_states.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="116">
-          <caret line="95" selection-start-line="95" selection-end-line="95" />
+        <state relative-caret-position="309">
+          <caret line="75" column="76" lean-forward="true" selection-start-line="75" selection-start-column="76" selection-end-line="75" selection-end-column="76" />
           <folding>
             <element signature="e#0#21#0" expanded="true" />
           </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/Q/rewards.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="532">
+          <caret line="34" lean-forward="true" selection-start-line="34" selection-end-line="34" />
         </state>
       </provider>
     </entry>

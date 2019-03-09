@@ -1,8 +1,9 @@
-
 import numpy as np
+import warnings
 from random import shuffle
 from time import time, sleep
 from collections import deque
+import os
 
 from settings import s
 
@@ -15,7 +16,24 @@ def setup(self):
     You can also use the self.logger object at any time to write to the log
     file for debugging (see https://docs.python.org/3.7/library/logging.html).
     """
-    self.logger.debug('Successfully entered setup code')
+    # Zx6 array with actions ['UP', 'DOWN', 'LEFT', 'RIGHT', 'BOMB', 'WAIT']
+    try:
+        self.q_table = np.load(os.path.join('agent_code', 'eike_agent', 'q_table.npy'))
+        self.logger.debug('LOADED Q')
+    except Exception as e:
+        self.q_table = np.empty([0,6])
+        self.logger.info(f'OVERWRITTEN: {e}')
+
+    # Zx10 array with 3x3 observation around agent plus coin_flag
+    try:
+        self.observation_db = np.load(os.path.join('agent_code', 'eike_agent', 'observation_db.npy'))
+        self.logger.debug('LOADED Obs')
+    except:
+        self.observation_db = np.empty([0,10])
+    self.learning_rate = 0.4
+    self.discount = 0.7
+    self.epsilon = 0.2
+    self.train_flag = False
 
 
 def act(self):
@@ -31,24 +49,61 @@ def act(self):
     in settings.py, execution is interrupted by the game and the current value
     of self.next_action will be used. The default value is 'WAIT'.
     """
-    self.logger.info('Picking action according to rule set')
+    # Default action
+    self.next_action = 'RIGHT'
 
     # Gather information about the game state
     arena = self.game_state['arena']
     x, y, _, bombs_left, score = self.game_state['self']
-    bombs = self.game_state['bombs']
-    bomb_xys = [(x,y) for (x,y,t) in bombs]
-    others = [(x,y) for (x,y,n,b,s) in self.game_state['others']]
+    # bombs = self.game_state['bombs']
+    # bomb_xys = [(x,y) for (x,y,t) in bombs]
+    # others = [(x,y) for (x,y,n,b,s) in self.game_state['others']]
     coins = self.game_state['coins']
-    bomb_map = np.ones(arena.shape) * 5
-    for xb,yb,t in bombs:
-        for (i,j) in [(xb+h, yb) for h in range(-3,4)] + [(xb, yb+h) for h in range(-3,4)]:
-            if (0 < i < bomb_map.shape[0]) and (0 < j < bomb_map.shape[1]):
-                bomb_map[i,j] = min(bomb_map[i,j], t)
+    for c in coins:
+        arena[c[0],c[1]] = 3 # Coin
+    # bomb_map = np.ones(arena.shape) * 5
+    # for xb,yb,t in bombs:
+    #     for (i,j) in [(xb+h, yb) for h in range(-3,4)] + [(xb, yb+h) for h in range(-3,4)]:
+    #         if (0 < i < bomb_map.shape[0]) and (0 < j < bomb_map.shape[1]):
+    #             bomb_map[i,j] = min(bomb_map[i,j], t)
+    
+    self.logger.info(f'self: {[x, y]}')
+    
+    free_space = arena == 0
+    (tx,ty) = look_for_targets(free_space, (x, y), np.asarray(coins), None)
+    coin_flag = determine_Coin_Flag((tx,ty), x, y)
 
-    self.next_action = 'RIGHT'
+    observation = np.array([arena[x-1, y-1], arena[x, y-1], arena[x+1, y-1], arena[x-1, y], arena[x, y], arena[x+1, y], arena[x-1, y+1], arena[x, y+1], arena[x+1, y+1], coin_flag])
+    self.old_observation = observation
+    self.logger.info(f'Observation: {observation}')
 
+    # Search for state in observation_db
+    # If/else needed because np.where can only be done if self.observation_db is not empty
+    if self.observation_db.shape[0] != 0:
+        warnings.simplefilter(action='ignore', category=FutureWarning)
+        observation_ind = np.where((self.observation_db == observation).all(axis=1))[0]
+        self.last_q_ind = observation_ind
+    else:
+        observation_ind = np.array([])
 
+    if self.epsilon > np.random.uniform(0,1) and self.train_flag:
+        self.last_action_ind = np.random.randint(0,6)
+    else:
+        # If state is not yet contained in observation_db it has to be appended and a random action is chosen.
+        # Otherwise the action with the highest value is chosen.
+        if observation_ind.shape[0] == 0 and self.train_flag:
+            self.observation_db = np.append(self.observation_db, np.array([observation]), axis = 0)
+            self.q_table = np.append(self.q_table, np.zeros([1, self.q_table.shape[1]]), axis = 0)
+            self.last_action_ind = np.random.randint(0,6)
+            self.last_q_ind = self.q_table.shape[0] - 1
+        else:
+            if observation_ind.shape[0] == 0:
+                self.last_action_ind = np.random.randint(0,6)
+            else:
+                self.last_action_ind = np.random.choice(np.flatnonzero(self.q_table[observation_ind[0]] == self.q_table[observation_ind[0]].max()))
+                self.logger.info(f'Q-TABLE: {self.q_table[observation_ind[0]] }')
+
+    self.next_action = ['UP', 'DOWN', 'LEFT', 'RIGHT', 'BOMB', 'WAIT'][self.last_action_ind]
 
 def reward_update(self):
     """Called once per step to allow intermediate rewards based on game events.
@@ -60,7 +115,31 @@ def reward_update(self):
     contrast to act, this method has no time limit.
     """
     self.logger.debug(f'Encountered {len(self.events)} game event(s)')
+    self.logger.info(f'Events: {self.events}')
 
+    arena = self.game_state['arena']
+    x, y, _, _, _ = self.game_state['self']
+    coins = self.game_state['coins']
+    for c in coins:
+        arena[c[0],c[1]] = 3 # Coin
+    
+    self.logger.info(f'self: {[x, y]}')
+    free_space = arena == 0
+    (tx,ty) = look_for_targets(free_space, (x, y), np.asarray(coins), logger=self.logger)
+    coin_flag = determine_Coin_Flag((tx,ty), x, y)
+    self.logger.info(f'COIN_FLAG_REWARD: {coin_flag}')
+    reward = getReward(self.events, self.old_observation)
+
+    observation = np.array([arena[x-1, y-1], arena[x, y-1], arena[x+1, y-1], arena[x-1, y], arena[x, y], arena[x+1, y], arena[x-1, y+1], arena[x, y+1], arena[x+1, y+1], coin_flag])
+    warnings.simplefilter(action='ignore', category=FutureWarning)
+    observation_ind = np.where((self.observation_db == observation).all(axis=1))[0]
+    if observation_ind.shape[0] == 0:
+        current_best_value = 0
+    else:
+        current_best_value = self.q_table[observation_ind].max()
+
+    self.q_table[self.last_q_ind, self.last_action_ind] = (1-self.learning_rate) * self.q_table[self.last_q_ind, self.last_action_ind] \
+                                                                + self.learning_rate * (reward + self.discount * current_best_value)
 
 def end_of_episode(self):
     """Called at the end of each game to hand out final rewards and do training.
@@ -69,4 +148,119 @@ def end_of_episode(self):
     game. self.events will contain all events that occured during your agent's
     final step. You should place your actual learning code in this method.
     """
-    self.logger.debug(f'Encountered {len(self.events)} game event(s) in final step')
+    # Do the same as in reward_update
+    reward_update(self)
+    np.save(os.path.join('agent_code', 'eike_agent', 'observation_db'), self.observation_db)
+    np.save(os.path.join('agent_code', 'eike_agent', 'q_table'), self.q_table)
+
+def getReward(events, old_observation):
+    reward = 0
+    # Left, right, up, down (0-3) check for coin flag (old_observation[9])
+    if 0 in events:
+        if old_observation[9] == 1:
+            reward += 5
+        else:
+            reward -= 2
+    elif 1 in events:
+        if old_observation[9] == 2:
+            reward += 5
+        else:
+            reward -= 2
+    elif 2 in events:
+        if old_observation[9] == 3:
+            reward += 5
+        else:
+            reward -= 2
+    elif 3 in events:
+        if old_observation[9] == 4:
+            reward += 5
+        else:
+            reward -= 2
+    # waited
+    elif 4 in events:
+        reward -= 5
+    # Interrupted
+    if 5 in events:
+        reward -= 0
+    # Invalid action
+    if 6 in events:
+        reward -= 50
+    # Bomb dropped
+    if 7 in events:
+        reward -= 50
+    # Coin found
+    if 10 in events:
+        reward += 10
+    # Coin collected
+    if 11 in events:
+        reward += 50
+    # Killed self
+    if 12 in events:
+        reward -= 50
+    return reward
+
+def determine_Coin_Flag(best_step, x, y):
+    if best_step == (x-1,y):
+        # move left
+        coin_flag = 1
+    elif best_step == (x+1,y):
+        # move right
+        coin_flag = 2
+    elif best_step == (x,y-1):
+        # move up
+        coin_flag = 3
+    elif best_step == (x,y+1):
+        # move down
+        coin_flag = 4
+    elif best_step == (x,y):
+        # Collected???? This case does not make sense. TODO: Find out when it occurs
+        coin_flag = 5
+    return coin_flag
+
+def look_for_targets(free_space, start, targets, logger):
+    """Find direction of closest target that can be reached via free tiles.
+
+    Performs a breadth-first search of the reachable free tiles until a target is encountered.
+    If no target can be reached, the path that takes the agent closest to any target is chosen.
+
+    Args:
+        free_space: Boolean numpy array. True for free tiles and False for obstacles.
+        start: the coordinate from which to begin the search.
+        targets: list or array holding the coordinates of all target tiles.
+        logger: optional logger object for debugging.
+    Returns:
+        coordinate of first step towards closest target or towards tile closest to any target.
+    """
+    if len(targets) == 0: return None
+    frontier = [start]
+    parent_dict = {start: start}
+    dist_so_far = {start: 0}
+    best = start
+    best_dist = np.sum(np.abs(np.subtract(targets, start)), axis=1).min()
+
+    while len(frontier) > 0:
+        current = frontier.pop(0)
+        # Find distance from current position to all targets, track closest
+        d = np.sum(np.abs(np.subtract(targets, current)), axis=1).min()
+        if d + dist_so_far[current] <= best_dist:
+            best = current
+            best_dist = d + dist_so_far[current]
+        if d == 0:
+            # Found path to a target's exact position, mission accomplished!
+            best = current
+            break
+        # Add unexplored free neighboring tiles to the queue in a random order
+        x, y = current
+        neighbors = [(x,y) for (x,y) in [(x+1,y), (x-1,y), (x,y+1), (x,y-1)] if free_space[x,y]]
+        shuffle(neighbors)
+        for neighbor in neighbors:
+            if neighbor not in parent_dict:
+                frontier.append(neighbor)
+                parent_dict[neighbor] = current
+                dist_so_far[neighbor] = dist_so_far[current] + 1
+    if logger: logger.debug(f'Suitable target found at {best}')
+    # Determine the first step towards the best found target tile
+    current = best
+    while True:
+        if parent_dict[current] == start: return current
+        current = parent_dict[current]

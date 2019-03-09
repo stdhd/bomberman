@@ -13,9 +13,9 @@ settings = {
     'fps': 15,
 
     # Main loop
-    'update_interval': 0.08, # 0.33,
+    'update_interval': 0.06, # 0.33,
     'turn_based': False,
-    'n_rounds': 100,
+    'n_rounds': 600,
     'save_replay': False,
     'make_video_from_replay': False,
 
@@ -25,10 +25,10 @@ settings = {
     'grid_size': 30,
     #'crate_density': 0.75,
     # For task one no creates are required
-    'crate_density': 0.5,
+    'crate_density': 0,
     'actions': ['UP', 'DOWN', 'LEFT', 'RIGHT', 'BOMB', 'WAIT'],
     'max_agents': 4,
-    'max_steps': 400,
+    'max_steps': 200,
     'stop_if_not_training': False,
     'bomb_power': 3,
     'bomb_timer': 4,
@@ -78,7 +78,7 @@ events = [
     'KILLED_OPPONENT', #12
     'KILLED_SELF',
 
-    'GOT_KILLED',
+    'GOT_KILLED', #14
     'OPPONENT_ELIMINATED',
     'SURVIVED_ROUND',
 ]

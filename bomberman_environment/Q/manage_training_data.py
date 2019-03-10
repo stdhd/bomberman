@@ -31,10 +31,14 @@ def add_to_trained(records_file, train_data_file):
     :return: True iff file loading successful
     """
 
-    with open(records_file, "w") as f:
+    with open(records_file, "r") as f:
         records = json.load(f)
 
+    f.close()
+
     records.append(train_data_file)
+
+    f = open(records_file, "w")
 
     json.dump(records, f)
 

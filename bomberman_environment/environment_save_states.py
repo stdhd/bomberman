@@ -485,6 +485,7 @@ class BombeRLeWorld(object):
 
             #  TODO Save games from here
             save = self.savepath+'_'+str(self.round)
+            print("Saving game to: " + save)
             np.save(save, np.asarray(self.save_list))
             self.save_list = []
 

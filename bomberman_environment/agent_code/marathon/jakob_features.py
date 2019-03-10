@@ -8,7 +8,7 @@ from agent_code.marathon.indices import *
 
 def jakob_features(state, player_index=0, ncols=s.cols, nrows=s.rows):
     """
-    Given a state vector, return a list of features as an array. (See Google Drive: features)
+    Given a state vector, return a list of features for a player as an array. (See Google Drive: features)
 
     :param state:
     :param player_index: Which player to generate the features for.
@@ -86,7 +86,6 @@ def jakob_features(state, player_index=0, ncols=s.cols, nrows=s.rows):
 
     remaining_coins = coins.shape[0]
 
-
     return np.array([
         me_has_bomb,
         closest_coin_dist,
@@ -101,8 +100,6 @@ def jakob_features(state, player_index=0, ncols=s.cols, nrows=s.rows):
         remaining_crates,
         remaining_coins
     ])
-
-
 
 
 def is_holding_bomb(state, player_index):

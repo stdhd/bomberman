@@ -1,10 +1,10 @@
-#from ..state_functions.rewards import *
-#from ..indices import *
 
-from rewards import *
+from QTraining.rewards import *
 from agent_code.marathon.indices import *
 
 import math
+
+from settings import s
 
 
 def create_observation(daten, radius, selected_agents):
@@ -19,7 +19,7 @@ def create_observation(daten, radius, selected_agents):
     :return: reward: shape [agent_count]
     """
 
-    ZEILEN = 17
+    ZEILEN = s.rows
     WALL = 2
     CRATE = 1
     FREE = 0

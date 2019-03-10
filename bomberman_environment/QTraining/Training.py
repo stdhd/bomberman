@@ -1,5 +1,5 @@
 from agent_code.marathon.indices import *
-from observation import *
+from QTraining.observation import *
 
 
 def q_train_from_games(reader_path, writer_path):

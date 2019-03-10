@@ -2,13 +2,8 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="8281fd87-bacf-4f99-9ff1-cd15d1389165" name="Default Changelist" comment="">
-      <change afterPath="$PROJECT_DIR$/agent_code/marathon/jakob_features.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../Text/State representations.txt" beforeDir="false" afterPath="$PROJECT_DIR$/../Text/State representations.txt" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Q-Training/Training.py" beforeDir="false" afterPath="$PROJECT_DIR$/Q-Training/Training.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Q-Training/observation.py" beforeDir="false" afterPath="$PROJECT_DIR$/Q-Training/observation.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/environment_save_states.py" beforeDir="false" afterPath="$PROJECT_DIR$/environment_save_states.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/indices.py" beforeDir="false" afterPath="$PROJECT_DIR$/agent_code/marathon/indices.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/agent_code/marathon/jakob_features.py" beforeDir="false" afterPath="$PROJECT_DIR$/agent_code/marathon/jakob_features.py" afterDir="false" />
     </list>
     <ignored path=".idea/" />
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
@@ -74,40 +69,49 @@
       <usages-collector id="statistics.file.extensions.open">
         <counts>
           <entry key="ipynb" value="1" />
-          <entry key="py" value="22" />
+          <entry key="py" value="24" />
         </counts>
       </usages-collector>
       <usages-collector id="statistics.file.types.open">
         <counts>
           <entry key="IPNB" value="1" />
-          <entry key="Python" value="22" />
+          <entry key="Python" value="24" />
         </counts>
       </usages-collector>
       <usages-collector id="statistics.file.extensions.edit">
         <counts>
           <entry key="dummy" value="62" />
-          <entry key="py" value="9537" />
-          <entry key="txt" value="213" />
+          <entry key="py" value="9740" />
+          <entry key="txt" value="267" />
         </counts>
       </usages-collector>
       <usages-collector id="statistics.file.types.edit">
         <counts>
-          <entry key="PLAIN_TEXT" value="275" />
-          <entry key="Python" value="9537" />
+          <entry key="PLAIN_TEXT" value="329" />
+          <entry key="Python" value="9740" />
         </counts>
       </usages-collector>
     </session>
   </component>
   <component name="FileEditorManager">
     <leaf SIDE_TABS_SIZE_LIMIT_KEY="300">
-      <file pinned="false" current-in-tab="false">
+      <file pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/environment_save_states.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="289">
+            <state relative-caret-position="136">
               <caret line="62" column="68" selection-start-line="62" selection-start-column="68" selection-end-line="62" selection-end-column="68" />
               <folding>
                 <element signature="e#0#29#0" expanded="true" />
               </folding>
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/Q/manage_training_data.py">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="360">
+              <caret line="25" column="50" selection-start-line="25" selection-start-column="50" selection-end-line="25" selection-end-column="50" />
             </state>
           </provider>
         </entry>
@@ -123,16 +127,16 @@
           </provider>
         </entry>
       </file>
-      <file pinned="false" current-in-tab="true">
+      <file pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/agent_code/marathon/jakob_features.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="391">
-              <caret line="23" column="42" selection-start-line="23" selection-start-column="42" selection-end-line="23" selection-end-column="42" />
+            <state relative-caret-position="255">
+              <caret line="84" column="28" selection-start-line="84" selection-start-column="28" selection-end-line="84" selection-end-column="28" />
               <folding>
                 <element signature="e#1#19#0" expanded="true" />
-                <marker date="1552235031765" expanded="true" signature="159:164" ph="..." />
-                <marker date="1552235031765" expanded="true" signature="3376:3381" ph="..." />
-                <marker date="1552235031765" expanded="true" signature="3749:4516" ph="..." />
+                <marker date="1552235635043" expanded="true" signature="159:164" ph="..." />
+                <marker date="1552235635043" expanded="true" signature="3447:3452" ph="..." />
+                <marker date="1552235635043" expanded="true" signature="3820:4587" ph="..." />
               </folding>
             </state>
           </provider>
@@ -150,7 +154,7 @@
       <file pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/agent_code/marathon/indices.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="447">
+            <state relative-caret-position="765">
               <caret line="45" lean-forward="true" selection-start-line="45" selection-end-line="45" />
               <folding>
                 <element signature="e#0#18#0" expanded="true" />
@@ -181,30 +185,10 @@
         </entry>
       </file>
       <file pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/agent_code/eike_agent/callbacks.py">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="-2346">
-              <folding>
-                <element signature="e#0#18#0" expanded="true" />
-              </folding>
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/settings.py">
           <provider selected="true" editor-type-id="text-editor">
             <state relative-caret-position="-352">
               <caret line="32" column="20" selection-start-line="32" selection-start-column="20" selection-end-line="32" selection-end-column="20" />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/main.py">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="680">
-              <caret line="42" column="27" selection-start-line="42" selection-start-column="27" selection-end-line="42" selection-end-column="27" />
             </state>
           </provider>
         </entry>
@@ -288,8 +272,8 @@
     <sorting>DEFINITION_ORDER</sorting>
   </component>
   <component name="ProjectFrameBounds">
-    <option name="x" value="17" />
-    <option name="y" value="67" />
+    <option name="x" value="-10" />
+    <option name="y" value="27" />
     <option name="width" value="1710" />
     <option name="height" value="868" />
   </component>
@@ -345,6 +329,12 @@
               <item name="" type="442cc68d:ScopeViewTreeModel$RootNode" />
               <item name="agent_code" type="9f88c78c:ScopeViewTreeModel$FileNode" />
               <item name="marathon" type="9f88c78c:ScopeViewTreeModel$FileNode" />
+            </path>
+            <path>
+              <item name="bomberman_environment" type="3d21c010:ScopeViewTreeModel$ProjectNode" />
+              <item name="" type="442cc68d:ScopeViewTreeModel$RootNode" />
+              <item name="agent_code" type="9f88c78c:ScopeViewTreeModel$FileNode" />
+              <item name="random_agent" type="9f88c78c:ScopeViewTreeModel$FileNode" />
             </path>
             <path>
               <item name="bomberman_environment" type="3d21c010:ScopeViewTreeModel$ProjectNode" />
@@ -586,14 +576,28 @@
       <option name="project" value="LOCAL" />
       <updated>1551965091588</updated>
     </task>
-    <option name="localTasksCounter" value="18" />
+    <task id="LOCAL-00018" summary="Added new features">
+      <created>1552235045889</created>
+      <option name="number" value="00018" />
+      <option name="presentableId" value="LOCAL-00018" />
+      <option name="project" value="LOCAL" />
+      <updated>1552235045889</updated>
+    </task>
+    <task id="LOCAL-00019" summary="Removed duplicate indices.py file">
+      <created>1552235196072</created>
+      <option name="number" value="00019" />
+      <option name="presentableId" value="LOCAL-00019" />
+      <option name="project" value="LOCAL" />
+      <updated>1552235196072</updated>
+    </task>
+    <option name="localTasksCounter" value="20" />
     <servers />
   </component>
   <component name="TimeTrackingManager">
     <option name="totallyTimeSpent" value="1829000" />
   </component>
   <component name="ToolWindowManager">
-    <frame x="14" y="54" width="1368" height="694" extended-state="0" />
+    <frame x="-48" y="85" width="1368" height="694" extended-state="0" />
     <editor active="true" />
     <layout>
       <window_info active="true" content_ui="combo" id="Project" order="0" visible="true" weight="0.24923548" />
@@ -665,7 +669,9 @@
     <MESSAGE value="Added training data" />
     <MESSAGE value="Fixed error in environment_save_states for event capturing" />
     <MESSAGE value="Fixed state saving" />
-    <option name="LAST_COMMIT_MESSAGE" value="Fixed state saving" />
+    <MESSAGE value="Added new features" />
+    <MESSAGE value="Removed duplicate indices.py file" />
+    <option name="LAST_COMMIT_MESSAGE" value="Removed duplicate indices.py file" />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>
@@ -730,13 +736,6 @@
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/Q/rewards.py" />
-    <entry file="file://$PROJECT_DIR$/Q/manage_training_data.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="425">
-          <caret line="25" column="50" selection-start-line="25" selection-start-column="50" selection-end-line="25" selection-end-column="50" />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/main_save_states.py">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="459">
@@ -794,30 +793,10 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/environment_save_states.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="289">
-          <caret line="62" column="68" selection-start-line="62" selection-start-column="68" selection-end-line="62" selection-end-column="68" />
-          <folding>
-            <element signature="e#0#29#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/settings.py">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="-352">
           <caret line="32" column="20" selection-start-line="32" selection-start-column="20" selection-end-line="32" selection-end-column="20" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/agent_code/marathon/indices.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="447">
-          <caret line="45" lean-forward="true" selection-start-line="45" selection-end-line="45" />
-          <folding>
-            <element signature="e#0#18#0" expanded="true" />
-          </folding>
         </state>
       </provider>
     </entry>
@@ -847,15 +826,47 @@
         </state>
       </provider>
     </entry>
+    <entry file="file://$PROJECT_DIR$/Q-Training/indices.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="-439" />
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/Q/manage_training_data.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="360">
+          <caret line="25" column="50" selection-start-line="25" selection-start-column="50" selection-end-line="25" selection-end-column="50" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/agent_code/marathon/indices.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="765">
+          <caret line="45" lean-forward="true" selection-start-line="45" selection-end-line="45" />
+          <folding>
+            <element signature="e#0#18#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
     <entry file="file://$PROJECT_DIR$/agent_code/marathon/jakob_features.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="391">
-          <caret line="23" column="42" selection-start-line="23" selection-start-column="42" selection-end-line="23" selection-end-column="42" />
+        <state relative-caret-position="255">
+          <caret line="84" column="28" selection-start-line="84" selection-start-column="28" selection-end-line="84" selection-end-column="28" />
           <folding>
             <element signature="e#1#19#0" expanded="true" />
-            <marker date="1552235031765" expanded="true" signature="159:164" ph="..." />
-            <marker date="1552235031765" expanded="true" signature="3376:3381" ph="..." />
-            <marker date="1552235031765" expanded="true" signature="3749:4516" ph="..." />
+            <marker date="1552235635043" expanded="true" signature="159:164" ph="..." />
+            <marker date="1552235635043" expanded="true" signature="3447:3452" ph="..." />
+            <marker date="1552235635043" expanded="true" signature="3820:4587" ph="..." />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/environment_save_states.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="136">
+          <caret line="62" column="68" selection-start-line="62" selection-start-column="68" selection-end-line="62" selection-end-column="68" />
+          <folding>
+            <element signature="e#0#29#0" expanded="true" />
           </folding>
         </state>
       </provider>

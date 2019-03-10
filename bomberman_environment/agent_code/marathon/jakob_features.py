@@ -15,25 +15,19 @@ def jakob_features(state, player_index=0, ncols=s.cols, nrows=s.rows):
     :return: features in array form
     """
 
-    features = np.zeros(6)
-
-    begin = state.shape[0] - (1 + (4 - player_index) * 21)
-    end = state.shape[0] - (1 + (4 - player_index - 1) * 21)
-    me = state[begin: end]
-
-    board_end = state.shape[0] - (1 + 4* 21)
+    board_end = state.shape[0] - (1 + 4 * 21)
 
     board = state[0: board_end]
 
     player_blocks = state[board_end:]
 
-    player_locs = [player_blocks[i*21] for i in range(4)]  # player locations
+    player_locs = np.array([player_blocks[i*21] for i in range(4)])  # player locations
 
     me_loc = np.array([*index_to_x_y(player_locs[player_index])])
 
     me_has_bomb = is_holding_bomb(state, player_index)  # indicate whether player is holding a bomb
 
-    coins = (np.arange(board.shape[0]+1)[1:])[np.where(board == 3)]  # list of coin indices
+    coins = np.arange(board.shape[0]+1)[1:][np.where(board == 3)]  # list of coin indices
 
     coin_dists = np.array([np.linalg.norm(me_loc - np.array([*index_to_x_y(coin)]), ord=1) for coin in coins])
     # manhattan dist. to coins
@@ -82,6 +76,17 @@ def jakob_features(state, player_index=0, ncols=s.cols, nrows=s.rows):
 
     smallest_enemy_dist = np.min(enemies[np.where(enemies != 0)])  # smallest distance between two living enemies
 
+    center_map = np.array([s.rows//2, s.cols//2])
+
+    dist_to_center = np.linalg.norm(center_map - me_loc)
+
+    remaining_enemies = player_locs[np.where(player_locs != 0)].shape[0]  # count living enemies
+
+    remaining_crates = board[np.where(board == 1)].shape[0]  # count remaining crates
+
+    remaining_coins = coins.shape[0]
+
+
     return np.array([
         me_has_bomb,
         closest_coin_dist,
@@ -90,9 +95,11 @@ def jakob_features(state, player_index=0, ncols=s.cols, nrows=s.rows):
         closest_foe_dir,
         closest_foe_has_bomb,
         nearest_foe_to_closest_coin,
-        smallest_enemy_dist
-
-
+        smallest_enemy_dist,
+        dist_to_center,
+        remaining_enemies,
+        remaining_crates,
+        remaining_coins
     ])
 
 

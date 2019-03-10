@@ -20,10 +20,10 @@ def setup(self):
     file for debugging (see https://docs.python.org/3.7/library/logging.html).
     """
     self.coin_distance = 0
-    self.obs_length = 10
+    self.obs_length = 1
     self.discount = 0.8
     self.learning_rate = 0.8
-    self.epsilon = 0.2
+    self.epsilon = 0.01
     self.reward = 0
     self.last_observation = np.zeros([self.obs_length])
     self.last_action_index = -1
@@ -55,16 +55,17 @@ def act(self):
     # Gather information about the game state
 
     x, y, _, bombs_left, score = self.game_state['self']
-    #print("x,y:" + str(x)  + "  " + str(y))
+    # print("x,y:" + str(x)  + "  " + str(y))
 
-
-    # actions = np.array(['RIGHT', 'LEFT', 'UP', 'DOWN', 'BOMB'])
+    #actions = np.array(['RIGHT', 'LEFT', 'UP', 'DOWN', 'BOMB'])
     actions = np.array(['RIGHT', 'LEFT', 'UP', 'DOWN'])
 
     current_obs = get_observation(self, arena, x, y)
+
     self.observations, index_current, self.learned = update_and_get_obs(self.observations, current_obs, self.learned)
     if self.epsilon > uniform(0, 1):
         choice = np.random.choice(np.arange(actions.shape[0]))
+
     else:
         choice = np.random.choice(np.flatnonzero(self.learned[index_current] == self.learned[index_current].max()))
 
@@ -131,7 +132,8 @@ def reward_update(self):
         'SURVIVED_ROUND',
     ]
 
-    #self.reward = 0
+    coin_collected_flag = False
+    self.reward = 0
     #print(self.events)
     self.reward = -5
     for event in self.events:
@@ -140,7 +142,8 @@ def reward_update(self):
         if event == 9:
             self.reward += 50
         if event == 11:
-            self.reward += 100
+            self.reward += 300
+            coin_collected_flag = True
         if event == 13:
             self.reward -= 1000
         if event == 14:
@@ -154,8 +157,16 @@ def reward_update(self):
 
     (tx, ty), new_distance = look_for_targets(free_tiles, (x,y), targets, None)
 
-    if self.coin_distance > new_distance:
-        self.reward += 5
+    if not coin_collected_flag:
+        if self.coin_distance > new_distance:
+            self.reward += 5
+           # print("old:" + str(self.coin_distance) + "new:" + str(new_distance) + "+5")
+        elif self.coin_distance < new_distance:
+            self.reward -= 5
+            #print("old:" + str(self.coin_distance) + "new:" + str(new_distance) + "-5")
+        else:
+            self.reward -= 2
+
     self.coin_distance = new_distance
 
     self.logger.debug(f'Encountered {len(self.events)} game event(s)')
@@ -186,71 +197,45 @@ def get_observation(self,spielfeld, x, y):
     :param x:
     :return:
     '''
-    # Suche den Coin, der am nächsten ist (manhattan distance)
-    coinsX, coinsY = np.where(spielfeld == 10)
-    distancesY = np.abs(coinsY - y)
-    distancesX = np.abs(coinsX - x)
     observation = np.zeros([self.obs_length])
-    # 1. Richtung des nächsten Coins: (1,2,3,4:links,oben,rechts,unten)
-    # 2. Direkte Umgebung: (links, oben, rechts, unten; 0=frei, 1 = Coin, 2 = Wand)
-
-
-    distances = distancesY + distancesX
-    coinY = coinsY[np.argmin(distances)]
-    coinX = coinsX[np.argmin(distances)]
-        # setze observation flags:
-    #winkel = math.atan((coinY-y)/(coinX-x))
-
-    # observation[0] = round(winkel,0)
-    dx = coinX - x
-    dy = coinY - y
-    if dx > 1:
-        dx = 1
-    if dy > 1:
-        dy = 1
-    if dx < -1:
-        dx = -1
-    if dy < -1:
-        dy = -1
-
-    #observation[0] = dx
-    #observation[1] = dy
-    #print(dx,dy)
-    #print(observation[0])
-
-    free_tiles = np.where(spielfeld == 0, True, False)
+    free_tiles = np.where(spielfeld != -1, True, False)
     start = (x,y)
     targetsX, targetsY = np.where(spielfeld == 10)
-
-    targets = list(zip(targetsX.tolist(), targetsY.tolist()))
-
-
-    # print(next_target)
-    (tx,ty), self.coin_distance = look_for_targets(free_tiles, start, targets, None)
-    #print(self.coin_distance)
     tmp = 0
-    if (tx,ty) == (x+1,y):
-        # move right
-        tmp = 1
-    if (tx,ty) == (x-1,y):
-        # move left
-        tmp = 2
-    if (tx,ty) == (x,y+1):
-        # move up
-        tmp = 3
-    if (tx,ty) == (x,y-1):
-        # move down
-        tmp = 4
+    if targetsX.shape[0] > 0:
+        targets = list(zip(targetsX.tolist(), targetsY.tolist()))
+
+
+        # print(next_target)
+        (tx,ty), self.coin_distance = look_for_targets(free_tiles, start, targets, None)
+        #print("---")
+        #print(tx, ty)
+        #print(x,y)
+
+        # print(self.coin_distance)
+
+        if (tx,ty) == (x+1,y):
+            # move right
+            tmp = 1
+        if (tx,ty) == (x-1,y):
+            # move left
+            tmp = 2
+        if (tx,ty) == (x,y+1):
+            # move up
+            tmp = 3
+        if (tx,ty) == (x,y-1):
+            # move down
+            tmp = 4
 
     observation[0] = tmp
 
-    k = 1
-    radius = 1
-    obs = np.zeros([2*radius+1,2*radius+1])
-    for i in range(2*radius+1):
-        for j in range(2*radius+1):
-            observation[k] = get_spielfeld(x-radius + j, y-radius + i,spielfeld)
-            k += 1
+    # k = 1
+    # radius = 3
+    # obs = np.zeros([2*radius+1,2*radius+1])
+    # for i in range(2*radius+1):
+    #     for j in range(2*radius+1):
+    #         observation[k] = get_spielfeld(x-radius + j, y-radius + i,spielfeld)
+    #         k += 1
 
     return observation
 

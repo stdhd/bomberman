@@ -1,9 +1,5 @@
-import numpy as np
-from random import *
-import matplotlib.pyplot as plt
-from indices import *
-from observation import *
-import math
+from agent_code.marathon.indices import *
+from QTraining.observation import *
 
 
 def q_train_from_games(reader_path, writer_path):

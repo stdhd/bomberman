@@ -1,6 +1,7 @@
 import numpy as np
+from settings import s
 
-def x_y_to_index(x, y, ncols, nrows):
+def x_y_to_index(x, y, ncols=s.cols, nrows=s.rows):
     """
     Return the index of a free grid from x, y coordinates. Indices start at 1 !
 
@@ -31,7 +32,7 @@ def x_y_to_index(x, y, ncols, nrows):
         return int(ind)
 
 
-def index_to_x_y(ind, ncols, nrows):
+def index_to_x_y(ind, ncols=s.cols, nrows=s.rows):
     """
     Convert a given coordinate index into its x, y representation. Indices start at 1 !
     :param ind: Index of coordinate to represent as x, y
@@ -39,6 +40,9 @@ def index_to_x_y(ind, ncols, nrows):
     :param nrows:
     :return: x, y coordinates
     """
+
+    if ind == 0:
+        raise ValueError("Got zero index (dead player)")
 
     y = 1
 

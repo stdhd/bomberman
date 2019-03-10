@@ -1,9 +1,8 @@
-import numpy as np
 #from ..state_functions.rewards import *
 #from ..indices import *
 
 from rewards import *
-from indices import *
+from agent_code.marathon.indices import *
 
 import math
 

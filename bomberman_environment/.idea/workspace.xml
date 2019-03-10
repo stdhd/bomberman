@@ -2,7 +2,13 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="8281fd87-bacf-4f99-9ff1-cd15d1389165" name="Default Changelist" comment="">
-      <change beforePath="$PROJECT_DIR$/state_functions/rewards.py" beforeDir="false" afterPath="$PROJECT_DIR$/state_functions/rewards.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/agent_code/marathon/jakob_features.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../Text/State representations.txt" beforeDir="false" afterPath="$PROJECT_DIR$/../Text/State representations.txt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Q-Training/Training.py" beforeDir="false" afterPath="$PROJECT_DIR$/Q-Training/Training.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Q-Training/observation.py" beforeDir="false" afterPath="$PROJECT_DIR$/Q-Training/observation.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/environment_save_states.py" beforeDir="false" afterPath="$PROJECT_DIR$/environment_save_states.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/indices.py" beforeDir="false" afterPath="$PROJECT_DIR$/agent_code/marathon/indices.py" afterDir="false" />
     </list>
     <ignored path=".idea/" />
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
@@ -54,39 +60,40 @@
     <session id="-1280577960">
       <usages-collector id="statistics.lifecycle.project">
         <counts>
-          <entry key="project.closed" value="4" />
+          <entry key="project.closed" value="5" />
           <entry key="project.open.time.1" value="1" />
           <entry key="project.open.time.13" value="1" />
+          <entry key="project.open.time.29" value="1" />
           <entry key="project.open.time.32" value="1" />
           <entry key="project.open.time.35" value="1" />
           <entry key="project.open.time.36" value="1" />
           <entry key="project.open.time.40" value="1" />
-          <entry key="project.opened" value="6" />
+          <entry key="project.opened" value="7" />
         </counts>
       </usages-collector>
       <usages-collector id="statistics.file.extensions.open">
         <counts>
           <entry key="ipynb" value="1" />
-          <entry key="py" value="15" />
+          <entry key="py" value="22" />
         </counts>
       </usages-collector>
       <usages-collector id="statistics.file.types.open">
         <counts>
           <entry key="IPNB" value="1" />
-          <entry key="Python" value="15" />
+          <entry key="Python" value="22" />
         </counts>
       </usages-collector>
       <usages-collector id="statistics.file.extensions.edit">
         <counts>
           <entry key="dummy" value="62" />
-          <entry key="py" value="5649" />
+          <entry key="py" value="9537" />
           <entry key="txt" value="213" />
         </counts>
       </usages-collector>
       <usages-collector id="statistics.file.types.edit">
         <counts>
           <entry key="PLAIN_TEXT" value="275" />
-          <entry key="Python" value="5649" />
+          <entry key="Python" value="9537" />
         </counts>
       </usages-collector>
     </session>
@@ -96,29 +103,76 @@
       <file pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/environment_save_states.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="564">
-              <caret line="75" column="76" selection-start-line="75" selection-start-column="76" selection-end-line="75" selection-end-column="76" />
+            <state relative-caret-position="289">
+              <caret line="62" column="68" selection-start-line="62" selection-start-column="68" selection-end-line="62" selection-end-column="68" />
               <folding>
-                <element signature="e#0#21#0" expanded="true" />
+                <element signature="e#0#29#0" expanded="true" />
               </folding>
             </state>
           </provider>
         </entry>
       </file>
       <file pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/Q/manage_training_data.py">
+        <entry file="file://$PROJECT_DIR$/Q-Training/Training.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="425">
-              <caret line="25" column="50" lean-forward="true" selection-start-line="25" selection-start-column="50" selection-end-line="25" selection-end-column="50" />
+            <state>
+              <folding>
+                <element signature="e#0#41#0" expanded="true" />
+              </folding>
             </state>
           </provider>
         </entry>
       </file>
       <file pinned="false" current-in-tab="true">
+        <entry file="file://$PROJECT_DIR$/agent_code/marathon/jakob_features.py">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="391">
+              <caret line="23" column="42" selection-start-line="23" selection-start-column="42" selection-end-line="23" selection-end-column="42" />
+              <folding>
+                <element signature="e#1#19#0" expanded="true" />
+                <marker date="1552235031765" expanded="true" signature="159:164" ph="..." />
+                <marker date="1552235031765" expanded="true" signature="3376:3381" ph="..." />
+                <marker date="1552235031765" expanded="true" signature="3749:4516" ph="..." />
+              </folding>
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/agent_code/marathon/callbacks.py">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="403">
+              <caret line="62" selection-start-line="62" selection-end-line="62" />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/agent_code/marathon/indices.py">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="447">
+              <caret line="45" lean-forward="true" selection-start-line="45" selection-end-line="45" />
+              <folding>
+                <element signature="e#0#18#0" expanded="true" />
+              </folding>
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/Q-Training/rewards.py">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="578">
+              <caret line="35" lean-forward="true" selection-start-line="35" selection-end-line="35" />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/state_functions/rewards.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="544">
-              <caret line="32" lean-forward="true" selection-start-line="32" selection-end-line="32" />
+            <state relative-caret-position="374">
+              <caret line="22" lean-forward="true" selection-start-line="22" selection-end-line="22" />
               <folding>
                 <element signature="e#1#28#0" expanded="true" />
               </folding>
@@ -127,39 +181,11 @@
         </entry>
       </file>
       <file pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/main_save_states.py">
+        <entry file="file://$PROJECT_DIR$/agent_code/eike_agent/callbacks.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="459">
-              <caret line="30" selection-start-line="30" selection-end-line="30" />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/environment.py">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="697">
-              <caret line="55" column="25" selection-start-line="55" selection-start-column="25" selection-end-line="55" selection-end-column="25" />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/indices.py">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="918">
-              <caret line="54" selection-start-line="54" selection-end-line="54" />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/agent_code/simple_agent/callbacks.py">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="1530">
-              <caret line="90" selection-start-line="90" selection-end-line="90" />
+            <state relative-caret-position="-2346">
               <folding>
-                <element signature="e#1#19#0" expanded="true" />
+                <element signature="e#0#18#0" expanded="true" />
               </folding>
             </state>
           </provider>
@@ -170,18 +196,6 @@
           <provider selected="true" editor-type-id="text-editor">
             <state relative-caret-position="-352">
               <caret line="32" column="20" selection-start-line="32" selection-start-column="20" selection-end-line="32" selection-end-column="20" />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/agent_code/marathon/kernel_regression.py">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="408">
-              <caret line="24" column="46" selection-start-line="24" selection-start-column="46" selection-end-line="24" selection-end-column="46" />
-              <folding>
-                <element signature="e#1#19#0" expanded="true" />
-              </folding>
             </state>
           </provider>
         </entry>
@@ -259,9 +273,11 @@
         <option value="$PROJECT_DIR$/main.py" />
         <option value="$PROJECT_DIR$/main_save_states.py" />
         <option value="$PROJECT_DIR$/settings.py" />
-        <option value="$PROJECT_DIR$/environment_save_states.py" />
         <option value="$PROJECT_DIR$/Q/rewards.py" />
         <option value="$PROJECT_DIR$/state_functions/rewards.py" />
+        <option value="$PROJECT_DIR$/environment_save_states.py" />
+        <option value="$PROJECT_DIR$/agent_code/marathon/indices.py" />
+        <option value="$PROJECT_DIR$/agent_code/marathon/jakob_features.py" />
       </list>
     </option>
   </component>
@@ -272,9 +288,10 @@
     <sorting>DEFINITION_ORDER</sorting>
   </component>
   <component name="ProjectFrameBounds">
-    <option name="x" value="-10" />
-    <option name="width" value="1709" />
-    <option name="height" value="1040" />
+    <option name="x" value="17" />
+    <option name="y" value="67" />
+    <option name="width" value="1710" />
+    <option name="height" value="868" />
   </component>
   <component name="ProjectLevelVcsManager" settingsEditedManually="true">
     <ConfirmationsSetting value="2" id="Add" />
@@ -321,6 +338,12 @@
               <item name="bomberman_environment" type="3d21c010:ScopeViewTreeModel$ProjectNode" />
               <item name="" type="442cc68d:ScopeViewTreeModel$RootNode" />
               <item name="agent_code" type="9f88c78c:ScopeViewTreeModel$FileNode" />
+              <item name="eike_agent" type="9f88c78c:ScopeViewTreeModel$FileNode" />
+            </path>
+            <path>
+              <item name="bomberman_environment" type="3d21c010:ScopeViewTreeModel$ProjectNode" />
+              <item name="" type="442cc68d:ScopeViewTreeModel$RootNode" />
+              <item name="agent_code" type="9f88c78c:ScopeViewTreeModel$FileNode" />
               <item name="marathon" type="9f88c78c:ScopeViewTreeModel$FileNode" />
             </path>
             <path>
@@ -337,6 +360,11 @@
             <path>
               <item name="bomberman_environment" type="3d21c010:ScopeViewTreeModel$ProjectNode" />
               <item name="" type="442cc68d:ScopeViewTreeModel$RootNode" />
+              <item name="Q-Training" type="9f88c78c:ScopeViewTreeModel$FileNode" />
+            </path>
+            <path>
+              <item name="bomberman_environment" type="3d21c010:ScopeViewTreeModel$ProjectNode" />
+              <item name="" type="442cc68d:ScopeViewTreeModel$RootNode" />
               <item name="state_functions" type="9f88c78c:ScopeViewTreeModel$FileNode" />
             </path>
           </expand>
@@ -348,10 +376,13 @@
   <component name="PropertiesComponent">
     <property name="SearchEverywhereHistoryKey" value="&#9;FILE&#9;file://C:/Users/ASUS-N55S-Laptop/Desktop/WS1819/Bomberman/bomberman/bomberman_environment/settings.py" />
     <property name="WebServerToolWindowFactoryState" value="false" />
-    <property name="last_opened_file_path" value="$PROJECT_DIR$/.idea" />
+    <property name="last_opened_file_path" value="$PROJECT_DIR$/agent_code/marathon" />
     <property name="settings.editor.selected.configurable" value="project.propVCSSupport.Ignored.Files" />
   </component>
   <component name="RecentsManager">
+    <key name="MoveFile.RECENT_KEYS">
+      <recent name="C:\Users\ASUS-N55S-Laptop\Desktop\WS1819\Bomberman\bomberman_jakob\bomberman_environment\agent_code\marathon" />
+    </key>
     <key name="CopyFile.RECENT_KEYS">
       <recent name="C:\Users\ASUS-N55S-Laptop\Desktop\WS1819\Bomberman\bomberman\bomberman_environment" />
     </key>
@@ -562,14 +593,14 @@
     <option name="totallyTimeSpent" value="1829000" />
   </component>
   <component name="ToolWindowManager">
-    <frame x="-8" y="0" width="1367" height="832" extended-state="0" />
+    <frame x="14" y="54" width="1368" height="694" extended-state="0" />
     <editor active="true" />
     <layout>
-      <window_info active="true" content_ui="combo" id="Project" order="0" visible="true" weight="0.18286152" />
+      <window_info active="true" content_ui="combo" id="Project" order="0" visible="true" weight="0.24923548" />
       <window_info id="Structure" order="1" side_tool="true" weight="0.25" />
       <window_info id="Favorites" order="2" side_tool="true" />
       <window_info anchor="bottom" id="Message" order="0" />
-      <window_info anchor="bottom" id="Find" order="1" weight="0.63829786" />
+      <window_info anchor="bottom" id="Find" order="1" weight="0.4248927" />
       <window_info anchor="bottom" id="Run" order="2" sideWeight="0.4986577" weight="0.10921986" />
       <window_info anchor="bottom" id="Debug" order="3" sideWeight="0.88322145" weight="0.55157596" />
       <window_info anchor="bottom" id="Cvs" order="4" weight="0.25" />
@@ -641,7 +672,7 @@
       <breakpoints>
         <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
           <url>file://$PROJECT_DIR$/environment_save_states.py</url>
-          <line>95</line>
+          <line>89</line>
           <option name="timeStamp" value="15" />
         </line-breakpoint>
       </breakpoints>
@@ -698,14 +729,14 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/agent_code/marathon/callbacks.py">
+    <entry file="file://$PROJECT_DIR$/Q/rewards.py" />
+    <entry file="file://$PROJECT_DIR$/Q/manage_training_data.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="403">
-          <caret line="62" selection-start-line="62" selection-end-line="62" />
+        <state relative-caret-position="425">
+          <caret line="25" column="50" selection-start-line="25" selection-start-column="50" selection-end-line="25" selection-end-column="50" />
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/Q/rewards.py" />
     <entry file="file://$PROJECT_DIR$/main_save_states.py">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="459">
@@ -720,16 +751,9 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/indices.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="918">
-          <caret line="54" selection-start-line="54" selection-end-line="54" />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/agent_code/simple_agent/callbacks.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="1530">
+        <state relative-caret-position="1445">
           <caret line="90" selection-start-line="90" selection-end-line="90" />
           <folding>
             <element signature="e#1#19#0" expanded="true" />
@@ -739,7 +763,7 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/agent_code/marathon/kernel_regression.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="408">
+        <state relative-caret-position="323">
           <caret line="24" column="46" selection-start-line="24" selection-start-column="46" selection-end-line="24" selection-end-column="46" />
           <folding>
             <element signature="e#1#19#0" expanded="true" />
@@ -754,19 +778,28 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/Q/manage_training_data.py">
+    <entry file="file://$PROJECT_DIR$/agent_code/eike_agent/callbacks.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="425">
-          <caret line="25" column="50" lean-forward="true" selection-start-line="25" selection-start-column="50" selection-end-line="25" selection-end-column="50" />
+        <state relative-caret-position="-2346">
+          <folding>
+            <element signature="e#0#18#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/agent_code/marathon/callbacks.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="403">
+          <caret line="62" selection-start-line="62" selection-end-line="62" />
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/environment_save_states.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="564">
-          <caret line="75" column="76" selection-start-line="75" selection-start-column="76" selection-end-line="75" selection-end-column="76" />
+        <state relative-caret-position="289">
+          <caret line="62" column="68" selection-start-line="62" selection-start-column="68" selection-end-line="62" selection-end-column="68" />
           <folding>
-            <element signature="e#0#21#0" expanded="true" />
+            <element signature="e#0#29#0" expanded="true" />
           </folding>
         </state>
       </provider>
@@ -778,12 +811,51 @@
         </state>
       </provider>
     </entry>
+    <entry file="file://$PROJECT_DIR$/agent_code/marathon/indices.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="447">
+          <caret line="45" lean-forward="true" selection-start-line="45" selection-end-line="45" />
+          <folding>
+            <element signature="e#0#18#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
     <entry file="file://$PROJECT_DIR$/state_functions/rewards.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="544">
-          <caret line="32" lean-forward="true" selection-start-line="32" selection-end-line="32" />
+        <state relative-caret-position="374">
+          <caret line="22" lean-forward="true" selection-start-line="22" selection-end-line="22" />
           <folding>
             <element signature="e#1#28#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/Q-Training/rewards.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="578">
+          <caret line="35" lean-forward="true" selection-start-line="35" selection-end-line="35" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/Q-Training/Training.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state>
+          <folding>
+            <element signature="e#0#41#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/agent_code/marathon/jakob_features.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="391">
+          <caret line="23" column="42" selection-start-line="23" selection-start-column="42" selection-end-line="23" selection-end-column="42" />
+          <folding>
+            <element signature="e#1#19#0" expanded="true" />
+            <marker date="1552235031765" expanded="true" signature="159:164" ph="..." />
+            <marker date="1552235031765" expanded="true" signature="3376:3381" ph="..." />
+            <marker date="1552235031765" expanded="true" signature="3749:4516" ph="..." />
           </folding>
         </state>
       </provider>

@@ -1,20 +1,12 @@
-from time import time
 from datetime import datetime
-import multiprocessing as mp
-import numpy as np
 import random
-import pygame
 import pickle
-from pygame.locals import *
-from pygame.transform import smoothscale
-
-import logging
 
 from agents import *
 from items import *
 from settings import s, e
 
-from indices import *
+from agent_code.marathon.indices import *
 
 class BombeRLeWorld(object):
 
@@ -47,6 +39,8 @@ class BombeRLeWorld(object):
     def capture_state(self):
         """
         Capture and append the current game state to the file at self.savepath
+
+        See documentation in Drive
         :return:
         """
 
@@ -93,7 +87,7 @@ class BombeRLeWorld(object):
                 coin = int(state[ind] == 3)
                 state[ind] = -1 * 3**coin * 2**explosion_map[x,y]  # note explosions
 
-        self.save_list.append(state)
+        self.save_list.append(state.astype(int))
 
 
     def setup_logging(self):

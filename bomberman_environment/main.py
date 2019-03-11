@@ -41,7 +41,7 @@ def main():
 
     # Initialize environment and agents
     world = BombeRLeWorld([
-            ('eike_agent', False)
+            ('eike_agent', True)
             ])
 
     # world = ReplayWorld('Replay 2019-01-30 16:57:42')

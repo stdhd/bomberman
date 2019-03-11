@@ -21,12 +21,13 @@ def get_reward(state, player_index):
     end = state.shape[0]-(1 + (4 - player_index - 1)*21)
     player = state[begin: end]
 
-    step_events = np.asarray(events)[player[4:].astype(bool)]
-
     reward = 0
 
-    for ev in step_events:
-        reward += rewards[ev] if ev in rewards else 0
+    for event_index, count in player[4:]:  # index corresponds to event, value at index is multiplicity of event
+
+        event = events[event_index]
+
+        reward += rewards[event]*count if event in rewards.keys() else 0
 
     return reward
 

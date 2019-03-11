@@ -1,0 +1,20 @@
+
+
+
+
+In order to test the efficacy of various machine learning approaches for our task, it is convenient to have a database of played games to use as a basis for training. 
+
+
+The alternative to this approach - playing games and training models "live", without saving them to the disk somehow - has the disadvantage that all games played are "lost" and cannot be reused, and that one cannot compare the performance of different models to each other on the same data. 
+
+
+For this reason, the team chose to develop a vectorized representation of the game state which contains all information for a single game step. 
+
+
+
+
+
+
+
+
+

@@ -113,6 +113,5 @@ def create_observation(state, radius, player_indices):
 
         observations[count] = np.concatenate((window.flatten(), jakob_features(state, player_index)))
 
-
-
+    return observations
 

@@ -3,6 +3,30 @@ from Q.create_observation_jakob import *
 from Q.rewards import *
 
 
+def q_train_from_games_jakob(train_data, write_path, obs):
+    """
+    Trains from all files in a directory using an existing q- and observation-table under write_path.
+
+    If tables do not exist, creates them.
+
+    Creates json files indexing known training files under write_path.
+    
+    Uses preconfigured ObservationObject to train. 
+
+    :param train_data: Directory containing training episodes
+    :param write_path: Directory to which to output Q-learning results and json files.
+    :param obs Observation Object containing training settings (view radius etc.)
+    :return:
+    """
+
+    try:
+        learned = np.load(write_path+"/learned.npy")
+        observations = np.load(write_path+"/observations.npy")
+    except:
+        print("Error loading learned q table. using empty table instead.")
+        learned = np.zeros([0,5])
+        observations = np.zeros([0, obs.obs_length])
+
 
 def q_train_from_games(reader_file, writer_path):
     """
@@ -29,6 +53,7 @@ def q_train_from_games(reader_file, writer_path):
             action_db[i] = np.argmax(data[int(start + 4 + agent * 21): int(start + 8 + agent * 21)])
 
         for i in range(data.shape[0]):
+
             temp_observation = create_observation(data[i], RADIUS, agent)
             obs, index_current, learned = update_and_get_obs(obs, temp_observation, learned)
             my_best_value = np.max(learned[index_current])

@@ -1,5 +1,4 @@
 from agent_code.marathon.indices import *
-from Q.create_observation_jakob import *
 from Q.rewards import *
 from os import listdir
 from os.path import isfile, join

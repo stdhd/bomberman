@@ -24,7 +24,6 @@ Available Features:
 """
 
 
-
 class ObservationObject:
     """
     class to keep track of constants such as window size, number of features, etc..
@@ -110,7 +109,6 @@ class ObservationObject:
             observations[count] = np.concatenate((window.flatten(), features[count]))  # concatenate window and features
 
         return observations
-
 
     def is_in_window(self, obj_index, origin_x, origin_y, radius):
         """

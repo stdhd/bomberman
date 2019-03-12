@@ -6,6 +6,25 @@ from settings import s
 from agent_code.marathon.indices import *
 
 
+"""
+Available Features: 
+
+        me_has_bomb,
+        closest_coin_dist,
+        closest_coin_dir,
+        closest_foe_dist,
+        closest_foe_dir,
+        closest_foe_has_bomb,
+        nearest_foe_to_closest_coin,
+        smallest_enemy_dist,
+        dist_to_center,
+        remaining_enemies,
+        remaining_crates,
+        remaining_coins
+"""
+
+
+
 class ObservationObject:
     """
     class to keep track of constants such as window size, number of features, etc..
@@ -15,7 +34,7 @@ class ObservationObject:
         """
         Initialize Observation Object using window radius and list of features to create.
         :param radius: Radius in observation window (radius = 1 => 3x3 window)
-        :param FEATURE_LIST: list of features
+        :param FEATURE_LIST: list of features by name
         """
         sorted(FEATURE_LIST, key=str.lower)
         self.features = FEATURE_LIST
@@ -59,7 +78,7 @@ class ObservationObject:
 
         features = self._get_features(AGENTS)  # find features for all agents
 
-        for count, player_index in enumerate(AGENTS):  #  construct the window for all agents
+        for count, player_index in enumerate(AGENTS):  # construct the window for all agents
             window = np.zeros((window_size, window_size))
 
             player_x, player_y = index_to_x_y(player_index)

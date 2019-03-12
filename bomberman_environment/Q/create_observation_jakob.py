@@ -38,6 +38,7 @@ def get_window(window, board_x, board_y, window_radius, window_origin_x, window_
     return window[board_x - (window_origin_x - window_radius), board_y - (window_origin_y - window_radius)]
 
 def set_window(window, board_index, window_origin_x, window_origin_y, window_radius, val):
+
     if not is_in_window(board_index, window_origin_x, window_origin_y, window_radius):
         return
 

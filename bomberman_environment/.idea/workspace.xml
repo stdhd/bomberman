@@ -2,17 +2,1008 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="8281fd87-bacf-4f99-9ff1-cd15d1389165" name="Default Changelist" comment="">
-      <change afterPath="$PROJECT_DIR$/Q/create_observation_jakob.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/data/games/2019-03-10 17-42-46_1.npy" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/data/games/2019-03-10 17-42-46_10.npy" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/data/games/2019-03-10 17-42-46_100.npy" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/data/games/2019-03-10 17-42-46_1000.npy" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/data/games/2019-03-10 17-42-46_101.npy" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/data/games/2019-03-10 17-42-46_102.npy" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/data/games/2019-03-10 17-42-46_103.npy" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/data/games/2019-03-10 17-42-46_104.npy" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/data/games/2019-03-10 17-42-46_105.npy" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/data/games/2019-03-10 17-42-46_106.npy" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/data/games/2019-03-10 17-42-46_107.npy" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/data/games/2019-03-10 17-42-46_108.npy" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/data/games/2019-03-10 17-42-46_109.npy" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/data/games/2019-03-10 17-42-46_11.npy" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/data/games/2019-03-10 17-42-46_110.npy" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/data/games/2019-03-10 17-42-46_111.npy" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/data/games/2019-03-10 17-42-46_112.npy" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/data/games/2019-03-10 17-42-46_113.npy" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/data/games/2019-03-10 17-42-46_114.npy" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/data/games/2019-03-10 17-42-46_115.npy" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/data/games/2019-03-10 17-42-46_116.npy" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/data/games/2019-03-10 17-42-46_117.npy" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/data/games/2019-03-10 17-42-46_118.npy" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/data/games/2019-03-10 17-42-46_119.npy" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/data/games/2019-03-10 17-42-46_12.npy" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/data/games/2019-03-10 17-42-46_120.npy" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/data/games/2019-03-10 17-42-46_121.npy" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/data/games/2019-03-10 17-42-46_122.npy" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/data/games/2019-03-10 17-42-46_123.npy" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/data/games/2019-03-10 17-42-46_124.npy" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/data/games/2019-03-10 17-42-46_125.npy" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/data/games/2019-03-10 17-42-46_126.npy" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/data/games/2019-03-10 17-42-46_127.npy" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/data/games/2019-03-10 17-42-46_128.npy" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/data/games/2019-03-10 17-42-46_129.npy" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/data/games/2019-03-10 17-42-46_13.npy" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/data/games/2019-03-10 17-42-46_130.npy" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/data/games/2019-03-10 17-42-46_131.npy" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/data/games/2019-03-10 17-42-46_132.npy" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/data/games/2019-03-10 17-42-46_133.npy" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/data/games/2019-03-10 17-42-46_134.npy" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/data/games/2019-03-10 17-42-46_135.npy" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/data/games/2019-03-10 17-42-46_136.npy" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/data/games/2019-03-10 17-42-46_137.npy" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/data/games/2019-03-10 17-42-46_138.npy" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/data/games/2019-03-10 17-42-46_139.npy" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/data/games/2019-03-10 17-42-46_14.npy" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/data/games/2019-03-10 17-42-46_140.npy" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/data/games/2019-03-10 17-42-46_141.npy" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/data/games/2019-03-10 17-42-46_142.npy" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/data/games/2019-03-10 17-42-46_143.npy" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/data/games/2019-03-10 17-42-46_144.npy" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/data/games/2019-03-10 17-42-46_145.npy" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/data/games/2019-03-10 17-42-46_146.npy" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/data/games/2019-03-10 17-42-46_147.npy" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/data/games/2019-03-10 17-42-46_148.npy" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/data/games/2019-03-10 17-42-46_149.npy" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/data/games/2019-03-10 17-42-46_15.npy" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/data/games/2019-03-10 17-42-46_150.npy" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/data/games/2019-03-10 17-42-46_151.npy" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/data/games/2019-03-10 17-42-46_152.npy" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/data/games/2019-03-10 17-42-46_153.npy" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/data/games/2019-03-10 17-42-46_154.npy" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/data/games/2019-03-10 17-42-46_155.npy" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/data/games/2019-03-10 17-42-46_156.npy" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/data/games/2019-03-10 17-42-46_157.npy" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/data/games/2019-03-10 17-42-46_158.npy" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/data/games/2019-03-10 17-42-46_159.npy" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/data/games/2019-03-10 17-42-46_16.npy" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/data/games/2019-03-10 17-42-46_160.npy" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/data/games/2019-03-10 17-42-46_161.npy" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/data/games/2019-03-10 17-42-46_162.npy" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/data/games/2019-03-10 17-42-46_163.npy" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/data/games/2019-03-10 17-42-46_164.npy" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/data/games/2019-03-10 17-42-46_165.npy" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/data/games/2019-03-10 17-42-46_166.npy" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/data/games/2019-03-10 17-42-46_167.npy" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/data/games/2019-03-10 17-42-46_168.npy" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/data/games/2019-03-10 17-42-46_169.npy" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/data/games/2019-03-10 17-42-46_17.npy" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/data/games/2019-03-10 17-42-46_170.npy" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/data/games/2019-03-10 17-42-46_171.npy" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/data/games/2019-03-10 17-42-46_172.npy" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/data/games/2019-03-10 17-42-46_173.npy" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/data/games/2019-03-10 17-42-46_174.npy" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/data/games/2019-03-10 17-42-46_175.npy" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/data/games/2019-03-10 17-42-46_176.npy" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/data/games/2019-03-10 17-42-46_177.npy" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/data/games/2019-03-10 17-42-46_178.npy" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/data/games/2019-03-10 17-42-46_179.npy" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/data/games/2019-03-10 17-42-46_18.npy" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/data/games/2019-03-10 17-42-46_180.npy" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/data/games/2019-03-10 17-42-46_181.npy" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/data/games/2019-03-10 17-42-46_182.npy" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/data/games/2019-03-10 17-42-46_183.npy" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/data/games/2019-03-10 17-42-46_184.npy" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/data/games/2019-03-10 17-42-46_185.npy" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/data/games/2019-03-10 17-42-46_186.npy" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/data/games/2019-03-10 17-42-46_187.npy" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/data/games/2019-03-10 17-42-46_188.npy" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/data/games/2019-03-10 17-42-46_189.npy" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/data/games/2019-03-10 17-42-46_19.npy" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/data/games/2019-03-10 17-42-46_190.npy" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/data/games/2019-03-10 17-42-46_191.npy" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/data/games/2019-03-10 17-42-46_192.npy" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/data/games/2019-03-10 17-42-46_193.npy" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/data/games/2019-03-10 17-42-46_194.npy" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/data/games/2019-03-10 17-42-46_195.npy" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/data/games/2019-03-10 17-42-46_196.npy" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/data/games/2019-03-10 17-42-46_197.npy" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/data/games/2019-03-10 17-42-46_198.npy" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/data/games/2019-03-10 17-42-46_199.npy" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/data/games/2019-03-10 17-42-46_2.npy" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/data/games/2019-03-10 17-42-46_20.npy" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/data/games/2019-03-10 17-42-46_200.npy" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/data/games/2019-03-10 17-42-46_201.npy" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/data/games/2019-03-10 17-42-46_202.npy" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/data/games/2019-03-10 17-42-46_203.npy" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/data/games/2019-03-10 17-42-46_204.npy" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/data/games/2019-03-10 17-42-46_205.npy" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/data/games/2019-03-10 17-42-46_206.npy" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/data/games/2019-03-10 17-42-46_207.npy" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/data/games/2019-03-10 17-42-46_208.npy" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/data/games/2019-03-10 17-42-46_209.npy" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/data/games/2019-03-10 17-42-46_21.npy" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/data/games/2019-03-10 17-42-46_210.npy" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/data/games/2019-03-10 17-42-46_211.npy" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/data/games/2019-03-10 17-42-46_212.npy" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/data/games/2019-03-10 17-42-46_213.npy" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/data/games/2019-03-10 17-42-46_214.npy" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/data/games/2019-03-10 17-42-46_215.npy" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/data/games/2019-03-10 17-42-46_216.npy" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/data/games/2019-03-10 17-42-46_217.npy" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/data/games/2019-03-10 17-42-46_218.npy" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/data/games/2019-03-10 17-42-46_219.npy" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/data/games/2019-03-10 17-42-46_22.npy" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/data/games/2019-03-10 17-42-46_220.npy" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/data/games/2019-03-10 17-42-46_221.npy" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/data/games/2019-03-10 17-42-46_222.npy" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/data/games/2019-03-10 17-42-46_223.npy" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/data/games/2019-03-10 17-42-46_224.npy" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/data/games/2019-03-10 17-42-46_225.npy" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/data/games/2019-03-10 17-42-46_226.npy" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/data/games/2019-03-10 17-42-46_227.npy" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/data/games/2019-03-10 17-42-46_228.npy" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/data/games/2019-03-10 17-42-46_229.npy" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/data/games/2019-03-10 17-42-46_23.npy" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/data/games/2019-03-10 17-42-46_230.npy" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/data/games/2019-03-10 17-42-46_231.npy" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/data/games/2019-03-10 17-42-46_232.npy" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/data/games/2019-03-10 17-42-46_233.npy" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/data/games/2019-03-10 17-42-46_234.npy" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/data/games/2019-03-10 17-42-46_235.npy" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/data/games/2019-03-10 17-42-46_236.npy" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/data/games/2019-03-10 17-42-46_237.npy" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/data/games/2019-03-10 17-42-46_238.npy" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/data/games/2019-03-10 17-42-46_239.npy" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/data/games/2019-03-10 17-42-46_24.npy" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/data/games/2019-03-10 17-42-46_240.npy" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/data/games/2019-03-10 17-42-46_241.npy" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/data/games/2019-03-10 17-42-46_242.npy" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/data/games/2019-03-10 17-42-46_243.npy" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/data/games/2019-03-10 17-42-46_244.npy" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/data/games/2019-03-10 17-42-46_245.npy" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/data/games/2019-03-10 17-42-46_246.npy" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/data/games/2019-03-10 17-42-46_247.npy" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/data/games/2019-03-10 17-42-46_248.npy" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/data/games/2019-03-10 17-42-46_249.npy" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/data/games/2019-03-10 17-42-46_25.npy" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/data/games/2019-03-10 17-42-46_250.npy" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/data/games/2019-03-10 17-42-46_251.npy" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/data/games/2019-03-10 17-42-46_252.npy" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/data/games/2019-03-10 17-42-46_253.npy" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/data/games/2019-03-10 17-42-46_254.npy" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/data/games/2019-03-10 17-42-46_255.npy" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/data/games/2019-03-10 17-42-46_256.npy" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/data/games/2019-03-10 17-42-46_257.npy" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/data/games/2019-03-10 17-42-46_258.npy" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/data/games/2019-03-10 17-42-46_259.npy" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/data/games/2019-03-10 17-42-46_26.npy" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/data/games/2019-03-10 17-42-46_260.npy" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/data/games/2019-03-10 17-42-46_261.npy" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/data/games/2019-03-10 17-42-46_262.npy" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/data/games/2019-03-10 17-42-46_263.npy" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/data/games/2019-03-10 17-42-46_264.npy" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/data/games/2019-03-10 17-42-46_265.npy" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/data/games/2019-03-10 17-42-46_266.npy" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/data/games/2019-03-10 17-42-46_267.npy" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/data/games/2019-03-10 17-42-46_268.npy" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/data/games/2019-03-10 17-42-46_269.npy" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/data/games/2019-03-10 17-42-46_27.npy" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/data/games/2019-03-10 17-42-46_270.npy" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/data/games/2019-03-10 17-42-46_271.npy" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/data/games/2019-03-10 17-42-46_272.npy" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/data/games/2019-03-10 17-42-46_273.npy" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/data/games/2019-03-10 17-42-46_274.npy" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/data/games/2019-03-10 17-42-46_275.npy" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/data/games/2019-03-10 17-42-46_276.npy" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/data/games/2019-03-10 17-42-46_277.npy" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/data/games/2019-03-10 17-42-46_278.npy" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/data/games/2019-03-10 17-42-46_279.npy" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/data/games/2019-03-10 17-42-46_28.npy" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/data/games/2019-03-10 17-42-46_280.npy" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/data/games/2019-03-10 17-42-46_281.npy" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/data/games/2019-03-10 17-42-46_282.npy" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/data/games/2019-03-10 17-42-46_283.npy" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/data/games/2019-03-10 17-42-46_284.npy" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/data/games/2019-03-10 17-42-46_285.npy" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/data/games/2019-03-10 17-42-46_286.npy" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/data/games/2019-03-10 17-42-46_287.npy" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/data/games/2019-03-10 17-42-46_288.npy" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/data/games/2019-03-10 17-42-46_289.npy" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/data/games/2019-03-10 17-42-46_29.npy" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/data/games/2019-03-10 17-42-46_290.npy" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/data/games/2019-03-10 17-42-46_291.npy" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/data/games/2019-03-10 17-42-46_292.npy" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/data/games/2019-03-10 17-42-46_293.npy" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/data/games/2019-03-10 17-42-46_294.npy" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/data/games/2019-03-10 17-42-46_295.npy" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/data/games/2019-03-10 17-42-46_296.npy" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/data/games/2019-03-10 17-42-46_297.npy" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/data/games/2019-03-10 17-42-46_298.npy" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/data/games/2019-03-10 17-42-46_299.npy" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/data/games/2019-03-10 17-42-46_3.npy" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/data/games/2019-03-10 17-42-46_30.npy" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/data/games/2019-03-10 17-42-46_300.npy" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/data/games/2019-03-10 17-42-46_301.npy" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/data/games/2019-03-10 17-42-46_302.npy" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/data/games/2019-03-10 17-42-46_303.npy" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/data/games/2019-03-10 17-42-46_304.npy" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/data/games/2019-03-10 17-42-46_305.npy" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/data/games/2019-03-10 17-42-46_306.npy" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/data/games/2019-03-10 17-42-46_307.npy" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/data/games/2019-03-10 17-42-46_308.npy" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/data/games/2019-03-10 17-42-46_309.npy" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/data/games/2019-03-10 17-42-46_31.npy" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/data/games/2019-03-10 17-42-46_310.npy" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/data/games/2019-03-10 17-42-46_311.npy" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/data/games/2019-03-10 17-42-46_312.npy" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/data/games/2019-03-10 17-42-46_313.npy" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/data/games/2019-03-10 17-42-46_314.npy" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/data/games/2019-03-10 17-42-46_315.npy" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/data/games/2019-03-10 17-42-46_316.npy" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/data/games/2019-03-10 17-42-46_317.npy" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/data/games/2019-03-10 17-42-46_318.npy" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/data/games/2019-03-10 17-42-46_319.npy" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/data/games/2019-03-10 17-42-46_32.npy" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/data/games/2019-03-10 17-42-46_320.npy" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/data/games/2019-03-10 17-42-46_321.npy" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/data/games/2019-03-10 17-42-46_322.npy" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/data/games/2019-03-10 17-42-46_323.npy" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/data/games/2019-03-10 17-42-46_324.npy" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/data/games/2019-03-10 17-42-46_325.npy" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/data/games/2019-03-10 17-42-46_326.npy" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/data/games/2019-03-10 17-42-46_327.npy" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/data/games/2019-03-10 17-42-46_328.npy" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/data/games/2019-03-10 17-42-46_329.npy" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/data/games/2019-03-10 17-42-46_33.npy" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/data/games/2019-03-10 17-42-46_330.npy" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/data/games/2019-03-10 17-42-46_331.npy" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/data/games/2019-03-10 17-42-46_332.npy" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/data/games/2019-03-10 17-42-46_333.npy" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/data/games/2019-03-10 17-42-46_334.npy" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/data/games/2019-03-10 17-42-46_335.npy" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/data/games/2019-03-10 17-42-46_336.npy" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/data/games/2019-03-10 17-42-46_337.npy" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/data/games/2019-03-10 17-42-46_338.npy" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/data/games/2019-03-10 17-42-46_339.npy" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/data/games/2019-03-10 17-42-46_34.npy" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/data/games/2019-03-10 17-42-46_340.npy" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/data/games/2019-03-10 17-42-46_341.npy" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/data/games/2019-03-10 17-42-46_342.npy" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/data/games/2019-03-10 17-42-46_343.npy" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/data/games/2019-03-10 17-42-46_344.npy" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/data/games/2019-03-10 17-42-46_345.npy" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/data/games/2019-03-10 17-42-46_346.npy" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/data/games/2019-03-10 17-42-46_347.npy" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/data/games/2019-03-10 17-42-46_348.npy" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/data/games/2019-03-10 17-42-46_349.npy" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/data/games/2019-03-10 17-42-46_35.npy" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/data/games/2019-03-10 17-42-46_350.npy" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/data/games/2019-03-10 17-42-46_351.npy" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/data/games/2019-03-10 17-42-46_352.npy" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/data/games/2019-03-10 17-42-46_353.npy" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/data/games/2019-03-10 17-42-46_354.npy" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/data/games/2019-03-10 17-42-46_355.npy" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/data/games/2019-03-10 17-42-46_356.npy" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/data/games/2019-03-10 17-42-46_357.npy" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/data/games/2019-03-10 17-42-46_358.npy" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/data/games/2019-03-10 17-42-46_359.npy" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/data/games/2019-03-10 17-42-46_36.npy" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/data/games/2019-03-10 17-42-46_360.npy" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/data/games/2019-03-10 17-42-46_361.npy" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/data/games/2019-03-10 17-42-46_362.npy" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/data/games/2019-03-10 17-42-46_363.npy" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/data/games/2019-03-10 17-42-46_364.npy" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/data/games/2019-03-10 17-42-46_365.npy" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/data/games/2019-03-10 17-42-46_366.npy" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/data/games/2019-03-10 17-42-46_367.npy" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/data/games/2019-03-10 17-42-46_368.npy" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/data/games/2019-03-10 17-42-46_369.npy" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/data/games/2019-03-10 17-42-46_37.npy" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/data/games/2019-03-10 17-42-46_370.npy" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/data/games/2019-03-10 17-42-46_371.npy" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/data/games/2019-03-10 17-42-46_372.npy" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/data/games/2019-03-10 17-42-46_373.npy" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/data/games/2019-03-10 17-42-46_374.npy" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/data/games/2019-03-10 17-42-46_375.npy" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/data/games/2019-03-10 17-42-46_376.npy" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/data/games/2019-03-10 17-42-46_377.npy" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/data/games/2019-03-10 17-42-46_378.npy" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/data/games/2019-03-10 17-42-46_379.npy" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/data/games/2019-03-10 17-42-46_38.npy" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/data/games/2019-03-10 17-42-46_380.npy" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/data/games/2019-03-10 17-42-46_381.npy" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/data/games/2019-03-10 17-42-46_382.npy" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/data/games/2019-03-10 17-42-46_383.npy" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/data/games/2019-03-10 17-42-46_384.npy" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/data/games/2019-03-10 17-42-46_385.npy" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/data/games/2019-03-10 17-42-46_386.npy" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/data/games/2019-03-10 17-42-46_387.npy" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/data/games/2019-03-10 17-42-46_388.npy" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/data/games/2019-03-10 17-42-46_389.npy" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/data/games/2019-03-10 17-42-46_39.npy" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/data/games/2019-03-10 17-42-46_390.npy" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/data/games/2019-03-10 17-42-46_391.npy" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/data/games/2019-03-10 17-42-46_392.npy" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/data/games/2019-03-10 17-42-46_393.npy" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/data/games/2019-03-10 17-42-46_394.npy" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/data/games/2019-03-10 17-42-46_395.npy" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/data/games/2019-03-10 17-42-46_396.npy" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/data/games/2019-03-10 17-42-46_397.npy" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/data/games/2019-03-10 17-42-46_398.npy" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/data/games/2019-03-10 17-42-46_399.npy" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/data/games/2019-03-10 17-42-46_4.npy" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/data/games/2019-03-10 17-42-46_40.npy" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/data/games/2019-03-10 17-42-46_400.npy" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/data/games/2019-03-10 17-42-46_401.npy" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/data/games/2019-03-10 17-42-46_402.npy" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/data/games/2019-03-10 17-42-46_403.npy" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/data/games/2019-03-10 17-42-46_404.npy" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/data/games/2019-03-10 17-42-46_405.npy" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/data/games/2019-03-10 17-42-46_406.npy" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/data/games/2019-03-10 17-42-46_407.npy" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/data/games/2019-03-10 17-42-46_408.npy" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/data/games/2019-03-10 17-42-46_409.npy" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/data/games/2019-03-10 17-42-46_41.npy" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/data/games/2019-03-10 17-42-46_410.npy" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/data/games/2019-03-10 17-42-46_411.npy" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/data/games/2019-03-10 17-42-46_412.npy" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/data/games/2019-03-10 17-42-46_413.npy" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/data/games/2019-03-10 17-42-46_414.npy" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/data/games/2019-03-10 17-42-46_415.npy" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/data/games/2019-03-10 17-42-46_416.npy" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/data/games/2019-03-10 17-42-46_417.npy" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/data/games/2019-03-10 17-42-46_418.npy" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/data/games/2019-03-10 17-42-46_419.npy" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/data/games/2019-03-10 17-42-46_42.npy" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/data/games/2019-03-10 17-42-46_420.npy" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/data/games/2019-03-10 17-42-46_421.npy" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/data/games/2019-03-10 17-42-46_422.npy" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/data/games/2019-03-10 17-42-46_423.npy" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/data/games/2019-03-10 17-42-46_424.npy" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/data/games/2019-03-10 17-42-46_425.npy" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/data/games/2019-03-10 17-42-46_426.npy" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/data/games/2019-03-10 17-42-46_427.npy" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/data/games/2019-03-10 17-42-46_428.npy" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/data/games/2019-03-10 17-42-46_429.npy" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/data/games/2019-03-10 17-42-46_43.npy" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/data/games/2019-03-10 17-42-46_430.npy" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/data/games/2019-03-10 17-42-46_431.npy" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/data/games/2019-03-10 17-42-46_432.npy" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/data/games/2019-03-10 17-42-46_433.npy" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/data/games/2019-03-10 17-42-46_434.npy" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/data/games/2019-03-10 17-42-46_435.npy" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/data/games/2019-03-10 17-42-46_436.npy" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/data/games/2019-03-10 17-42-46_437.npy" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/data/games/2019-03-10 17-42-46_438.npy" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/data/games/2019-03-10 17-42-46_439.npy" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/data/games/2019-03-10 17-42-46_44.npy" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/data/games/2019-03-10 17-42-46_440.npy" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/data/games/2019-03-10 17-42-46_441.npy" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/data/games/2019-03-10 17-42-46_442.npy" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/data/games/2019-03-10 17-42-46_443.npy" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/data/games/2019-03-10 17-42-46_444.npy" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/data/games/2019-03-10 17-42-46_445.npy" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/data/games/2019-03-10 17-42-46_446.npy" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/data/games/2019-03-10 17-42-46_447.npy" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/data/games/2019-03-10 17-42-46_448.npy" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/data/games/2019-03-10 17-42-46_449.npy" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/data/games/2019-03-10 17-42-46_45.npy" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/data/games/2019-03-10 17-42-46_450.npy" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/data/games/2019-03-10 17-42-46_451.npy" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/data/games/2019-03-10 17-42-46_452.npy" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/data/games/2019-03-10 17-42-46_453.npy" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/data/games/2019-03-10 17-42-46_454.npy" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/data/games/2019-03-10 17-42-46_455.npy" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/data/games/2019-03-10 17-42-46_456.npy" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/data/games/2019-03-10 17-42-46_457.npy" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/data/games/2019-03-10 17-42-46_458.npy" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/data/games/2019-03-10 17-42-46_459.npy" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/data/games/2019-03-10 17-42-46_46.npy" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/data/games/2019-03-10 17-42-46_460.npy" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/data/games/2019-03-10 17-42-46_461.npy" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/data/games/2019-03-10 17-42-46_462.npy" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/data/games/2019-03-10 17-42-46_463.npy" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/data/games/2019-03-10 17-42-46_464.npy" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/data/games/2019-03-10 17-42-46_465.npy" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/data/games/2019-03-10 17-42-46_466.npy" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/data/games/2019-03-10 17-42-46_467.npy" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/data/games/2019-03-10 17-42-46_468.npy" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/data/games/2019-03-10 17-42-46_469.npy" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/data/games/2019-03-10 17-42-46_47.npy" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/data/games/2019-03-10 17-42-46_470.npy" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/data/games/2019-03-10 17-42-46_471.npy" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/data/games/2019-03-10 17-42-46_472.npy" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/data/games/2019-03-10 17-42-46_473.npy" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/data/games/2019-03-10 17-42-46_474.npy" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/data/games/2019-03-10 17-42-46_475.npy" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/data/games/2019-03-10 17-42-46_476.npy" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/data/games/2019-03-10 17-42-46_477.npy" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/data/games/2019-03-10 17-42-46_478.npy" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/data/games/2019-03-10 17-42-46_479.npy" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/data/games/2019-03-10 17-42-46_48.npy" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/data/games/2019-03-10 17-42-46_480.npy" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/data/games/2019-03-10 17-42-46_481.npy" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/data/games/2019-03-10 17-42-46_482.npy" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/data/games/2019-03-10 17-42-46_483.npy" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/data/games/2019-03-10 17-42-46_484.npy" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/data/games/2019-03-10 17-42-46_485.npy" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/data/games/2019-03-10 17-42-46_486.npy" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/data/games/2019-03-10 17-42-46_487.npy" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/data/games/2019-03-10 17-42-46_488.npy" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/data/games/2019-03-10 17-42-46_489.npy" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/data/games/2019-03-10 17-42-46_49.npy" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/data/games/2019-03-10 17-42-46_490.npy" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/data/games/2019-03-10 17-42-46_491.npy" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/data/games/2019-03-10 17-42-46_492.npy" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/data/games/2019-03-10 17-42-46_493.npy" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/data/games/2019-03-10 17-42-46_494.npy" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/data/games/2019-03-10 17-42-46_495.npy" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/data/games/2019-03-10 17-42-46_496.npy" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/data/games/2019-03-10 17-42-46_497.npy" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/data/games/2019-03-10 17-42-46_498.npy" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/data/games/2019-03-10 17-42-46_499.npy" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/data/games/2019-03-10 17-42-46_5.npy" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/data/games/2019-03-10 17-42-46_50.npy" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/data/games/2019-03-10 17-42-46_500.npy" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/data/games/2019-03-10 17-42-46_501.npy" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/data/games/2019-03-10 17-42-46_502.npy" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/data/games/2019-03-10 17-42-46_503.npy" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/data/games/2019-03-10 17-42-46_504.npy" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/data/games/2019-03-10 17-42-46_505.npy" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/data/games/2019-03-10 17-42-46_506.npy" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/data/games/2019-03-10 17-42-46_507.npy" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/data/games/2019-03-10 17-42-46_508.npy" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/data/games/2019-03-10 17-42-46_509.npy" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/data/games/2019-03-10 17-42-46_51.npy" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/data/games/2019-03-10 17-42-46_510.npy" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/data/games/2019-03-10 17-42-46_511.npy" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/data/games/2019-03-10 17-42-46_512.npy" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/data/games/2019-03-10 17-42-46_513.npy" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/data/games/2019-03-10 17-42-46_514.npy" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/data/games/2019-03-10 17-42-46_515.npy" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/data/games/2019-03-10 17-42-46_516.npy" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/data/games/2019-03-10 17-42-46_517.npy" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/data/games/2019-03-10 17-42-46_518.npy" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/data/games/2019-03-10 17-42-46_519.npy" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/data/games/2019-03-10 17-42-46_52.npy" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/data/games/2019-03-10 17-42-46_520.npy" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/data/games/2019-03-10 17-42-46_521.npy" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/data/games/2019-03-10 17-42-46_522.npy" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/data/games/2019-03-10 17-42-46_523.npy" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/data/games/2019-03-10 17-42-46_524.npy" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/data/games/2019-03-10 17-42-46_525.npy" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/data/games/2019-03-10 17-42-46_526.npy" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/data/games/2019-03-10 17-42-46_527.npy" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/data/games/2019-03-10 17-42-46_528.npy" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/data/games/2019-03-10 17-42-46_529.npy" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/data/games/2019-03-10 17-42-46_53.npy" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/data/games/2019-03-10 17-42-46_530.npy" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/data/games/2019-03-10 17-42-46_531.npy" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/data/games/2019-03-10 17-42-46_532.npy" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/data/games/2019-03-10 17-42-46_533.npy" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/data/games/2019-03-10 17-42-46_534.npy" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/data/games/2019-03-10 17-42-46_535.npy" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/data/games/2019-03-10 17-42-46_536.npy" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/data/games/2019-03-10 17-42-46_537.npy" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/data/games/2019-03-10 17-42-46_538.npy" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/data/games/2019-03-10 17-42-46_539.npy" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/data/games/2019-03-10 17-42-46_54.npy" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/data/games/2019-03-10 17-42-46_540.npy" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/data/games/2019-03-10 17-42-46_541.npy" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/data/games/2019-03-10 17-42-46_542.npy" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/data/games/2019-03-10 17-42-46_543.npy" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/data/games/2019-03-10 17-42-46_544.npy" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/data/games/2019-03-10 17-42-46_545.npy" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/data/games/2019-03-10 17-42-46_546.npy" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/data/games/2019-03-10 17-42-46_547.npy" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/data/games/2019-03-10 17-42-46_548.npy" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/data/games/2019-03-10 17-42-46_549.npy" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/data/games/2019-03-10 17-42-46_55.npy" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/data/games/2019-03-10 17-42-46_550.npy" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/data/games/2019-03-10 17-42-46_551.npy" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/data/games/2019-03-10 17-42-46_552.npy" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/data/games/2019-03-10 17-42-46_553.npy" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/data/games/2019-03-10 17-42-46_554.npy" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/data/games/2019-03-10 17-42-46_555.npy" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/data/games/2019-03-10 17-42-46_556.npy" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/data/games/2019-03-10 17-42-46_557.npy" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/data/games/2019-03-10 17-42-46_558.npy" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/data/games/2019-03-10 17-42-46_559.npy" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/data/games/2019-03-10 17-42-46_56.npy" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/data/games/2019-03-10 17-42-46_560.npy" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/data/games/2019-03-10 17-42-46_561.npy" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/data/games/2019-03-10 17-42-46_562.npy" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/data/games/2019-03-10 17-42-46_563.npy" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/data/games/2019-03-10 17-42-46_564.npy" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/data/games/2019-03-10 17-42-46_565.npy" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/data/games/2019-03-10 17-42-46_566.npy" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/data/games/2019-03-10 17-42-46_567.npy" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/data/games/2019-03-10 17-42-46_568.npy" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/data/games/2019-03-10 17-42-46_569.npy" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/data/games/2019-03-10 17-42-46_57.npy" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/data/games/2019-03-10 17-42-46_570.npy" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/data/games/2019-03-10 17-42-46_571.npy" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/data/games/2019-03-10 17-42-46_572.npy" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/data/games/2019-03-10 17-42-46_573.npy" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/data/games/2019-03-10 17-42-46_574.npy" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/data/games/2019-03-10 17-42-46_575.npy" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/data/games/2019-03-10 17-42-46_576.npy" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/data/games/2019-03-10 17-42-46_577.npy" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/data/games/2019-03-10 17-42-46_578.npy" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/data/games/2019-03-10 17-42-46_579.npy" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/data/games/2019-03-10 17-42-46_58.npy" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/data/games/2019-03-10 17-42-46_580.npy" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/data/games/2019-03-10 17-42-46_581.npy" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/data/games/2019-03-10 17-42-46_582.npy" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/data/games/2019-03-10 17-42-46_583.npy" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/data/games/2019-03-10 17-42-46_584.npy" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/data/games/2019-03-10 17-42-46_585.npy" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/data/games/2019-03-10 17-42-46_586.npy" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/data/games/2019-03-10 17-42-46_587.npy" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/data/games/2019-03-10 17-42-46_588.npy" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/data/games/2019-03-10 17-42-46_589.npy" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/data/games/2019-03-10 17-42-46_59.npy" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/data/games/2019-03-10 17-42-46_590.npy" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/data/games/2019-03-10 17-42-46_591.npy" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/data/games/2019-03-10 17-42-46_592.npy" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/data/games/2019-03-10 17-42-46_593.npy" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/data/games/2019-03-10 17-42-46_594.npy" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/data/games/2019-03-10 17-42-46_595.npy" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/data/games/2019-03-10 17-42-46_596.npy" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/data/games/2019-03-10 17-42-46_597.npy" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/data/games/2019-03-10 17-42-46_598.npy" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/data/games/2019-03-10 17-42-46_599.npy" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/data/games/2019-03-10 17-42-46_6.npy" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/data/games/2019-03-10 17-42-46_60.npy" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/data/games/2019-03-10 17-42-46_600.npy" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/data/games/2019-03-10 17-42-46_601.npy" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/data/games/2019-03-10 17-42-46_602.npy" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/data/games/2019-03-10 17-42-46_603.npy" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/data/games/2019-03-10 17-42-46_604.npy" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/data/games/2019-03-10 17-42-46_605.npy" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/data/games/2019-03-10 17-42-46_606.npy" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/data/games/2019-03-10 17-42-46_607.npy" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/data/games/2019-03-10 17-42-46_608.npy" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/data/games/2019-03-10 17-42-46_609.npy" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/data/games/2019-03-10 17-42-46_61.npy" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/data/games/2019-03-10 17-42-46_610.npy" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/data/games/2019-03-10 17-42-46_611.npy" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/data/games/2019-03-10 17-42-46_612.npy" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/data/games/2019-03-10 17-42-46_613.npy" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/data/games/2019-03-10 17-42-46_614.npy" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/data/games/2019-03-10 17-42-46_615.npy" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/data/games/2019-03-10 17-42-46_616.npy" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/data/games/2019-03-10 17-42-46_617.npy" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/data/games/2019-03-10 17-42-46_618.npy" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/data/games/2019-03-10 17-42-46_619.npy" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/data/games/2019-03-10 17-42-46_62.npy" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/data/games/2019-03-10 17-42-46_620.npy" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/data/games/2019-03-10 17-42-46_621.npy" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/data/games/2019-03-10 17-42-46_622.npy" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/data/games/2019-03-10 17-42-46_623.npy" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/data/games/2019-03-10 17-42-46_624.npy" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/data/games/2019-03-10 17-42-46_625.npy" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/data/games/2019-03-10 17-42-46_626.npy" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/data/games/2019-03-10 17-42-46_627.npy" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/data/games/2019-03-10 17-42-46_628.npy" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/data/games/2019-03-10 17-42-46_629.npy" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/data/games/2019-03-10 17-42-46_63.npy" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/data/games/2019-03-10 17-42-46_630.npy" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/data/games/2019-03-10 17-42-46_631.npy" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/data/games/2019-03-10 17-42-46_632.npy" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/data/games/2019-03-10 17-42-46_633.npy" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/data/games/2019-03-10 17-42-46_634.npy" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/data/games/2019-03-10 17-42-46_635.npy" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/data/games/2019-03-10 17-42-46_636.npy" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/data/games/2019-03-10 17-42-46_637.npy" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/data/games/2019-03-10 17-42-46_638.npy" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/data/games/2019-03-10 17-42-46_639.npy" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/data/games/2019-03-10 17-42-46_64.npy" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/data/games/2019-03-10 17-42-46_640.npy" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/data/games/2019-03-10 17-42-46_641.npy" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/data/games/2019-03-10 17-42-46_642.npy" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/data/games/2019-03-10 17-42-46_643.npy" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/data/games/2019-03-10 17-42-46_644.npy" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/data/games/2019-03-10 17-42-46_645.npy" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/data/games/2019-03-10 17-42-46_646.npy" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/data/games/2019-03-10 17-42-46_647.npy" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/data/games/2019-03-10 17-42-46_648.npy" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/data/games/2019-03-10 17-42-46_649.npy" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/data/games/2019-03-10 17-42-46_65.npy" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/data/games/2019-03-10 17-42-46_650.npy" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/data/games/2019-03-10 17-42-46_651.npy" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/data/games/2019-03-10 17-42-46_652.npy" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/data/games/2019-03-10 17-42-46_653.npy" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/data/games/2019-03-10 17-42-46_654.npy" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/data/games/2019-03-10 17-42-46_655.npy" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/data/games/2019-03-10 17-42-46_656.npy" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/data/games/2019-03-10 17-42-46_657.npy" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/data/games/2019-03-10 17-42-46_658.npy" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/data/games/2019-03-10 17-42-46_659.npy" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/data/games/2019-03-10 17-42-46_66.npy" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/data/games/2019-03-10 17-42-46_660.npy" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/data/games/2019-03-10 17-42-46_661.npy" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/data/games/2019-03-10 17-42-46_662.npy" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/data/games/2019-03-10 17-42-46_663.npy" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/data/games/2019-03-10 17-42-46_664.npy" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/data/games/2019-03-10 17-42-46_665.npy" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/data/games/2019-03-10 17-42-46_666.npy" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/data/games/2019-03-10 17-42-46_667.npy" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/data/games/2019-03-10 17-42-46_668.npy" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/data/games/2019-03-10 17-42-46_669.npy" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/data/games/2019-03-10 17-42-46_67.npy" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/data/games/2019-03-10 17-42-46_670.npy" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/data/games/2019-03-10 17-42-46_671.npy" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/data/games/2019-03-10 17-42-46_672.npy" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/data/games/2019-03-10 17-42-46_673.npy" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/data/games/2019-03-10 17-42-46_674.npy" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/data/games/2019-03-10 17-42-46_675.npy" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/data/games/2019-03-10 17-42-46_676.npy" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/data/games/2019-03-10 17-42-46_677.npy" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/data/games/2019-03-10 17-42-46_678.npy" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/data/games/2019-03-10 17-42-46_679.npy" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/data/games/2019-03-10 17-42-46_68.npy" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/data/games/2019-03-10 17-42-46_680.npy" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/data/games/2019-03-10 17-42-46_681.npy" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/data/games/2019-03-10 17-42-46_682.npy" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/data/games/2019-03-10 17-42-46_683.npy" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/data/games/2019-03-10 17-42-46_684.npy" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/data/games/2019-03-10 17-42-46_685.npy" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/data/games/2019-03-10 17-42-46_686.npy" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/data/games/2019-03-10 17-42-46_687.npy" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/data/games/2019-03-10 17-42-46_688.npy" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/data/games/2019-03-10 17-42-46_689.npy" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/data/games/2019-03-10 17-42-46_69.npy" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/data/games/2019-03-10 17-42-46_690.npy" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/data/games/2019-03-10 17-42-46_691.npy" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/data/games/2019-03-10 17-42-46_692.npy" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/data/games/2019-03-10 17-42-46_693.npy" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/data/games/2019-03-10 17-42-46_694.npy" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/data/games/2019-03-10 17-42-46_695.npy" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/data/games/2019-03-10 17-42-46_696.npy" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/data/games/2019-03-10 17-42-46_697.npy" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/data/games/2019-03-10 17-42-46_698.npy" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/data/games/2019-03-10 17-42-46_699.npy" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/data/games/2019-03-10 17-42-46_7.npy" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/data/games/2019-03-10 17-42-46_70.npy" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/data/games/2019-03-10 17-42-46_700.npy" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/data/games/2019-03-10 17-42-46_701.npy" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/data/games/2019-03-10 17-42-46_702.npy" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/data/games/2019-03-10 17-42-46_703.npy" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/data/games/2019-03-10 17-42-46_704.npy" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/data/games/2019-03-10 17-42-46_705.npy" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/data/games/2019-03-10 17-42-46_706.npy" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/data/games/2019-03-10 17-42-46_707.npy" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/data/games/2019-03-10 17-42-46_708.npy" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/data/games/2019-03-10 17-42-46_709.npy" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/data/games/2019-03-10 17-42-46_71.npy" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/data/games/2019-03-10 17-42-46_710.npy" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/data/games/2019-03-10 17-42-46_711.npy" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/data/games/2019-03-10 17-42-46_712.npy" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/data/games/2019-03-10 17-42-46_713.npy" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/data/games/2019-03-10 17-42-46_714.npy" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/data/games/2019-03-10 17-42-46_715.npy" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/data/games/2019-03-10 17-42-46_716.npy" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/data/games/2019-03-10 17-42-46_717.npy" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/data/games/2019-03-10 17-42-46_718.npy" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/data/games/2019-03-10 17-42-46_719.npy" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/data/games/2019-03-10 17-42-46_72.npy" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/data/games/2019-03-10 17-42-46_720.npy" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/data/games/2019-03-10 17-42-46_721.npy" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/data/games/2019-03-10 17-42-46_722.npy" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/data/games/2019-03-10 17-42-46_723.npy" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/data/games/2019-03-10 17-42-46_724.npy" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/data/games/2019-03-10 17-42-46_725.npy" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/data/games/2019-03-10 17-42-46_726.npy" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/data/games/2019-03-10 17-42-46_727.npy" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/data/games/2019-03-10 17-42-46_728.npy" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/data/games/2019-03-10 17-42-46_729.npy" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/data/games/2019-03-10 17-42-46_73.npy" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/data/games/2019-03-10 17-42-46_730.npy" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/data/games/2019-03-10 17-42-46_731.npy" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/data/games/2019-03-10 17-42-46_732.npy" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/data/games/2019-03-10 17-42-46_733.npy" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/data/games/2019-03-10 17-42-46_734.npy" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/data/games/2019-03-10 17-42-46_735.npy" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/data/games/2019-03-10 17-42-46_736.npy" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/data/games/2019-03-10 17-42-46_737.npy" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/data/games/2019-03-10 17-42-46_738.npy" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/data/games/2019-03-10 17-42-46_739.npy" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/data/games/2019-03-10 17-42-46_74.npy" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/data/games/2019-03-10 17-42-46_740.npy" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/data/games/2019-03-10 17-42-46_741.npy" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/data/games/2019-03-10 17-42-46_742.npy" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/data/games/2019-03-10 17-42-46_743.npy" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/data/games/2019-03-10 17-42-46_744.npy" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/data/games/2019-03-10 17-42-46_745.npy" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/data/games/2019-03-10 17-42-46_746.npy" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/data/games/2019-03-10 17-42-46_747.npy" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/data/games/2019-03-10 17-42-46_748.npy" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/data/games/2019-03-10 17-42-46_749.npy" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/data/games/2019-03-10 17-42-46_75.npy" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/data/games/2019-03-10 17-42-46_750.npy" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/data/games/2019-03-10 17-42-46_751.npy" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/data/games/2019-03-10 17-42-46_752.npy" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/data/games/2019-03-10 17-42-46_753.npy" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/data/games/2019-03-10 17-42-46_754.npy" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/data/games/2019-03-10 17-42-46_755.npy" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/data/games/2019-03-10 17-42-46_756.npy" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/data/games/2019-03-10 17-42-46_757.npy" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/data/games/2019-03-10 17-42-46_758.npy" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/data/games/2019-03-10 17-42-46_759.npy" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/data/games/2019-03-10 17-42-46_76.npy" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/data/games/2019-03-10 17-42-46_760.npy" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/data/games/2019-03-10 17-42-46_761.npy" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/data/games/2019-03-10 17-42-46_762.npy" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/data/games/2019-03-10 17-42-46_763.npy" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/data/games/2019-03-10 17-42-46_764.npy" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/data/games/2019-03-10 17-42-46_765.npy" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/data/games/2019-03-10 17-42-46_766.npy" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/data/games/2019-03-10 17-42-46_767.npy" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/data/games/2019-03-10 17-42-46_768.npy" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/data/games/2019-03-10 17-42-46_769.npy" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/data/games/2019-03-10 17-42-46_77.npy" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/data/games/2019-03-10 17-42-46_770.npy" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/data/games/2019-03-10 17-42-46_771.npy" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/data/games/2019-03-10 17-42-46_772.npy" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/data/games/2019-03-10 17-42-46_773.npy" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/data/games/2019-03-10 17-42-46_774.npy" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/data/games/2019-03-10 17-42-46_775.npy" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/data/games/2019-03-10 17-42-46_776.npy" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/data/games/2019-03-10 17-42-46_777.npy" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/data/games/2019-03-10 17-42-46_778.npy" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/data/games/2019-03-10 17-42-46_779.npy" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/data/games/2019-03-10 17-42-46_78.npy" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/data/games/2019-03-10 17-42-46_780.npy" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/data/games/2019-03-10 17-42-46_781.npy" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/data/games/2019-03-10 17-42-46_782.npy" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/data/games/2019-03-10 17-42-46_783.npy" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/data/games/2019-03-10 17-42-46_784.npy" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/data/games/2019-03-10 17-42-46_785.npy" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/data/games/2019-03-10 17-42-46_786.npy" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/data/games/2019-03-10 17-42-46_787.npy" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/data/games/2019-03-10 17-42-46_788.npy" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/data/games/2019-03-10 17-42-46_789.npy" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/data/games/2019-03-10 17-42-46_79.npy" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/data/games/2019-03-10 17-42-46_790.npy" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/data/games/2019-03-10 17-42-46_791.npy" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/data/games/2019-03-10 17-42-46_792.npy" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/data/games/2019-03-10 17-42-46_793.npy" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/data/games/2019-03-10 17-42-46_794.npy" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/data/games/2019-03-10 17-42-46_795.npy" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/data/games/2019-03-10 17-42-46_796.npy" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/data/games/2019-03-10 17-42-46_797.npy" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/data/games/2019-03-10 17-42-46_798.npy" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/data/games/2019-03-10 17-42-46_799.npy" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/data/games/2019-03-10 17-42-46_8.npy" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/data/games/2019-03-10 17-42-46_80.npy" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/data/games/2019-03-10 17-42-46_800.npy" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/data/games/2019-03-10 17-42-46_801.npy" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/data/games/2019-03-10 17-42-46_802.npy" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/data/games/2019-03-10 17-42-46_803.npy" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/data/games/2019-03-10 17-42-46_804.npy" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/data/games/2019-03-10 17-42-46_805.npy" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/data/games/2019-03-10 17-42-46_806.npy" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/data/games/2019-03-10 17-42-46_807.npy" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/data/games/2019-03-10 17-42-46_808.npy" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/data/games/2019-03-10 17-42-46_809.npy" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/data/games/2019-03-10 17-42-46_81.npy" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/data/games/2019-03-10 17-42-46_810.npy" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/data/games/2019-03-10 17-42-46_811.npy" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/data/games/2019-03-10 17-42-46_812.npy" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/data/games/2019-03-10 17-42-46_813.npy" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/data/games/2019-03-10 17-42-46_814.npy" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/data/games/2019-03-10 17-42-46_815.npy" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/data/games/2019-03-10 17-42-46_816.npy" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/data/games/2019-03-10 17-42-46_817.npy" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/data/games/2019-03-10 17-42-46_818.npy" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/data/games/2019-03-10 17-42-46_819.npy" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/data/games/2019-03-10 17-42-46_82.npy" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/data/games/2019-03-10 17-42-46_820.npy" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/data/games/2019-03-10 17-42-46_821.npy" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/data/games/2019-03-10 17-42-46_822.npy" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/data/games/2019-03-10 17-42-46_823.npy" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/data/games/2019-03-10 17-42-46_824.npy" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/data/games/2019-03-10 17-42-46_825.npy" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/data/games/2019-03-10 17-42-46_826.npy" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/data/games/2019-03-10 17-42-46_827.npy" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/data/games/2019-03-10 17-42-46_828.npy" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/data/games/2019-03-10 17-42-46_829.npy" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/data/games/2019-03-10 17-42-46_83.npy" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/data/games/2019-03-10 17-42-46_830.npy" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/data/games/2019-03-10 17-42-46_831.npy" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/data/games/2019-03-10 17-42-46_832.npy" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/data/games/2019-03-10 17-42-46_833.npy" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/data/games/2019-03-10 17-42-46_834.npy" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/data/games/2019-03-10 17-42-46_835.npy" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/data/games/2019-03-10 17-42-46_836.npy" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/data/games/2019-03-10 17-42-46_837.npy" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/data/games/2019-03-10 17-42-46_838.npy" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/data/games/2019-03-10 17-42-46_839.npy" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/data/games/2019-03-10 17-42-46_84.npy" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/data/games/2019-03-10 17-42-46_840.npy" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/data/games/2019-03-10 17-42-46_841.npy" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/data/games/2019-03-10 17-42-46_842.npy" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/data/games/2019-03-10 17-42-46_843.npy" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/data/games/2019-03-10 17-42-46_844.npy" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/data/games/2019-03-10 17-42-46_845.npy" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/data/games/2019-03-10 17-42-46_846.npy" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/data/games/2019-03-10 17-42-46_847.npy" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/data/games/2019-03-10 17-42-46_848.npy" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/data/games/2019-03-10 17-42-46_849.npy" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/data/games/2019-03-10 17-42-46_85.npy" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/data/games/2019-03-10 17-42-46_850.npy" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/data/games/2019-03-10 17-42-46_851.npy" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/data/games/2019-03-10 17-42-46_852.npy" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/data/games/2019-03-10 17-42-46_853.npy" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/data/games/2019-03-10 17-42-46_854.npy" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/data/games/2019-03-10 17-42-46_855.npy" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/data/games/2019-03-10 17-42-46_856.npy" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/data/games/2019-03-10 17-42-46_857.npy" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/data/games/2019-03-10 17-42-46_858.npy" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/data/games/2019-03-10 17-42-46_859.npy" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/data/games/2019-03-10 17-42-46_86.npy" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/data/games/2019-03-10 17-42-46_860.npy" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/data/games/2019-03-10 17-42-46_861.npy" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/data/games/2019-03-10 17-42-46_862.npy" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/data/games/2019-03-10 17-42-46_863.npy" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/data/games/2019-03-10 17-42-46_864.npy" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/data/games/2019-03-10 17-42-46_865.npy" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/data/games/2019-03-10 17-42-46_866.npy" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/data/games/2019-03-10 17-42-46_867.npy" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/data/games/2019-03-10 17-42-46_868.npy" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/data/games/2019-03-10 17-42-46_869.npy" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/data/games/2019-03-10 17-42-46_87.npy" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/data/games/2019-03-10 17-42-46_870.npy" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/data/games/2019-03-10 17-42-46_871.npy" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/data/games/2019-03-10 17-42-46_872.npy" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/data/games/2019-03-10 17-42-46_873.npy" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/data/games/2019-03-10 17-42-46_874.npy" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/data/games/2019-03-10 17-42-46_875.npy" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/data/games/2019-03-10 17-42-46_876.npy" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/data/games/2019-03-10 17-42-46_877.npy" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/data/games/2019-03-10 17-42-46_878.npy" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/data/games/2019-03-10 17-42-46_879.npy" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/data/games/2019-03-10 17-42-46_88.npy" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/data/games/2019-03-10 17-42-46_880.npy" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/data/games/2019-03-10 17-42-46_881.npy" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/data/games/2019-03-10 17-42-46_882.npy" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/data/games/2019-03-10 17-42-46_883.npy" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/data/games/2019-03-10 17-42-46_884.npy" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/data/games/2019-03-10 17-42-46_885.npy" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/data/games/2019-03-10 17-42-46_886.npy" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/data/games/2019-03-10 17-42-46_887.npy" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/data/games/2019-03-10 17-42-46_888.npy" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/data/games/2019-03-10 17-42-46_889.npy" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/data/games/2019-03-10 17-42-46_89.npy" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/data/games/2019-03-10 17-42-46_890.npy" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/data/games/2019-03-10 17-42-46_891.npy" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/data/games/2019-03-10 17-42-46_892.npy" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/data/games/2019-03-10 17-42-46_893.npy" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/data/games/2019-03-10 17-42-46_894.npy" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/data/games/2019-03-10 17-42-46_895.npy" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/data/games/2019-03-10 17-42-46_896.npy" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/data/games/2019-03-10 17-42-46_897.npy" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/data/games/2019-03-10 17-42-46_898.npy" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/data/games/2019-03-10 17-42-46_899.npy" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/data/games/2019-03-10 17-42-46_9.npy" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/data/games/2019-03-10 17-42-46_90.npy" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/data/games/2019-03-10 17-42-46_900.npy" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/data/games/2019-03-10 17-42-46_901.npy" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/data/games/2019-03-10 17-42-46_902.npy" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/data/games/2019-03-10 17-42-46_903.npy" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/data/games/2019-03-10 17-42-46_904.npy" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/data/games/2019-03-10 17-42-46_905.npy" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/data/games/2019-03-10 17-42-46_906.npy" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/data/games/2019-03-10 17-42-46_907.npy" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/data/games/2019-03-10 17-42-46_908.npy" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/data/games/2019-03-10 17-42-46_909.npy" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/data/games/2019-03-10 17-42-46_91.npy" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/data/games/2019-03-10 17-42-46_910.npy" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/data/games/2019-03-10 17-42-46_911.npy" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/data/games/2019-03-10 17-42-46_912.npy" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/data/games/2019-03-10 17-42-46_913.npy" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/data/games/2019-03-10 17-42-46_914.npy" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/data/games/2019-03-10 17-42-46_915.npy" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/data/games/2019-03-10 17-42-46_916.npy" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/data/games/2019-03-10 17-42-46_917.npy" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/data/games/2019-03-10 17-42-46_918.npy" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/data/games/2019-03-10 17-42-46_919.npy" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/data/games/2019-03-10 17-42-46_92.npy" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/data/games/2019-03-10 17-42-46_920.npy" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/data/games/2019-03-10 17-42-46_921.npy" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/data/games/2019-03-10 17-42-46_922.npy" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/data/games/2019-03-10 17-42-46_923.npy" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/data/games/2019-03-10 17-42-46_924.npy" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/data/games/2019-03-10 17-42-46_925.npy" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/data/games/2019-03-10 17-42-46_926.npy" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/data/games/2019-03-10 17-42-46_927.npy" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/data/games/2019-03-10 17-42-46_928.npy" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/data/games/2019-03-10 17-42-46_929.npy" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/data/games/2019-03-10 17-42-46_93.npy" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/data/games/2019-03-10 17-42-46_930.npy" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/data/games/2019-03-10 17-42-46_931.npy" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/data/games/2019-03-10 17-42-46_932.npy" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/data/games/2019-03-10 17-42-46_933.npy" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/data/games/2019-03-10 17-42-46_934.npy" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/data/games/2019-03-10 17-42-46_935.npy" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/data/games/2019-03-10 17-42-46_936.npy" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/data/games/2019-03-10 17-42-46_937.npy" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/data/games/2019-03-10 17-42-46_938.npy" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/data/games/2019-03-10 17-42-46_939.npy" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/data/games/2019-03-10 17-42-46_94.npy" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/data/games/2019-03-10 17-42-46_940.npy" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/data/games/2019-03-10 17-42-46_941.npy" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/data/games/2019-03-10 17-42-46_942.npy" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/data/games/2019-03-10 17-42-46_943.npy" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/data/games/2019-03-10 17-42-46_944.npy" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/data/games/2019-03-10 17-42-46_945.npy" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/data/games/2019-03-10 17-42-46_946.npy" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/data/games/2019-03-10 17-42-46_947.npy" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/data/games/2019-03-10 17-42-46_948.npy" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/data/games/2019-03-10 17-42-46_949.npy" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/data/games/2019-03-10 17-42-46_95.npy" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/data/games/2019-03-10 17-42-46_950.npy" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/data/games/2019-03-10 17-42-46_951.npy" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/data/games/2019-03-10 17-42-46_952.npy" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/data/games/2019-03-10 17-42-46_953.npy" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/data/games/2019-03-10 17-42-46_954.npy" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/data/games/2019-03-10 17-42-46_955.npy" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/data/games/2019-03-10 17-42-46_956.npy" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/data/games/2019-03-10 17-42-46_957.npy" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/data/games/2019-03-10 17-42-46_958.npy" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/data/games/2019-03-10 17-42-46_959.npy" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/data/games/2019-03-10 17-42-46_96.npy" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/data/games/2019-03-10 17-42-46_960.npy" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/data/games/2019-03-10 17-42-46_961.npy" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/data/games/2019-03-10 17-42-46_962.npy" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/data/games/2019-03-10 17-42-46_963.npy" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/data/games/2019-03-10 17-42-46_964.npy" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/data/games/2019-03-10 17-42-46_965.npy" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/data/games/2019-03-10 17-42-46_966.npy" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/data/games/2019-03-10 17-42-46_967.npy" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/data/games/2019-03-10 17-42-46_968.npy" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/data/games/2019-03-10 17-42-46_969.npy" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/data/games/2019-03-10 17-42-46_97.npy" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/data/games/2019-03-10 17-42-46_970.npy" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/data/games/2019-03-10 17-42-46_971.npy" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/data/games/2019-03-10 17-42-46_972.npy" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/data/games/2019-03-10 17-42-46_973.npy" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/data/games/2019-03-10 17-42-46_974.npy" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/data/games/2019-03-10 17-42-46_975.npy" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/data/games/2019-03-10 17-42-46_976.npy" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/data/games/2019-03-10 17-42-46_977.npy" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/data/games/2019-03-10 17-42-46_978.npy" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/data/games/2019-03-10 17-42-46_979.npy" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/data/games/2019-03-10 17-42-46_98.npy" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/data/games/2019-03-10 17-42-46_980.npy" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/data/games/2019-03-10 17-42-46_981.npy" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/data/games/2019-03-10 17-42-46_982.npy" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/data/games/2019-03-10 17-42-46_983.npy" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/data/games/2019-03-10 17-42-46_984.npy" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/data/games/2019-03-10 17-42-46_985.npy" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/data/games/2019-03-10 17-42-46_986.npy" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/data/games/2019-03-10 17-42-46_987.npy" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/data/games/2019-03-10 17-42-46_988.npy" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/data/games/2019-03-10 17-42-46_989.npy" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/data/games/2019-03-10 17-42-46_99.npy" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/data/games/2019-03-10 17-42-46_990.npy" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/data/games/2019-03-10 17-42-46_991.npy" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/data/games/2019-03-10 17-42-46_992.npy" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/data/games/2019-03-10 17-42-46_993.npy" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/data/games/2019-03-10 17-42-46_994.npy" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/data/games/2019-03-10 17-42-46_995.npy" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/data/games/2019-03-10 17-42-46_996.npy" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/data/games/2019-03-10 17-42-46_997.npy" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/data/games/2019-03-10 17-42-46_998.npy" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/data/games/2019-03-10 17-42-46_999.npy" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Q-Training/Training.py" beforeDir="false" afterPath="$PROJECT_DIR$/QTraining/Training.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Q-Training/observation.py" beforeDir="false" afterPath="$PROJECT_DIR$/QTraining/observation.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Q-Training/rewards.py" beforeDir="false" afterPath="$PROJECT_DIR$/QTraining/rewards.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Q-Training/settings.py" beforeDir="false" afterPath="$PROJECT_DIR$/QTraining/settings.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Q-Training/test_daten.npy" beforeDir="false" afterPath="$PROJECT_DIR$/QTraining/test_daten.npy" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Q/manage_training_data.py" beforeDir="false" afterPath="$PROJECT_DIR$/Q/manage_training_data.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/agent_code/marathon/jakob_features.py" beforeDir="false" afterPath="$PROJECT_DIR$/agent_code/marathon/jakob_features.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/environment_save_states.py" beforeDir="false" afterPath="$PROJECT_DIR$/environment_save_states.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/settings.py" beforeDir="false" afterPath="$PROJECT_DIR$/settings.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Q/create_observation_jakob.py" beforeDir="false" afterPath="$PROJECT_DIR$/Q/create_observation_jakob.py" afterDir="false" />
     </list>
     <ignored path=".idea/" />
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
@@ -64,15 +1055,17 @@
     <session id="-1280577960">
       <usages-collector id="statistics.lifecycle.project">
         <counts>
-          <entry key="project.closed" value="5" />
+          <entry key="project.closed" value="7" />
           <entry key="project.open.time.1" value="1" />
           <entry key="project.open.time.13" value="1" />
+          <entry key="project.open.time.26" value="1" />
           <entry key="project.open.time.29" value="1" />
           <entry key="project.open.time.32" value="1" />
-          <entry key="project.open.time.35" value="1" />
+          <entry key="project.open.time.35" value="2" />
           <entry key="project.open.time.36" value="1" />
+          <entry key="project.open.time.4" value="1" />
           <entry key="project.open.time.40" value="1" />
-          <entry key="project.opened" value="7" />
+          <entry key="project.opened" value="10" />
         </counts>
       </usages-collector>
       <usages-collector id="statistics.file.extensions.open">
@@ -90,14 +1083,14 @@
       <usages-collector id="statistics.file.extensions.edit">
         <counts>
           <entry key="dummy" value="62" />
-          <entry key="py" value="12934" />
-          <entry key="txt" value="281" />
+          <entry key="py" value="12935" />
+          <entry key="txt" value="315" />
         </counts>
       </usages-collector>
       <usages-collector id="statistics.file.types.edit">
         <counts>
-          <entry key="PLAIN_TEXT" value="343" />
-          <entry key="Python" value="12934" />
+          <entry key="PLAIN_TEXT" value="377" />
+          <entry key="Python" value="12935" />
         </counts>
       </usages-collector>
     </session>
@@ -107,8 +1100,8 @@
       <file pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/environment_save_states.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="2758">
-              <caret line="492" column="81" lean-forward="true" selection-start-line="492" selection-start-column="81" selection-end-line="492" selection-end-column="81" />
+            <state relative-caret-position="8228">
+              <caret line="492" column="81" selection-start-line="492" selection-start-column="81" selection-end-line="492" selection-end-column="81" />
               <folding>
                 <element signature="e#0#29#0" expanded="true" />
               </folding>
@@ -119,8 +1112,8 @@
       <file pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/QTraining/observation.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="442">
-              <caret line="26" column="14" lean-forward="true" selection-start-line="26" selection-start-column="14" selection-end-line="26" selection-end-column="14" />
+            <state relative-caret-position="357">
+              <caret line="26" column="14" selection-start-line="26" selection-start-column="14" selection-end-line="26" selection-end-column="14" />
               <folding>
                 <element signature="e#1#32#0" expanded="true" />
               </folding>
@@ -128,30 +1121,27 @@
           </provider>
         </entry>
       </file>
-      <file pinned="false" current-in-tab="true">
+      <file pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/Q/create_observation_jakob.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="334">
-              <caret line="35" column="43" selection-start-line="35" selection-start-column="43" selection-end-line="35" selection-end-column="43" />
+            <state relative-caret-position="493">
+              <caret line="31" column="12" selection-start-line="31" selection-start-column="12" selection-end-line="31" selection-end-column="12" />
               <folding>
                 <element signature="e#1#19#0" expanded="true" />
-                <marker date="1552242178682" expanded="true" signature="1276:1539" ph="..." />
-                <marker date="1552242178682" expanded="true" signature="1593:1598" ph="..." />
               </folding>
             </state>
           </provider>
         </entry>
       </file>
-      <file pinned="false" current-in-tab="false">
+      <file pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/agent_code/marathon/jakob_features.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="1326">
-              <caret line="78" column="49" lean-forward="true" selection-start-line="78" selection-start-column="49" selection-end-line="78" selection-end-column="49" />
+            <state relative-caret-position="369">
+              <caret line="92" column="25" lean-forward="true" selection-start-line="92" selection-start-column="25" selection-end-line="92" selection-end-column="25" />
               <folding>
                 <element signature="e#1#19#0" expanded="true" />
                 <marker date="1552236038118" expanded="true" signature="159:164" ph="..." />
                 <marker date="1552236038118" expanded="true" signature="3652:3657" ph="..." />
-                <marker date="1552236038118" expanded="true" signature="4025:4792" ph="..." />
               </folding>
             </state>
           </provider>
@@ -165,7 +1155,7 @@
       <file pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/main_save_states.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="-204">
+            <state relative-caret-position="459">
               <caret line="30" selection-start-line="30" selection-end-line="30" />
             </state>
           </provider>
@@ -174,8 +1164,8 @@
       <file pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/Q/manage_training_data.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="242">
-              <caret line="36" column="13" selection-start-line="36" selection-start-column="13" selection-end-line="36" selection-end-column="13" />
+            <state relative-caret-position="850">
+              <caret line="50" selection-start-line="50" selection-end-line="50" />
             </state>
           </provider>
         </entry>
@@ -183,8 +1173,8 @@
       <file pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/QTraining/Training.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="408">
-              <caret line="24" column="37" lean-forward="true" selection-start-line="24" selection-start-column="37" selection-end-line="24" selection-end-column="37" />
+            <state relative-caret-position="391">
+              <caret line="24" column="37" selection-start-line="24" selection-start-column="37" selection-end-line="24" selection-end-column="37" />
               <folding>
                 <element signature="e#0#41#0" expanded="true" />
               </folding>
@@ -195,7 +1185,7 @@
       <file pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/agent_code/marathon/indices.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="765">
+            <state relative-caret-position="748">
               <caret line="45" selection-start-line="45" selection-end-line="45" />
               <folding>
                 <element signature="e#0#18#0" expanded="true" />
@@ -207,7 +1197,7 @@
       <file pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/settings.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="210">
+            <state relative-caret-position="238">
               <caret line="17" column="19" selection-start-line="17" selection-start-column="19" selection-end-line="17" selection-end-column="19" />
             </state>
           </provider>
@@ -297,9 +1287,9 @@
   </component>
   <component name="ProjectFrameBounds" extendedState="6">
     <option name="x" value="-10" />
-    <option name="y" value="27" />
+    <option name="y" value="25" />
     <option name="width" value="1710" />
-    <option name="height" value="868" />
+    <option name="height" value="870" />
   </component>
   <component name="ProjectLevelVcsManager" settingsEditedManually="true">
     <ConfirmationsSetting value="2" id="Add" />
@@ -365,6 +1355,11 @@
               <item name="" type="442cc68d:ScopeViewTreeModel$RootNode" />
               <item name="agent_code" type="9f88c78c:ScopeViewTreeModel$FileNode" />
               <item name="simple_agent" type="9f88c78c:ScopeViewTreeModel$FileNode" />
+            </path>
+            <path>
+              <item name="bomberman_environment" type="3d21c010:ScopeViewTreeModel$ProjectNode" />
+              <item name="" type="442cc68d:ScopeViewTreeModel$RootNode" />
+              <item name="data" type="9f88c78c:ScopeViewTreeModel$FileNode" />
             </path>
             <path>
               <item name="bomberman_environment" type="3d21c010:ScopeViewTreeModel$ProjectNode" />
@@ -621,7 +1616,14 @@
       <option name="project" value="LOCAL" />
       <updated>1552235787523</updated>
     </task>
-    <option name="localTasksCounter" value="21" />
+    <task id="LOCAL-00021" summary="Added observation function">
+      <created>1552242194541</created>
+      <option name="number" value="00021" />
+      <option name="presentableId" value="LOCAL-00021" />
+      <option name="project" value="LOCAL" />
+      <updated>1552242194541</updated>
+    </task>
+    <option name="localTasksCounter" value="22" />
     <servers />
   </component>
   <component name="TimeTrackingManager">
@@ -629,9 +1631,8 @@
   </component>
   <component name="ToolWindowManager">
     <frame x="-7" y="-7" width="1550" height="838" extended-state="6" />
-    <editor active="true" />
     <layout>
-      <window_info active="true" content_ui="combo" id="Project" order="0" visible="true" weight="0.21879195" />
+      <window_info active="true" content_ui="combo" id="Project" order="0" visible="true" weight="0.22885907" />
       <window_info id="Structure" order="1" side_tool="true" weight="0.25" />
       <window_info id="Favorites" order="2" side_tool="true" />
       <window_info anchor="bottom" id="Message" order="0" />
@@ -703,7 +1704,8 @@
     <MESSAGE value="Added new features" />
     <MESSAGE value="Removed duplicate indices.py file" />
     <MESSAGE value="Added features" />
-    <option name="LAST_COMMIT_MESSAGE" value="Added features" />
+    <MESSAGE value="Added observation function" />
+    <option name="LAST_COMMIT_MESSAGE" value="Added observation function" />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>
@@ -779,9 +1781,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="1445">
           <caret line="90" selection-start-line="90" selection-end-line="90" />
-          <folding>
-            <element signature="e#1#19#0" expanded="true" />
-          </folding>
         </state>
       </provider>
     </entry>
@@ -789,9 +1788,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="323">
           <caret line="24" column="46" selection-start-line="24" selection-start-column="46" selection-end-line="24" selection-end-column="46" />
-          <folding>
-            <element signature="e#1#19#0" expanded="true" />
-          </folding>
         </state>
       </provider>
     </entry>
@@ -804,11 +1800,7 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/agent_code/eike_agent/callbacks.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="-2346">
-          <folding>
-            <element signature="e#0#18#0" expanded="true" />
-          </folding>
-        </state>
+        <state relative-caret-position="-2346" />
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/agent_code/marathon/callbacks.py">
@@ -822,9 +1814,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="374">
           <caret line="22" selection-start-line="22" selection-end-line="22" />
-          <folding>
-            <element signature="e#1#28#0" expanded="true" />
-          </folding>
         </state>
       </provider>
     </entry>
@@ -835,58 +1824,33 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/Q-Training/indices.py">
+    <entry file="file://$PROJECT_DIR$/Q-Training/indices.py" />
+    <entry file="file://$PROJECT_DIR$/environment_save_states.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="-439" />
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/agent_code/marathon/indices.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="765">
-          <caret line="45" selection-start-line="45" selection-end-line="45" />
+        <state relative-caret-position="8228">
+          <caret line="492" column="81" selection-start-line="492" selection-start-column="81" selection-end-line="492" selection-end-column="81" />
           <folding>
-            <element signature="e#0#18#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/Q/manage_training_data.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="242">
-          <caret line="36" column="13" selection-start-line="36" selection-start-column="13" selection-end-line="36" selection-end-column="13" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/settings.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="210">
-          <caret line="17" column="19" selection-start-line="17" selection-start-column="19" selection-end-line="17" selection-end-column="19" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/main_save_states.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="-204">
-          <caret line="30" selection-start-line="30" selection-end-line="30" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/QTraining/Training.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="408">
-          <caret line="24" column="37" lean-forward="true" selection-start-line="24" selection-start-column="37" selection-end-line="24" selection-end-column="37" />
-          <folding>
-            <element signature="e#0#41#0" expanded="true" />
+            <element signature="e#0#29#0" expanded="true" />
           </folding>
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/QTraining/observation.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="442">
-          <caret line="26" column="14" lean-forward="true" selection-start-line="26" selection-start-column="14" selection-end-line="26" selection-end-column="14" />
+        <state relative-caret-position="357">
+          <caret line="26" column="14" selection-start-line="26" selection-start-column="14" selection-end-line="26" selection-end-column="14" />
           <folding>
             <element signature="e#1#32#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/Q/create_observation_jakob.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="493">
+          <caret line="31" column="12" selection-start-line="31" selection-start-column="12" selection-end-line="31" selection-end-column="12" />
+          <folding>
+            <element signature="e#1#19#0" expanded="true" />
           </folding>
         </state>
       </provider>
@@ -894,37 +1858,55 @@
     <entry file="file://$PROJECT_DIR$/feature_extraction.py">
       <provider selected="true" editor-type-id="text-editor" />
     </entry>
-    <entry file="file://$PROJECT_DIR$/environment_save_states.py">
+    <entry file="file://$PROJECT_DIR$/main_save_states.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="2758">
-          <caret line="492" column="81" lean-forward="true" selection-start-line="492" selection-start-column="81" selection-end-line="492" selection-end-column="81" />
+        <state relative-caret-position="459">
+          <caret line="30" selection-start-line="30" selection-end-line="30" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/Q/manage_training_data.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="850">
+          <caret line="50" selection-start-line="50" selection-end-line="50" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/QTraining/Training.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="391">
+          <caret line="24" column="37" selection-start-line="24" selection-start-column="37" selection-end-line="24" selection-end-column="37" />
           <folding>
-            <element signature="e#0#29#0" expanded="true" />
+            <element signature="e#0#41#0" expanded="true" />
           </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/agent_code/marathon/indices.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="748">
+          <caret line="45" selection-start-line="45" selection-end-line="45" />
+          <folding>
+            <element signature="e#0#18#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/settings.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="238">
+          <caret line="17" column="19" selection-start-line="17" selection-start-column="19" selection-end-line="17" selection-end-column="19" />
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/agent_code/marathon/jakob_features.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="1326">
-          <caret line="78" column="49" lean-forward="true" selection-start-line="78" selection-start-column="49" selection-end-line="78" selection-end-column="49" />
+        <state relative-caret-position="369">
+          <caret line="92" column="25" lean-forward="true" selection-start-line="92" selection-start-column="25" selection-end-line="92" selection-end-column="25" />
           <folding>
             <element signature="e#1#19#0" expanded="true" />
             <marker date="1552236038118" expanded="true" signature="159:164" ph="..." />
             <marker date="1552236038118" expanded="true" signature="3652:3657" ph="..." />
-            <marker date="1552236038118" expanded="true" signature="4025:4792" ph="..." />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/Q/create_observation_jakob.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="334">
-          <caret line="35" column="43" selection-start-line="35" selection-start-column="43" selection-end-line="35" selection-end-column="43" />
-          <folding>
-            <element signature="e#1#19#0" expanded="true" />
-            <marker date="1552242178682" expanded="true" signature="1276:1539" ph="..." />
-            <marker date="1552242178682" expanded="true" signature="1593:1598" ph="..." />
           </folding>
         </state>
       </provider>

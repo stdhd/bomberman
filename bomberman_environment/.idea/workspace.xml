@@ -1,11 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="ChangeListManager">
-    <list default="true" id="8281fd87-bacf-4f99-9ff1-cd15d1389165" name="Default Changelist" comment="">
-      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/main_save_states.py" beforeDir="false" afterPath="$PROJECT_DIR$/main_save_states.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/settings.py" beforeDir="false" afterPath="$PROJECT_DIR$/settings.py" afterDir="false" />
-    </list>
+    <list default="true" id="8281fd87-bacf-4f99-9ff1-cd15d1389165" name="Default Changelist" comment="" />
     <ignored path=".idea/" />
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="SHOW_DIALOG" value="false" />
@@ -85,12 +81,12 @@
         <counts>
           <entry key="dummy" value="62" />
           <entry key="py" value="12972" />
-          <entry key="txt" value="326" />
+          <entry key="txt" value="339" />
         </counts>
       </usages-collector>
       <usages-collector id="statistics.file.types.edit">
         <counts>
-          <entry key="PLAIN_TEXT" value="388" />
+          <entry key="PLAIN_TEXT" value="401" />
           <entry key="Python" value="12972" />
         </counts>
       </usages-collector>
@@ -145,7 +141,7 @@
         <entry file="file://$PROJECT_DIR$/main_save_states.py">
           <provider selected="true" editor-type-id="text-editor">
             <state relative-caret-position="357">
-              <caret line="54" column="36" lean-forward="true" selection-start-line="54" selection-start-column="36" selection-end-line="54" selection-end-column="36" />
+              <caret line="54" column="36" selection-start-line="54" selection-start-column="36" selection-end-line="54" selection-end-column="36" />
             </state>
           </provider>
         </entry>
@@ -174,7 +170,9 @@
       <file pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/agent_code/eike_agent/callbacks.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="-4497" />
+            <state relative-caret-position="297">
+              <caret line="289" column="53" selection-start-line="289" selection-start-column="53" selection-end-line="289" selection-end-column="53" />
+            </state>
           </provider>
         </entry>
       </file>
@@ -635,7 +633,14 @@
       <option name="project" value="LOCAL" />
       <updated>1552387132132</updated>
     </task>
-    <option name="localTasksCounter" value="25" />
+    <task id="LOCAL-00025" summary="Added folder">
+      <created>1552387936643</created>
+      <option name="number" value="00025" />
+      <option name="presentableId" value="LOCAL-00025" />
+      <option name="project" value="LOCAL" />
+      <updated>1552387936644</updated>
+    </task>
+    <option name="localTasksCounter" value="26" />
     <servers />
   </component>
   <component name="TimeTrackingManager">
@@ -643,6 +648,7 @@
   </component>
   <component name="ToolWindowManager">
     <frame x="-7" y="-7" width="1550" height="838" extended-state="6" />
+    <editor active="true" />
     <layout>
       <window_info active="true" content_ui="combo" id="Project" order="0" visible="true" weight="0.22885907" />
       <window_info id="Structure" order="1" side_tool="true" weight="0.25" />
@@ -718,7 +724,8 @@
     <MESSAGE value="Added features" />
     <MESSAGE value="Added observation function" />
     <MESSAGE value="Added games" />
-    <option name="LAST_COMMIT_MESSAGE" value="Added games" />
+    <MESSAGE value="Added folder" />
+    <option name="LAST_COMMIT_MESSAGE" value="Added folder" />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>
@@ -905,7 +912,7 @@
     <entry file="file://$PROJECT_DIR$/main_save_states.py">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="357">
-          <caret line="54" column="36" lean-forward="true" selection-start-line="54" selection-start-column="36" selection-end-line="54" selection-end-column="36" />
+          <caret line="54" column="36" selection-start-line="54" selection-start-column="36" selection-end-line="54" selection-end-column="36" />
         </state>
       </provider>
     </entry>
@@ -921,7 +928,9 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/agent_code/eike_agent/callbacks.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="-4497" />
+        <state relative-caret-position="297">
+          <caret line="289" column="53" selection-start-line="289" selection-start-column="53" selection-end-line="289" selection-end-column="53" />
+        </state>
       </provider>
     </entry>
   </component>

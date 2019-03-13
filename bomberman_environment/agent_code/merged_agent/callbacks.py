@@ -3,6 +3,8 @@ import warnings
 from random import shuffle
 from time import time, sleep
 from collections import deque
+from agent_code.marathon import indices
+from agent_code.observation_object import ObservationObject
 import os
 
 from settings import s
@@ -20,8 +22,9 @@ def setup(self):
     self.discount = 0.7
     self.epsilon = 0.1
     self.train_flag = False
-    # TODO: Initialize Jakobs Observation Object
-    observation_size = 1
+    self.obs_object = ObservationObject(2, ["dist_to_center"])
+
+    observation_size = self.obs_object.get_observation_size()
     # Zx6 array with actions ['UP', 'DOWN', 'LEFT', 'RIGHT', 'BOMB', 'WAIT']
     try:
         self.q_table = np.load(os.path.join('agent_code', 'merged_agent', 'q_table.npy'))
@@ -63,12 +66,12 @@ def act(self):
 
     arena = self.game_state['arena']
     x, y, _, bombs_left, score = self.game_state['self']
-    coins = np.array(self.game_state['coins'])
-    observation = create_observation(coins, arena, x, y)
+    #observation = create_observation(coins, arena, x, y)
+    self.obs_object.set_state(derive_state_representation(self))
+    observation = self.obs_object.create_observation(np.array([int(0)]))[0]
     self.old_observation = observation
     self.logger.info(f'self: {[x, y]}')
-    self.logger.info(f'Observation: {observation}')
-    self.logger.info(f'Coins: {coins}')
+    self.logger.info(f'Observation: {observation}')    
 
     # Search for state in observation_db
     # If/else needed because np.where can only be done if self.observation_db is not empty
@@ -132,7 +135,9 @@ def reward_update(self):
     x, y, _, _, _ = self.game_state['self']
     coins = np.array(self.game_state['coins'])
     self.logger.info(f'Coins: {coins.any()}')
-    observation = create_observation(coins, arena, x, y)
+    #observation = create_observation(coins, arena, x, y)
+    self.obs_object.set_state(derive_state_representation(self))
+    observation = self.obs_object.create_observation(np.array([0]))[0]
     warnings.simplefilter(action='ignore', category=FutureWarning)
     observation_ind = np.where((self.observation_db == observation).all(axis=1))[0]
     if observation_ind.shape[0] == 0:
@@ -286,3 +291,83 @@ def look_for_targets(free_space, start, targets, logger):
     while True:
         if parent_dict[current] == start: return current
         current = parent_dict[current]
+
+
+def derive_state_representation(self):
+    """
+    From provided game_state, extract array state representation. Use this when playing game (not training)
+
+    Final state format specification in environment_save_states.py
+    :param self:
+    :return: State representation in specified format
+    """
+
+    player_block = 4+17
+
+    state = np.zeros(indices.x_y_to_index(s.cols - 2, s.rows - 2, s.cols, s.rows) + 4 * player_block + 1)
+
+    state[-1] = self.game_state['step']
+
+    arena = self.game_state['arena']
+
+    explosions = self.game_state['explosions']
+
+    coins = self.game_state['coins']
+
+    players = self.game_state['others']
+
+    bombs = self.game_state['bombs']
+
+    me = self.game_state['self']
+
+    for x, y in coins:
+
+        ind = indices.x_y_to_index(x, y, s.cols, s.rows) - 1
+
+        state[ind] = 3
+
+    for x in range(arena.shape[0] ):
+        if x == 0 or arena.shape[0] - 1:
+            continue
+        for y in range(arena.shape[1]):
+            if y == 0 or arena.shape[1] - 1 or (x + 1) * (y + 1) % 2 == 1:
+                continue
+
+            ind = indices.x_y_to_index(x, y, s.cols, s.rows) - 1
+
+            coin = state[ind] == 3
+
+            if not coin:
+
+                state[ind] = arena[x, y]  # replace '17' with values from settings.py
+
+            if explosions[x, y] != 0:
+
+                state[ind] = -1 * 3**int(coin) * 2**explosions[x, y]
+
+    startplayers = indices.x_y_to_index(15, 15, s.cols, s.rows)  # player blocks start here
+
+    players.insert(0, me)
+
+    player_ind = 0
+
+    bomb_ind = 0
+
+    for player in players:  # keep track of player locations and bombs
+        state[startplayers + player_block * player_ind] = indices.x_y_to_index(player[0], player[1], s.cols, s.rows)
+
+        if player[3] == 0:
+
+            player_bomb = bombs[bomb_ind]  # count through bombs and assign a dropped bomb to each player
+            # who is not holding a bomb
+
+            state[startplayers + player_block*player_ind + 2] = indices.x_y_to_index(player_bomb[0], player_bomb[1],
+                                                                                  s.cols, s.rows)
+
+            state[startplayers + player_block * player_ind + 3] = player_bomb[2]  # bomb timer
+
+            bomb_ind += 1
+
+        player_ind += 1
+
+    return state

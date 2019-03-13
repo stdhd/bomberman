@@ -20,7 +20,7 @@ def setup(self):
     self.discount = 0.7
     self.epsilon = 0.1
     self.train_flag = True
-    self.obs_object = ObservationObject(2, ["dist_to_center", "me_has_bomb"])
+    self.obs_object = ObservationObject(2, ["closest_coin_dir"])
 
     observation_size = self.obs_object.get_observation_size()
     # Zx6 array with actions ['UP', 'DOWN', 'LEFT', 'RIGHT', 'BOMB', 'WAIT']

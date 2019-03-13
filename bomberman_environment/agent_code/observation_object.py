@@ -97,16 +97,16 @@ class ObservationObject:
             observations[count] = np.concatenate((window.flatten(), features[count]))  # concatenate window and features
 
         return observations
-    
+
     def _make_window(self, radius_custom, center_x, center_y):
         """
         Creates a window centered on given coordinates.
-        :param radius: 
-        :param center_x: 
-        :param center_y: 
-        :return: 
+        :param radius:
+        :param center_x:
+        :param center_y:
+        :return:
         """
-        
+
         window_size_custom = 2*radius_custom + 1
         window = np.zeros((window_size_custom, window_size_custom))
 
@@ -128,13 +128,16 @@ class ObservationObject:
 
         for player_loc in self.player_locs:
             if player_loc > 0:
-                location_value = self.get_window(window, *index_to_x_y(player_loc), radius_custom, center_x, center_y)
+                try:
+                    location_value = self.get_window(window, *index_to_x_y(player_loc), radius_custom, center_x, center_y)
 
-                if location_value > 0:  # if player is on a bomb, multiply bomb timer and player value
-                    self.set_window(window, player_loc, center_x, center_y, radius_custom, location_value * 5)
+                    if location_value > 0:  # if player is on a bomb, multiply bomb timer and player value
+                        self.set_window(window, player_loc, center_x, center_y, radius_custom, location_value * 5)
 
-                else:  # else set field to player value
-                    self.set_window(window, player_loc, center_x, center_y, radius_custom, 5)
+                    else:  # else set field to player value
+                        self.set_window(window, player_loc, center_x, center_y, radius_custom, 5)
+                except:
+                    continue
 
         return window
 

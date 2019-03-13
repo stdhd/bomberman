@@ -4,9 +4,9 @@ import pickle
 
 from agents import *
 from items import *
-from settings import s, e
+from settings import e
 
-from agent_code.marathon.indices import *
+from agent_code.merged_agent.indices import *
 
 class BombeRLeWorld(object):
 

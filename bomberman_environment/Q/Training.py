@@ -51,7 +51,7 @@ def q_train_from_games_jakob(train_data, write_path, obs:ObservationObject):
 
         for ind, step_state in enumerate(game):
 
-            last_actions = these_actions
+            last_actions = these_actions.astype(int)
 
             for player in range(4):
                 these_actions[player] = np.argmax(step_state[int(START + 4 + player * 21): int(START + 8 + player * 21)])
@@ -77,49 +77,29 @@ def q_train_from_games_jakob(train_data, write_path, obs:ObservationObject):
 
     return KNOWN, QTABLE
 
-def q_train_from_games(reader_file, writer_path):
-    """
-    Reads all json-files from reader_path
-    Trains Q table
-    Writes resulting Q table to writer_path
-    """
-    AGENTS_COUNT = 4
-    OBSERVATION_LENGTH = 25
-    ACTIONS_COUNT = 6
-    RADIUS = 2
-    LEARNING_RATE = 0.8
-    DISCOUNT = 0.8
 
-    data = np.load(reader_file)
-    learned = np.zeros([0, ACTIONS_COUNT])
-    obs = np.zeros([0, OBSERVATION_LENGTH])
-    action_db = np.zeros([data.shape[0], AGENTS_COUNT])
+def update_and_get_obs(db, new_obs, learned, radius):
+    radius = 2
+    findings = np.where((db == new_obs).all(axis=1))
+    if findings.shape[0] > 0:
+        return db, findings[0], learned
+    else:
+        single = new_obs[:(radius * 2 + 1) ** 2 - 1]
+        candidates = np.zeros(8, (radius * 2 + 1) ** 2)
+        single_reshaped = np.reshape(single, (radius * 2 + 1, radius * 2 + 1))
+        candidates[0] = single_reshaped
+        candidates[1] = single_reshaped.T
+        candidates[2] = np.flip(single_reshaped, 0)
+        candidates[3] = np.flip(single_reshaped, 1)
+        candidates[4] = np.flip(single_reshaped.T, 0)
+        candidates[5] = np.flip(single_reshaped.T, 1)
+        candidates[6] = np.fliplr(np.flip(single_reshaped, 0))
+        candidates[7] = np.fliplr(np.flip(single_reshaped.T, 0))
 
-    for agent in range(AGENTS_COUNT):
-        # Write events
-        start = 176
-        for i in range(data.shape[0]):
-            action_db[i] = np.argmax(data[int(start + 4 + agent * 21): int(start + 8 + agent * 21)])
-
-        for i in range(data.shape[0]):
-
-            temp_observation = create_observation(data[i], RADIUS, agent)
-            obs, index_current, learned = update_and_get_obs(obs, temp_observation, learned)
-            my_best_value = np.max(learned[index_current])
-            if i > 0:
-                learned[last_index, action_db[agent, i]] = (1 - LEARNING_RATE) * learned[last_index, action_db[agent, i]] + LEARNING_RATE * (get_reward(data[agent,i-1]) + DISCOUNT * my_best_value)
-
-            last_index = index_current
-        np.save(writer_path + "/observation.npy",obs)
-        np.save(writer_path + "/learned.npy", obs)
-    return obs, learned
-
-
-def update_and_get_obs(db, new_obs, learned):
-    for i in range(db.shape[0]):
-        if np.array_equal(db[i], new_obs):
-            return db, i, learned
-    db = np.append(db,np.array([new_obs]), axis = 0)
-    learned = np.append(learned, np.zeros([1,learned.shape[1]]), axis = 0)
-
-    return db, (db.shape[0] - 1), learned
+        alternative = np.where((candidates == new_obs).all(axis=1))
+        if alternative.shape[0] > 0:
+            return db, alternative[0], learned
+        else:
+            learned = np.append(learned, np.zeros([1, learned.shape[1]]), axis=0)
+            db = np.append(db, np.array([new_obs]), axis=0)
+            return db, db.shape[0] - 1, learned

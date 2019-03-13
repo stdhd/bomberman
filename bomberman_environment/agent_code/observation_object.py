@@ -15,7 +15,10 @@ Available Features:
         dist_to_center,
         remaining_enemies,
         remaining_crates,
-        remaining_coins
+        remaining_coins,
+        
+        closest_coin_old
+        
 """
 
 
@@ -451,6 +454,16 @@ class ObservationObject:
                 temp = self.name_dict[full_name]
 
         return temp
+
+    def closest_coin_old(self):
+        """
+                Direction to player's nearest coin (outdated).
+                :return:
+                """
+
+        player = self.player
+
+        return self._get_path_dir(self.player_locs[player.player_index], self.player_locs[player.closest_coin])
 
 
 

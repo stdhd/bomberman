@@ -89,39 +89,54 @@ class ObservationObject:
         features = self._get_features(AGENTS)  # find features for all agents
 
         for count, player_index in enumerate(AGENTS):  # construct the window for all agents
-            window = np.zeros((window_size, window_size))
 
             player_x, player_y = index_to_x_y(self.player_locs[int(player_index)])
 
-            lower_x = player_x - radius
-
-            lower_y = player_y - radius
-
-            for i in np.arange(window_size):
-                for j in np.arange(window_size):
-                    try:
-                        window[i, j] = self.board[x_y_to_index(lower_x + i, lower_y + j) - 1]
-
-                    except Exception as e:  # wall squares throw exception
-                        window[i, j] = -1
-
-            for ind, bomb_loc in enumerate(bomb_locs):  # bombs have precedence over explosions
-                if bomb_loc > 0:
-                    self.set_window(window, bomb_loc, player_x, player_y, radius, 2 ** bomb_timers[ind])
-
-            for player_loc in player_locs:
-                if player_loc > 0:
-                    location_value = self.get_window(window, *index_to_x_y(player_loc), radius, player_x, player_y)
-
-                    if location_value > 0:  # if player is on a bomb, multiply bomb timer and player value
-                        self.set_window(window, player_loc, player_x, player_y, radius, location_value * 5)
-
-                    else:  # else set field to player value
-                        self.set_window(window, player_loc, player_x, player_y, radius, 5)
+            window = self._make_window(radius, player_x, player_y)
 
             observations[count] = np.concatenate((window.flatten(), features[count]))  # concatenate window and features
 
         return observations
+    
+    def _make_window(self, radius_custom, center_x, center_y):
+        """
+        Creates a window centered on given coordinates.
+        :param radius: 
+        :param center_x: 
+        :param center_y: 
+        :return: 
+        """
+        
+        window_size_custom = 2*radius_custom +1
+        window = np.zeros((window_size_custom, window_size_custom))
+
+        lower_x = center_x - radius_custom
+
+        lower_y = center_y - radius_custom
+
+        for i in np.arange(window_size_custom):
+            for j in np.arange(window_size_custom):
+                try:
+                    window[i, j] = self.board[x_y_to_index(lower_x + i, lower_y + j) - 1]
+
+                except Exception as e:  # wall squares throw exception
+                    window[i, j] = -1
+
+        for ind, bomb_loc in enumerate(self.bomb_locs):  # bombs have precedence over explosions
+            if bomb_loc > 0:
+                self.set_window(window, bomb_loc, center_x, center_y, radius_custom, 2 ** self.bomb_timers[ind])
+
+        for player_loc in self.player_locs:
+            if player_loc > 0:
+                location_value = self.get_window(window, *index_to_x_y(player_loc), radius_custom, center_x, center_y)
+
+                if location_value > 0:  # if player is on a bomb, multiply bomb timer and player value
+                    self.set_window(window, player_loc, center_x, center_y, radius_custom, location_value * 5)
+
+                else:  # else set field to player value
+                    self.set_window(window, player_loc, center_x, center_y, radius_custom, 5)
+
+        return window
 
     def is_in_window(self, obj_index, origin_x, origin_y, radius):
         """

@@ -1,4 +1,4 @@
-from agent_code.marathon.indices import *
+from agent_code.merged_agent.indices import *
 from Q.rewards import *
 from os import listdir, getcwd
 from os.path import isfile, join

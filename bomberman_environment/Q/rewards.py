@@ -23,11 +23,11 @@ def get_reward(state, player_index):
 
     reward = 0
 
-    for event_index, count in player[4:]:  # index corresponds to event, value at index is multiplicity of event
+    for event_index, multiplicity in enumerate(player[4:]):  # index corresponds to event, value at index is multiplicity of event
 
         event = events[event_index]
 
-        reward += rewards[event]*count if event in rewards.keys() else 0
+        reward += rewards[event]*multiplicity if event in rewards.keys() else 0
 
     return reward
 

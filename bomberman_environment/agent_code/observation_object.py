@@ -1,4 +1,6 @@
 from agent_code.merged_agent.indices import *
+from random import shuffle
+import numpy as np
 
 
 """
@@ -24,7 +26,7 @@ class ObservationObject:
     class to keep track of constants such as window size, number of features, etc..
     """
 
-    def __init__(self, radius, FEATURE_LIST:list):
+    def __init__(self, radius, logger, FEATURE_LIST:list):
         """
         Initialize Observation Object using window radius and list of features to create.
         :param radius: Radius in observation window (radius = 1 => 3x3 window)
@@ -33,6 +35,7 @@ class ObservationObject:
         sorted(FEATURE_LIST, key=str.lower)
         self.features = FEATURE_LIST
         self.radius = radius
+        self.logger = logger
 
         self.window_size = (2 * radius + 1)
         self.NUM_FEATURES = len(self.features)
@@ -181,35 +184,22 @@ class ObservationObject:
 
 
     def initialize_feature_helpers(self):
-
         if self.state is None:
-
             raise AttributeError("State not set (call set_state)")
-
         state = self.state
-
         board_end = state.shape[0] - (1 + 4 * 21)
-
         self.board = state[0: board_end]
-
         player_blocks = state[board_end:]
-
         self.player_locs = np.array([player_blocks[i * 21] for i in range(4)])  # player locations
-
         self.coins = np.arange(self.board.shape[0] + 1)[1:][np.where(self.board == 3)]  # list of coin indices
-
         self.bomb_locs = np.array([player_blocks[i * 21 + 2] for i in range(4)])  # bomb locations
-
         self.bomb_timers = np.array([player_blocks[i * 21 + 3] for i in range(4)])  # bomb timers
-
         # manhattan dist. to coins
         self.player_distance_matrix = np.zeros((4, 4))
-
         for p1 in np.arange(self.player_distance_matrix.shape[0]):
             for p2 in np.arange(start=p1 + 1, stop=self.player_distance_matrix.shape[1]):
                 if self.player_locs[p1] == 0 or self.player_locs[p2] == 0:
                     continue  # skip dead players
-
                 self.player_distance_matrix[p1, p2] = np.linalg.norm(np.array([*index_to_x_y(self.player_locs[p1])])
                                                                 - np.array([*index_to_x_y(self.player_locs[p2])]), ord=1)
 
@@ -272,7 +262,7 @@ class ObservationObject:
             choose.append('except')
         return dirs[np.random.choice(np.array(choose))]
     
-    def _look_for_targets(free_space, start, targets, logger):
+    def _look_for_targets(self, free_space, start, targets, logger):
         """Find direction of closest target that can be reached via free tiles.
 
         Performs a breadth-first search of the reachable free tiles until a target is encountered.
@@ -346,7 +336,12 @@ class ObservationObject:
         """
         Direction to player's nearest coin.
         """
-        (best_step) = _look_for_targets(free_space, player.me_loc, self.coins, None)
+        arena = self._make_window(8, 8, 8)
+        coins_ind = np.where(arena == 3)
+        coins_coords = np.vstack((coins_ind[0], coins_ind[1])).T
+        free_space = (arena == 0) | (arena == 3)
+        x, y = self.player.me_loc[0], self.player.me_loc[1]
+        (best_step) = self._look_for_targets(free_space, (x, y), coins_coords, None)
 
         # move left
         if best_step == (x-1,y): return 1

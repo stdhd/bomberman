@@ -22,7 +22,7 @@ def setup(self):
     self.discount = 0.7
     self.epsilon = 0.1
     self.train_flag = False
-    self.obs_object = ObservationObject(2, ["dist_to_center"])
+    self.obs_object = ObservationObject(1, ["dist"])
 
     observation_size = self.obs_object.get_observation_size()
     # Zx6 array with actions ['UP', 'DOWN', 'LEFT', 'RIGHT', 'BOMB', 'WAIT']
@@ -40,7 +40,7 @@ def setup(self):
         self.observation_db = np.load(os.path.join('agent_code', 'merged_agent', 'observation_db.npy'))
         self.logger.debug('LOADED Obs')
     except:
-        self.observation_db = np.empty([0,observation_size])
+        self.observation_db = np.empty([0, observation_size])
         if self.observation_db.shape[1] != observation_size:
             raise Exception('observation_db size does not fit') 
 
@@ -71,7 +71,7 @@ def act(self):
     observation = self.obs_object.create_observation(np.array([int(0)]))[0]
     self.old_observation = observation
     self.logger.info(f'self: {[x, y]}')
-    self.logger.info(f'Observation: {observation}')    
+    self.logger.info(f'Observation: {type(observation), observation}')    
 
     # Search for state in observation_db
     # If/else needed because np.where can only be done if self.observation_db is not empty

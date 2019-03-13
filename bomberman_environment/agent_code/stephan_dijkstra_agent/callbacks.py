@@ -23,7 +23,7 @@ def setup(self):
     self.obs_length = 1
     self.discount = 0.8
     self.learning_rate = 0.8
-    self.epsilon = 0.01
+    self.epsilon = 0.1
     self.reward = 0
     self.last_observation = np.zeros([self.obs_length])
     self.last_action_index = -1

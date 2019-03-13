@@ -20,10 +20,12 @@ def setup(self):
     file for debugging (see https://docs.python.org/3.7/library/logging.html).
     """
     self.coin_distance = 0
-    self.obs_length = 1
+    self.crate_distance = 0
+    self.obs_length = 11
+    self.actions_count = 6
     self.discount = 0.8
     self.learning_rate = 0.8
-    self.epsilon = 0.01
+    self.epsilon = 0.2
     self.reward = 0
     self.last_observation = np.zeros([self.obs_length])
     self.last_action_index = -1
@@ -31,9 +33,14 @@ def setup(self):
     try:
         self.learned = np.load("learned.npy")
         self.observations = np.load("observations.npy")
+        if not self.observations.shape[1] == self.obs_length:
+            print("Learned q table does not fit to observation length. Using emopty table instead.")
+            self.learned = np.zeros([0, self.actions_count])
+            self.observations = np.zeros([0, self.obs_length])
+
     except:
-        print("Error loading learned q table. using empty table instead.")
-        self.learned = np.zeros([0,5])
+        print("Error loading learned q table. Using empty table instead.")
+        self.learned = np.zeros([0,self.actions_count])
         self.observations = np.zeros([0,self.obs_length])
 
 def act(self):
@@ -55,10 +62,8 @@ def act(self):
     # Gather information about the game state
 
     x, y, _, bombs_left, score = self.game_state['self']
-    # print("x,y:" + str(x)  + "  " + str(y))
 
-    #actions = np.array(['RIGHT', 'LEFT', 'UP', 'DOWN', 'BOMB'])
-    actions = np.array(['RIGHT', 'LEFT', 'UP', 'DOWN'])
+    actions = np.array(['RIGHT', 'LEFT', 'UP', 'DOWN', 'BOMB', 'WAIT'])
 
     current_obs = get_observation(self, arena, x, y)
 
@@ -74,19 +79,18 @@ def act(self):
     self.observations, last_index, self.learned = update_and_get_obs(self.observations, self.last_observation, self.learned)
 
     if not (self.last_action_index == -1):
-        tes = 123
         self.learned[last_index, self.last_action_index] = (1 - self.learning_rate) * self.learned[last_index, self.last_action_index] + self.learning_rate * (self.reward + self.discount * my_best_value)
 
     self.reward = 0
     self.last_action_index = choice
     self.last_observation = current_obs
     self.next_action = actions[choice]
-   #  print(actions[choice])
-    # print(actions[choice], self.observations, self.learned)
+
 
 def create_arena(self):
     arena = self.game_state['arena']
-    # print(self.game_state['bombs'])
+    # Arena sets crate fields to 1
+
     for x, y, time in self.game_state['bombs']:
         arena[x, y] = 9
 
@@ -95,6 +99,15 @@ def create_arena(self):
 
     for x, y in self.game_state['coins']:
         arena[x, y] = 10
+
+    for i in range(17):
+        for j in range(17):
+            if self.game_state['explosions'][i,j] > 0:
+                arena[i, j] = 8
+                # print("#########")
+
+    #print(self.game_state['explosions'])
+    # print(self.game_state['explosions'])
 
     return arena
 
@@ -108,33 +121,8 @@ def reward_update(self):
     contrast to act, this method has no time limit.
     """
 
-    reminder = [
-        'MOVED_LEFT',  # 0
-        'MOVED_RIGHT',
-        'MOVED_UP',
-        'MOVED_DOWN',
-        'WAITED',  # 4
-        'INTERRUPTED',
-        'INVALID_ACTION',
-
-        'BOMB_DROPPED',  # 7
-        'BOMB_EXPLODED',
-
-        'CRATE_DESTROYED',  # 9
-        'COIN_FOUND',
-        'COIN_COLLECTED',
-
-        'KILLED_OPPONENT',  # 12
-        'KILLED_SELF',
-
-        'GOT_KILLED',
-        'OPPONENT_ELIMINATED',
-        'SURVIVED_ROUND',
-    ]
-
     coin_collected_flag = False
     self.reward = 0
-    #print(self.events)
     self.reward = -5
     for event in self.events:
         if event == 6:
@@ -155,17 +143,22 @@ def reward_update(self):
     targetsX, targetsY = np.where(arena == 10)
     targets = list(zip(targetsX.tolist(), targetsY.tolist()))
 
-    (tx, ty), new_distance = look_for_targets(free_tiles, (x,y), targets, None)
+    if not len(targets) == 0:
+        (tx, ty), new_distance = look_for_targets(free_tiles, (x,y), targets, None)
 
+    new_distance = 0
     if not coin_collected_flag:
         if self.coin_distance > new_distance:
-            self.reward += 5
+            pass
+            # self.reward += 5
            # print("old:" + str(self.coin_distance) + "new:" + str(new_distance) + "+5")
         elif self.coin_distance < new_distance:
-            self.reward -= 5
+            pass
+            # self.reward -= 5
             #print("old:" + str(self.coin_distance) + "new:" + str(new_distance) + "-5")
         else:
-            self.reward -= 2
+            pass
+            #self.reward -= 2
 
     self.coin_distance = new_distance
 
@@ -188,32 +181,62 @@ def end_of_episode(self):
     self.logger.debug(f'Encountered {len(self.events)} game event(s) in final step')
 
 
+def get_min_time_to_explode(self,x,y):
+    """
+
+    :param x: x coordinate of agent
+    :param y: y coordinate of agent
+    :return: returns integer value: steps until the current field will be affected by explosion
+    """
+
+    arena = self.game_state['arena']
+    min_time = 1000
+    for tx, ty, time in self.game_state['bombs']:
+        if time < min_time:
+
+            for i in range(5):
+                if arena[tx,ty + i] == -1:
+                    break
+                if (tx,ty + i) == (x,y):
+                    min_time = time
+            for i in range(5):
+                if arena[tx,ty - i] == -1:
+                    break
+                if (tx,ty - i) == (x,y):
+                    min_time = time
+            for i in range(5):
+                if arena[tx + i,ty] == -1:
+                    break
+                if (tx + i,ty) == (x,y):
+                    min_time = time
+            for i in range(5):
+                if arena[tx - i,ty] == -1:
+                    break
+                if (tx - i,ty) == (x,y):
+                    min_time = time
+
+    return min_time
+
+
+
 def get_observation(self,spielfeld, x, y):
     '''
-    TODO: change x,y, arena array[x,y]
-    TODO: Flexible radius
-    :param spielfeld:
-    :param y:
-    :param x:
-    :return:
+    :param spielfeld: 2D arena array with bombs, crates, walls, enemies, coins
+    :param y: coordiante of agent
+    :param x: coordinate of agent
+    :return: return observation vector
     '''
     observation = np.zeros([self.obs_length])
     free_tiles = np.where(spielfeld != -1, True, False)
+
+    # Observation feature 0: best step towards nearest coin
     start = (x,y)
     targetsX, targetsY = np.where(spielfeld == 10)
     tmp = 0
     if targetsX.shape[0] > 0:
         targets = list(zip(targetsX.tolist(), targetsY.tolist()))
 
-
-        # print(next_target)
         (tx,ty), self.coin_distance = look_for_targets(free_tiles, start, targets, None)
-        #print("---")
-        #print(tx, ty)
-        #print(x,y)
-
-        # print(self.coin_distance)
-
         if (tx,ty) == (x+1,y):
             # move right
             tmp = 1
@@ -229,26 +252,51 @@ def get_observation(self,spielfeld, x, y):
 
     observation[0] = tmp
 
-    # k = 1
-    # radius = 3
-    # obs = np.zeros([2*radius+1,2*radius+1])
-    # for i in range(2*radius+1):
-    #     for j in range(2*radius+1):
-    #         observation[k] = get_spielfeld(x-radius + j, y-radius + i,spielfeld)
-    #         k += 1
+    # Observation feature 1: best step towards nearest crate
+    start = (x, y)
+    targetsX, targetsY = np.where(spielfeld == 1)
+    tmp = 0
+    if targetsX.shape[0] > 0:
+        targets = list(zip(targetsX.tolist(), targetsY.tolist()))
+
+        (tx, ty), self.crate_distance = look_for_targets(free_tiles, start, targets, None)
+        if (tx, ty) == (x + 1, y):
+            # move right
+            tmp = 1
+        if (tx, ty) == (x - 1, y):
+            # move left
+            tmp = 2
+        if (tx, ty) == (x, y + 1):
+            # move up
+            tmp = 3
+        if (tx, ty) == (x, y - 1):
+            # move down
+            tmp = 4
+    # observation[1] = tmp
+
+    # observation feature: time until the current position is affected by explosion
+    observation[1] = get_min_time_to_explode(self, x, y)
+
+    k = 2
+    radius = 1
+    obs = np.zeros([2*radius+1,2*radius+1])
+    for i in range(2*radius+1):
+        for j in range(2*radius+1):
+            observation[k] = get_spielfeld(x-radius + j, y-radius + i, spielfeld)
+            k += 1
+
+    #print(observation)
 
     return observation
 
 def get_spielfeld(x,y,spielfeld):
     if y > spielfeld.shape[1] - 1 or x > spielfeld.shape[0] - 1 or y < 0 or x < 0:
-        #print("collision")
         return - 1
     else:
         return spielfeld[x,y]
 
 def update_and_get_obs(db, new_obs, learned):
     '''
-    TODO: Flexible radius
     TODO: Find transformed observations
     :param db:
     :param new_obs:

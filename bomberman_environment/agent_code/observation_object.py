@@ -1,9 +1,4 @@
-
-import numpy as np
-from settings import s
-
-
-from agent_code.marathon.indices import *
+from agent_code.merged_agent.indices import *
 
 
 """
@@ -41,13 +36,29 @@ class ObservationObject:
 
         self.window_size = (2 * radius + 1)
         self.NUM_FEATURES = len(self.features)
-        self.obs_length = self.window_size + self.NUM_FEATURES
+        self.obs_length = self.window_size ** 2 + self.NUM_FEATURES
 
         self.state, self.board, self.player_locs, self.coins, self.player_distance_matrix = None, None, None, None, None
 
         self.bomb_locs, self.bomb_timers = None, None
 
         self.player = None  # helper variable for creating features (not observation window)
+
+        self.name_dict = {
+        "me_has_bomb": "mhb",
+        "closest_coin_dist": "ccdist",
+        "closest_coin_dir": "ccdir",
+        "closest_foe_dist": "cfdist",
+        "closest_foe_dir": "cfdir",
+        "closest_foe_has_bomb": "cfhb",
+        "nearest_foe_to_closest_coin": "nftcc",
+        "dist_to_center": "dtc",
+        "smallest_enemy_dist": "smd",
+        "remaining_enemies": "re",
+        "remaining_crates": "rcrates",
+        "remaining_coins": "rcoins"
+        }
+
 
     def set_state(self, state):
 
@@ -80,7 +91,7 @@ class ObservationObject:
         for count, player_index in enumerate(AGENTS):  # construct the window for all agents
             window = np.zeros((window_size, window_size))
 
-            player_x, player_y = index_to_x_y(player_index)
+            player_x, player_y = index_to_x_y(self.player_locs[int(player_index)])
 
             lower_x = player_x - radius
 
@@ -95,16 +106,18 @@ class ObservationObject:
                         window[i, j] = -1
 
             for ind, bomb_loc in enumerate(bomb_locs):  # bombs have precedence over explosions
-                self.set_window(window, bomb_loc, player_x, player_y, radius, 2 ** bomb_timers[ind])
+                if bomb_loc > 0:
+                    self.set_window(window, bomb_loc, player_x, player_y, radius, 2 ** bomb_timers[ind])
 
             for player_loc in player_locs:
-                location_value = self.get_window(window, *index_to_x_y(player_loc), radius, player_x, player_y)
+                if player_loc > 0:
+                    location_value = self.get_window(window, *index_to_x_y(player_loc), radius, player_x, player_y)
 
-                if location_value > 0:  # if player is on a bomb, multiply bomb timer and player value
-                    self.set_window(window, player_loc, player_x, player_y, radius, location_value * 5)
+                    if location_value > 0:  # if player is on a bomb, multiply bomb timer and player value
+                        self.set_window(window, player_loc, player_x, player_y, radius, location_value * 5)
 
-                else:  # else set field to player value
-                    self.set_window(window, player_loc, player_x, player_y, radius, 5)
+                    else:  # else set field to player value
+                        self.set_window(window, player_loc, player_x, player_y, radius, 5)
 
             observations[count] = np.concatenate((window.flatten(), features[count]))  # concatenate window and features
 
@@ -138,7 +151,7 @@ class ObservationObject:
         :return:
         """
 
-        if not self.is_in_window(x_y_to_index(board_x, board_y)):
+        if not self.is_in_window(x_y_to_index(board_x, board_y), window_origin_x, window_origin_y, window_radius):
             raise ValueError("Board coordinates not in window. ")
 
         return window[board_x - (window_origin_x - window_radius), board_y - (window_origin_y - window_radius)]
@@ -195,12 +208,12 @@ class ObservationObject:
 
         return_features = np.zeros((AGENTS.shape[0], len(self.features)))
 
-        for count, agent_index in AGENTS:
-            self.player = _Player(self, self.player_locs[agent_index])
+        for count, agent_index in enumerate(AGENTS):
+            self.player = _Player(self, agent_index)
             for feature_index, feature in enumerate(self.features):
                 method_to_call = getattr(self, feature)
-                val = method_to_call(agent_index)
-                return_features[agent_index][feature_index] = val
+                val = method_to_call()
+                return_features[count][feature_index] = val
 
         return return_features
 
@@ -383,6 +396,20 @@ class ObservationObject:
     def remaining_coins(self):
         return self.coins.shape[0]
 
+    def get_observation_size(self):
+        return self.obs_length
+
+    def get_file_name_string(self):
+        temp = ""
+        for i,full_name in enumerate(self.features):
+            if i > 0:
+                temp = temp + "_" + self.name_dict[full_name]
+            else:
+                temp = self.name_dict[full_name]
+
+        return temp
+
+
 
 class _Player:
     """
@@ -391,7 +418,7 @@ class _Player:
 
     def __init__(player_self, observation_self, player_index):
         player_self.player_index = player_index
-        player_self.me_loc = np.array([*index_to_x_y(observation_self.player_locs[player_index])])
+        player_self.me_loc = np.array([*index_to_x_y(observation_self.player_locs[int(player_index)])])
         player_self.coin_dists, player_self.closest_coin = None, None  # distances of all coins, index of closest coin
         player_self.foes = [foe_loc for ind, foe_loc in enumerate(observation_self.player_locs) if ind != player_index]
         player_self.foe_dists, player_self.closest_foe = None, None

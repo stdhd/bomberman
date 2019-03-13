@@ -107,7 +107,7 @@ class ObservationObject:
         :return: 
         """
         
-        window_size_custom = 2*radius_custom +1
+        window_size_custom = 2*radius_custom + 1
         window = np.zeros((window_size_custom, window_size_custom))
 
         lower_x = center_x - radius_custom

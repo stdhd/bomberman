@@ -23,7 +23,7 @@ def is_trained(records_file, train_data_file):
         if train_data_file in records:
             return True
         return False
-    except json.decoder.JSONDecodeError:
+    except:
         print("json file", records_file, "empty, initializing with empty list.")
         file = open(records_file, 'w')
         json.dump([], file)

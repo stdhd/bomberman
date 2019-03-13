@@ -67,7 +67,8 @@ def act(self):
     observation = create_observation(coins, arena, x, y)
     self.old_observation = observation
     self.logger.info(f'self: {[x, y]}')
-    self.logger.info(f'Observation: {observation}')    
+    self.logger.info(f'Observation: {observation}')
+    self.logger.info(f'Coins: {coins}')
 
     # Search for state in observation_db
     # If/else needed because np.where can only be done if self.observation_db is not empty
@@ -99,17 +100,18 @@ def act(self):
             self.q_table = np.append(self.q_table, np.zeros([1, self.q_table.shape[1]]), axis = 0)
             self.last_q_ind = self.q_table.shape[0] - 1
     else:
-        # If state is not yet contained in observation_db it has to be appended and a random action is chosen.
-        # Otherwise the action with the highest value is chosen.
+        # If training mode is on and observation_db has no entry it has to be appended and a random action is chosen.
         if observation_ind.shape[0] == 0 and self.train_flag:
             self.last_action_ind = np.random.randint(0,6)
             self.observation_db = np.append(self.observation_db, np.array([observation]), axis = 0)
             self.q_table = np.append(self.q_table, np.zeros([1, self.q_table.shape[1]]), axis = 0)
             self.last_q_ind = self.q_table.shape[0] - 1
+        # If observation_db has entry the action with the highest value is chosen.
         elif observation_ind.shape[0] != 0:
             self.last_action_ind = np.random.choice(np.flatnonzero(self.q_table[observation_ind[0]] == self.q_table[observation_ind[0]].max()))
+        # If test mode and observation_db has no entry
         else:
-            # Actually regression
+            # TODO: regression
             self.last_action_ind = np.random.randint(0,6)
 
     self.next_action = ['UP', 'DOWN', 'LEFT', 'RIGHT', 'BOMB', 'WAIT'][self.last_action_ind]
@@ -226,10 +228,9 @@ def determine_flag(best_step, x, y):
     return flag
 
 def create_observation(coins, arena, x, y):
+    free_space = arena == 0
     for c in coins:
         arena[c[0],c[1]] = 3 # Coin
-
-    free_space = arena == 0
     if coins.shape[0] > 0:
         (coin_x, coin_y) = look_for_targets(free_space, (x, y), coins, None)
         coin_flag = determine_flag((coin_x, coin_y), x, y)

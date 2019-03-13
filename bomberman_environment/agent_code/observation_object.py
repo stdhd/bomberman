@@ -199,7 +199,6 @@ class ObservationObject:
                                                                 - np.array([*index_to_x_y(self.player_locs[p2])]), ord=1)
 
     def _get_features(self, AGENTS):
-
         """
         Internal function to return features as list.
         :param AGENTS: List of player indices (0 to 3) for which to generate observations.
@@ -233,46 +232,78 @@ class ObservationObject:
 
     def _get_path_dir(self, start, end):
         """
-
         Internal function, do not call.
-
         Given start and end board indices, get the path direction from start to end.
-
         Assuming directions are ambiguous (for instance: could go up or left), randomly return a direction.
-
         In case of start==end or other exception, return 0.
-
         See conventions/settings.py for path directions.
-
         :param start:
         :param end:
         :return:
         """
-
         dirs = {'left': 1, 'right': 2, 'up': 3, 'down': 4, 'except': 0}
-
         start_x, start_y = index_to_x_y(start)
-
         end_x, end_y = index_to_x_y(end)
-
         choose = []
-
         if start_x > end_x:
             choose.append('left')
-
         elif end_x > start_x:
             choose.append('right')
-
         if start_y > end_y:
             choose.append('down')
-
         elif end_y > start_y:
             choose.append('up')
-
         if not choose:
             choose.append('except')
-
         return dirs[np.random.choice(np.array(choose))]
+    
+    def _look_for_targets(free_space, start, targets, logger):
+        """Find direction of closest target that can be reached via free tiles.
+
+        Performs a breadth-first search of the reachable free tiles until a target is encountered.
+        If no target can be reached, the path that takes the agent closest to any target is chosen.
+
+        Args:
+            free_space: Boolean numpy array. True for free tiles and False for obstacles.
+            start: the coordinate from which to begin the search.
+            targets: list or array holding the coordinates of all target tiles.
+            logger: optional logger object for debugging.
+        Returns:
+            coordinate of first step towards closest target or towards tile closest to any target.
+        """
+        if len(targets) == 0: return None
+        frontier = [start]
+        parent_dict = {start: start}
+        dist_so_far = {start: 0}
+        best = start
+        best_dist = np.sum(np.abs(np.subtract(targets, start)), axis=1).min()
+
+        while len(frontier) > 0:
+            current = frontier.pop(0)
+            # Find distance from current position to all targets, track closest
+            d = np.sum(np.abs(np.subtract(targets, current)), axis=1).min()
+            if d + dist_so_far[current] <= best_dist:
+                best = current
+                best_dist = d + dist_so_far[current]
+            if d == 0:
+                # Found path to a target's exact position, mission accomplished!
+                best = current
+                break
+            # Add unexplored free neighboring tiles to the queue in a random order
+            x, y = current
+            neighbors = [(x,y) for (x,y) in [(x+1,y), (x-1,y), (x,y+1), (x,y-1)] if free_space[x,y]]
+            shuffle(neighbors)
+            for neighbor in neighbors:
+                if neighbor not in parent_dict:
+                    frontier.append(neighbor)
+                    parent_dict[neighbor] = current
+                    dist_so_far[neighbor] = dist_so_far[current] + 1
+        if logger: logger.debug(f'Suitable target found at {best}')
+        # Determine the first step towards the best found target tile
+        current = best
+        while True:
+            if parent_dict[current] == start: return current
+            current = parent_dict[current]
 
     def me_has_bomb(self):
         """
@@ -280,7 +311,6 @@ class ObservationObject:
         :param player_index: Index of "me" (player for whom observation is generated)
         :return: 1 if holding bomb, 0 otherwise
         """
-
         return self._is_holding_bomb(self.player.player_index)
 
     def closest_coin_dist(self):
@@ -300,18 +330,19 @@ class ObservationObject:
     def closest_coin_dir(self):
         """
         Direction to player's nearest coin.
-        (See settings.py for encoding 1 - 4)
-        :return:
         """
+        (best_step) = _look_for_targets(free_space, player.me_loc, self.coins, None)
 
-        player = self.player
-
-        if player.coin_dists is None:
-            player.coin_dists = np.array([np.linalg.norm(player.me_loc - np.array([*index_to_x_y(coin)]), ord=1)
-                                          for coin in self.coins])
-            player.closest_coin = np.argmin(player.coin_dists)
-
-        return self._get_path_dir(self.player_locs[player.player_index], self.coins[player.closest_coin])
+        # move left
+        if best_step == (x-1,y): return 1
+        # move right
+        if best_step == (x+1,y): return 2
+        # move up
+        if best_step == (x,y-1): return 3
+        # move down
+        if best_step == (x,y+1): return 4
+        # Something is wrong
+        if best_step == (x,y): return 5
 
     def closest_foe_dist(self):
         """
@@ -365,11 +396,8 @@ class ObservationObject:
         Smallest distance between two living enemies.
         :return:
         """
-
         enemies = np.delete(self.player_distance_matrix, self.player.player_index)
-
         enemies = np.delete(enemies.T, self.player.player_index)
-
         return np.min(enemies[np.where(enemies != 0)])  # smallest distance between two living enemies
 
     def dist_to_center(self):
@@ -378,16 +406,13 @@ class ObservationObject:
         :return:
         """
         center_map = np.array([s.rows//2, s.cols//2])
-
         return np.linalg.norm(center_map - self.player.me_loc, ord=1)
-
 
     def remaining_enemies(self):
         """
         Number of remaining enemies.
         :return:
         """
-
         return self.player_locs[np.where(self.player_locs != 0)].shape[0]  # count living enemies
 
     def remaining_crates(self):

@@ -1,9 +1,7 @@
 import numpy as np
 import warnings
 from random import shuffle
-from time import time, sleep
-from collections import deque
-from agent_code.marathon import indices
+from agent_code.merged_agent import indices
 from agent_code.observation_object import ObservationObject
 import os
 
@@ -21,13 +19,15 @@ def setup(self):
     self.learning_rate = 0.4
     self.discount = 0.7
     self.epsilon = 0.1
-    self.train_flag = False
-    self.obs_object = ObservationObject(2, ["dist_to_center"])
+    self.train_flag = True
+    self.obs_object = ObservationObject(2, ["dist_to_center", "me_has_bomb"])
 
     observation_size = self.obs_object.get_observation_size()
     # Zx6 array with actions ['UP', 'DOWN', 'LEFT', 'RIGHT', 'BOMB', 'WAIT']
+    filename = self.obs_object.get_file_name_string()
+
     try:
-        self.q_table = np.load(os.path.join('agent_code', 'merged_agent', 'q_table.npy'))
+        self.q_table = np.load(os.path.join('agent_code', 'merged_agent', 'q_table-' + filename + '.npy'))
         self.logger.debug('LOADED Q')
         if self.q_table.shape[1] != 6:
             raise Exception('q_table size does not fit') 
@@ -37,7 +37,7 @@ def setup(self):
 
     # Zx10 array with 3x3 observation around agent plus coin_flag
     try:
-        self.observation_db = np.load(os.path.join('agent_code', 'merged_agent', 'observation_db.npy'))
+        self.observation_db = np.load(os.path.join('agent_code', 'merged_agent', 'observation-' + filename + '.npy'))
         self.logger.debug('LOADED Obs')
     except:
         self.observation_db = np.empty([0,observation_size])
@@ -158,8 +158,9 @@ def end_of_episode(self):
     """
     # Do the same as in reward_update
     reward_update(self)
-    np.save(os.path.join('agent_code', 'merged_agent', 'observation_db'), self.observation_db)
-    np.save(os.path.join('agent_code', 'merged_agent', 'q_table'), self.q_table)
+    filename = self.obs_object.get_file_name_string()
+    np.save(os.path.join('agent_code', 'merged_agent', 'observation-' + filename), self.observation_db)
+    np.save(os.path.join('agent_code', 'merged_agent', 'q_table-' + filename), self.q_table)
 
 def getReward(events, old_observation):
     reward = 0
@@ -362,7 +363,7 @@ def derive_state_representation(self):
             # who is not holding a bomb
 
             state[startplayers + player_block*player_ind + 2] = indices.x_y_to_index(player_bomb[0], player_bomb[1],
-                                                                                  s.cols, s.rows)
+                                                                                     s.cols, s.rows)
 
             state[startplayers + player_block * player_ind + 3] = player_bomb[2]  # bomb timer
 

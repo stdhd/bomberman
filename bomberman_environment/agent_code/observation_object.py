@@ -1,9 +1,4 @@
-
-import numpy as np
-from settings import s
-
-
-from agent_code.marathon.indices import *
+from agent_code.merged_agent.indices import *
 
 
 """
@@ -48,6 +43,22 @@ class ObservationObject:
         self.bomb_locs, self.bomb_timers = None, None
 
         self.player = None  # helper variable for creating features (not observation window)
+
+        self.name_dict = {
+        "me_has_bomb": "mhb",
+        "closest_coin_dist": "ccdist",
+        "closest_coin_dir": "ccdir",
+        "closest_foe_dist": "cfdist",
+        "closest_foe_dir": "cfdir",
+        "closest_foe_has_bomb": "cfhb",
+        "nearest_foe_to_closest_coin": "nftcc",
+        "dist_to_center": "dtc",
+        "smallest_enemy_dist": "smd",
+        "remaining_enemies": "re",
+        "remaining_crates": "rcrates",
+        "remaining_coins": "rcoins"
+        }
+
 
     def set_state(self, state):
 
@@ -387,6 +398,17 @@ class ObservationObject:
 
     def get_observation_size(self):
         return self.obs_length
+
+    def get_file_name_string(self):
+        temp = ""
+        for i,full_name in enumerate(self.features):
+            if i > 0:
+                temp = temp + "_" + self.name_dict[full_name]
+            else:
+                temp = self.name_dict[full_name]
+
+        return temp
+
 
 
 class _Player:

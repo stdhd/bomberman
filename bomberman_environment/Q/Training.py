@@ -74,32 +74,16 @@ def q_train_from_games_jakob(train_data, write_path, obs:ObservationObject):
 
         np.save(write_path + "/observations.npy", KNOWN)
         np.save(write_path + "/learned.npy", QTABLE)
+        print("Trained one file")
 
     return KNOWN, QTABLE
 
 
-def update_and_get_obs(db, new_obs, learned, radius):
-    radius = 2
-    findings = np.where((db == new_obs).all(axis=1))
+def update_and_get_obs(db, new_obs, learned):
+    findings = np.where((db == new_obs).all(axis=1))[0]
     if findings.shape[0] > 0:
         return db, findings[0], learned
     else:
-        single = new_obs[:(radius * 2 + 1) ** 2 - 1]
-        candidates = np.zeros(8, (radius * 2 + 1) ** 2)
-        single_reshaped = np.reshape(single, (radius * 2 + 1, radius * 2 + 1))
-        candidates[0] = single_reshaped
-        candidates[1] = single_reshaped.T
-        candidates[2] = np.flip(single_reshaped, 0)
-        candidates[3] = np.flip(single_reshaped, 1)
-        candidates[4] = np.flip(single_reshaped.T, 0)
-        candidates[5] = np.flip(single_reshaped.T, 1)
-        candidates[6] = np.fliplr(np.flip(single_reshaped, 0))
-        candidates[7] = np.fliplr(np.flip(single_reshaped.T, 0))
-
-        alternative = np.where((candidates == new_obs).all(axis=1))
-        if alternative.shape[0] > 0:
-            return db, alternative[0], learned
-        else:
-            learned = np.append(learned, np.zeros([1, learned.shape[1]]), axis=0)
-            db = np.append(db, np.array([new_obs]), axis=0)
-            return db, db.shape[0] - 1, learned
+        learned = np.append(learned, np.zeros([1, learned.shape[1]]), axis = 0)
+        db = np.append(db, np.array([new_obs]), axis=0)
+        return db, db.shape[0] - 1, learned

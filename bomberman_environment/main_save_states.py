@@ -11,7 +11,7 @@ import numpy as np
 import multiprocessing as mp
 import threading
 
-from environment_save_states import BombeRLeWorld, ReplayWorld
+from environment_updated import BombeRLeWorld, ReplayWorld
 from settings import s
 
 

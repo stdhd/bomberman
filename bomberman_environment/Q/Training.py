@@ -1,9 +1,10 @@
 from agent_code.marathon.indices import *
 from Q.rewards import *
-from os import listdir
+from os import listdir, getcwd
 from os.path import isfile, join
 
 from agent_code.observation_object import ObservationObject
+from Q.manage_training_data import *
 
 def q_train_from_games_jakob(train_data, write_path, obs:ObservationObject):
     """
@@ -37,13 +38,18 @@ def q_train_from_games_jakob(train_data, write_path, obs:ObservationObject):
     for file in [f for f in listdir(train_data) if isfile(join(train_data, f))]:
         # go through files
 
-        game = np.load(file)
+        try:
+            if is_trained(write_path+"/records.json", file):
+                print("Skipping known training datum", file, "in folder", write_path)
+                continue
+        except IOError:
+            print("Error accessing .json records for file", file, "in folder", train_data)
 
-        last_actions = np.zeros(4)
+        game = np.load(train_data+"/"+file)
 
         these_actions = np.zeros(4)
 
-        for ind, step_state in game:
+        for ind, step_state in enumerate(game):
 
             last_actions = these_actions
 

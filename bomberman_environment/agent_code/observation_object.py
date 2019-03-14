@@ -165,6 +165,12 @@ class ObservationObject:
 
 
     def initialize_feature_helpers(self):
+
+        """
+        Finds and saves information about the board, for instance player locations, bomb locations, bomb timers,
+        and all distances between players.
+        :return:
+        """
         if self.state is None:
             raise AttributeError("State not set (call set_state)")
         state = self.state
@@ -172,7 +178,7 @@ class ObservationObject:
         self.board = state[0: board_end]
         player_blocks = state[board_end:]
         self.player_locs = np.array([player_blocks[i * 21] for i in range(4)])  # player locations
-        self.coins = np.arange(self.board.shape[0] + 1)[1:][np.where(self.board == 3)]  # list of coin indices
+        self.coins = np.arange(start=1, stop=self.board.shape[0] + 1)[np.where(self.board == 3)]  # list of coin indices
         self.bomb_locs = np.array([player_blocks[i * 21 + 2] for i in range(4)])  # bomb locations
         self.bomb_timers = np.array([player_blocks[i * 21 + 3] for i in range(4)])  # bomb timers
         # manhattan dist. to coins
@@ -186,7 +192,7 @@ class ObservationObject:
 
     def _get_features(self, AGENTS):
         """
-        Internal function to return features as list.
+        Internal function to return features as array.
         :param AGENTS: List of player indices (0 to 3) for which to generate observations.
         :return:
         """
@@ -300,13 +306,15 @@ class ObservationObject:
         :param player_index:
         :return:
         """
+
+        if self.remaining_coins() == 0:
+            return 0
+
         player = self.player
-        if player.coin_dists is None:
-            player.coin_dists = np.array([np.linalg.norm(player.me_loc - np.array([*index_to_x_y(coin)]), ord=1)
-                                          for coin in self.coins])
-            player.closest_coin = np.argmin(player.coin_dists)
-        # manhattan dist. to coins
-        return np.min(player.coin_dists)
+
+        player.setup_coin_dists()
+
+        return player.coin_dists[player.closest_coin]
 
     def closest_coin_dir(self):
         """
@@ -332,15 +340,12 @@ class ObservationObject:
         :return:
         """
 
+        if self.remaining_enemies() == 0:
+            return 0
+
         player = self.player
 
-        player.foe_dists = np.array([self.player_distance_matrix[min(player.player_index, foe_index),
-                                                                 max(foe_index, player.player_index)]
-                              for foe_index in range(4) if foe_index != player.player_index])
-        # manhattan dist. to foes
-        player.closest_foe = int(np.argmin(player.foe_dists))  # player index of closest foe
-
-        player.closest_foe += 1 if player.closest_foe >= player.player_index else 0  # me not in foe_dists
+        player.setup_foe_dists()
 
         return np.min(player.foe_dists)
 
@@ -351,7 +356,12 @@ class ObservationObject:
         :return:
         """
 
+        if self.remaining_enemies() == 0:
+            return 0
+
         player = self.player
+
+        player.setup_foe_dists()
 
         return self._get_path_dir(self.player_locs[player.player_index], self.player_locs[player.closest_foe])
 
@@ -368,14 +378,21 @@ class ObservationObject:
         :return:
         """
 
+        if self.remaining_coins() == 0:
+            return 0
+
+        player = self.player
+
+        player.setup_coin_dists()
+
         closest_coin_coords = np.array([*index_to_x_y(self.coins[self.player.closest_coin])])
 
-        return np.min(np.array([np.linalg.norm( closest_coin_coords - np.array([*index_to_x_y(foe_loc)]))
-                                for foe_loc in self.player.foes]))
+        return np.min(np.array([np.linalg.norm(closest_coin_coords - np.array([*index_to_x_y(foe_loc)]))
+                                for foe_loc in player.foes]))
 
     def smallest_enemy_dist(self):
         """
-        Smallest distance between two living enemies.
+        Smallest distance between two living enemies (accesses player distance matrix)
         :return:
         """
         enemies = np.delete(self.player_distance_matrix, self.player.player_index)
@@ -392,10 +409,10 @@ class ObservationObject:
 
     def remaining_enemies(self):
         """
-        Number of remaining enemies.
+        Number of remaining living enemies.
         :return:
         """
-        return self.player_locs[np.where(self.player_locs != 0)].shape[0]  # count living enemies
+        return self.player.foes.shape[0]  # count living enemies
 
     def remaining_crates(self):
         return self.board[np.where(self.board == 1)].shape[0]  # count remaining crates
@@ -418,13 +435,18 @@ class ObservationObject:
 
     def closest_coin_old(self):
         """
-                Direction to player's nearest coin (outdated).
-                :return:
-                """
+        Direction to player's nearest coin (outdated).
+        :return:
+        """
 
         player = self.player
 
-        return self._get_path_dir(self.player_locs[player.player_index], self.player_locs[player.closest_coin])
+        if self.remaining_coins() == 0:
+            return 0
+
+        player.setup_coin_dists()
+
+        return self._get_path_dir(self.player_locs[player.player_index], self.coins[player.closest_coin])
 
 
 
@@ -433,10 +455,51 @@ class _Player:
     Helper class to store useful attributes for a certain player.
     """
 
-    def __init__(player_self, observation_self, player_index):
-        player_self.player_index = player_index
-        player_self.me_loc = np.array([*index_to_x_y(observation_self.player_locs[int(player_index)])])
-        player_self.coin_dists, player_self.closest_coin = None, None  # distances of all coins, index of closest coin
-        player_self.foes = [foe_loc for ind, foe_loc in enumerate(observation_self.player_locs) if ind != player_index]
-        player_self.foe_dists, player_self.closest_foe = None, None
+    def __init__(self, observation_self, player_index):
+        """
+        Setup basic members (but not distances to foes or coins, use setup methods when creating features)
+        :param observation_self: self member of Obervation Object
+        :param player_index:
+        """
+        self.observation_self = observation_self
+        self.player_index = player_index  # index of player in game state vector (0 to 3)
+        self.me_loc = np.array([*index_to_x_y(observation_self.player_locs[int(player_index)])])
+        self.coin_dists, self.closest_coin = None, None  # distances of all coins, index of closest coin
+        self.foes = np.array([foe_loc for ind, foe_loc in enumerate(observation_self.player_locs) if ind != player_index
+                              and foe_loc != 0])  # count LIVING enemies
+        self.foe_dists, self.closest_foe = None, None
 
+        self._is_setup_coins, self._is_setup_foes = False, False
+
+    def setup_coin_dists(self):
+        """
+        Set a list of coin distances and find closest coin (set to None if no coins)
+        :return:
+        """
+        if self._is_setup_coins:
+            return  # don't calculate values twice
+
+        self.coin_dists = np.array([np.linalg.norm(self.me_loc - np.array([*index_to_x_y(coin)]), ord=1)
+                                      for coin in self.observation_self.coins])  # manhattan dist. to coins
+        self.closest_coin = np.argmin(self.coin_dists) if self.observation_self.coins.shape[0] != 0 else None
+
+        self._is_setup_coins = True
+
+    def setup_foe_dists(self):
+        """
+        Set a list of foe distances and find closest coin (set to None if no coins)
+        :return:
+        """
+
+        if self._is_setup_foes:
+            return  # don't calculate values twice
+        self.foe_dists = np.array([self.observation_self.player_distance_matrix[min(self.player_index, foe_index),
+                                                                 max(foe_index, self.player_index)]
+                                     for foe_index in range(4) if foe_index != self.player_index])
+        # manhattan dist. to foes
+        self.closest_foe = int(np.argmin(self.foe_dists)) if self.foes.shape[0] != 0 else None   # player index of closest foe
+
+        if self.closest_foe is not None:
+            self.closest_foe += 1 if self.closest_foe >= self.player_index else 0  # me not in foe_dists
+
+        self._is_setup_foes = True

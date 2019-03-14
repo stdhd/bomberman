@@ -63,7 +63,7 @@ def q_train_from_games_jakob(train_data, write_path, obs:ObservationObject, a = 
             step_observations = obs.create_observation(living_players)
 
             for observation in step_observations:
-                KNOWN, index_current, QTABLE = update_and_get_obs(KNOWN,observation, QTABLE)
+                KNOWN, index_current, QTABLE = update_and_get_obs_new(KNOWN,observation, QTABLE, obs, None)
 
                 best_choice_current_state = np.max(QTABLE[index_current])
 
@@ -74,6 +74,8 @@ def q_train_from_games_jakob(train_data, write_path, obs:ObservationObject, a = 
             last_index = index_current
 
         add_to_trained(write_path+"/records.json", file)  # update json table
+
+        print("Trained with file", file)
 
         np.save(write_path + "/observations.npy", KNOWN)
         np.save(write_path + "/learned.npy", QTABLE)
@@ -92,7 +94,18 @@ def update_and_get_obs(db, new_obs, learned):
 
 
 
-def update_and_get_obs_new(db, new_obs, learned, radius, direction_sensitive):
+def update_and_get_obs_new(db, new_obs, learned, observation_object, direction_sensitive):
+    """
+    Seach an observation table for a (potentially rotated) match for a given new observation.
+
+    If a match is found, return the index in the table, as well as a rotation encoding.
+    :param db: Database of known observations
+    :param new_obs: New observation to find in the database
+    :param learned: Q Table
+    :param observation_object: Object containing observation info (use to derive radius)
+    :param direction_sensitive: FIXME
+    :return: updated database, index of observation, q table, rotation encoding
+    """
     findings = np.where((db == np.array([new_obs])).all(axis=1))[0]
 
     if findings.shape[0] > 0:
@@ -101,6 +114,7 @@ def update_and_get_obs_new(db, new_obs, learned, radius, direction_sensitive):
 
     # Observation not found in collection of observations, so try to find a transformation:
 
+    radius = observation_object.radius
     new_window = new_obs[:(radius * 2 + 1) ** 2]
     new_rest = new_obs[new_window.shape[0]:]
     new_window_reshaped = new_window.reshape([radius * 2 + 1, radius * 2 + 1])

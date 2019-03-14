@@ -18,11 +18,15 @@ def setup(self):
     """
     self.learning_rate = 0.4
     self.discount = 0.7
-    self.epsilon = 0.1
-    self.train_flag = True
-    self.obs_object = ObservationObject(0, self.logger, ["closest_coin_dir"])
+    self.epsilon = 0.2
+    self.train_flag = False
+    self.obs_object = ObservationObject(0, ["closest_coin_dir"], self.logger)
+    # Used for plotting
+    self.total_steps_over_episodes = 0
+    self.total_deaths_over_episodes = 0
+    self.number_of_episode = 0
 
-    observation_size = self.obs_object.get_observation_size()
+    observation_size = self.obs_object.get_observation_size() - 1 #cut out field radius
     # Zx6 array with actions ['UP', 'DOWN', 'LEFT', 'RIGHT', 'BOMB', 'WAIT']
     filename = self.obs_object.get_file_name_string()
 
@@ -66,12 +70,15 @@ def act(self):
 
     arena = self.game_state['arena']
     x, y, _, bombs_left, score = self.game_state['self']
-    #observation = create_observation(coins, arena, x, y)
-    self.obs_object.set_state(derive_state_representation(self))
+    bombs = self.game_state['bombs']
+    # self.logger.info(f'BOMBS: {bombs}')
+    self.obs_object.set_state(derive_state_representation(self, "ACT"))
     observation = self.obs_object.create_observation(np.array([int(0)]))[0]
+    observation = np.delete(observation, [0])
     self.old_observation = observation
-    self.logger.info(f'self: {[x, y]}')
-    self.logger.info(f'Observation: {observation}')    
+    # self.logger.info(f'self: {[x, y]}')
+    # self.logger.info(f'Observation: {observation}')
+    
 
     # Search for state in observation_db
     # If/else needed because np.where can only be done if self.observation_db is not empty
@@ -128,26 +135,27 @@ def reward_update(self):
     agent based on these events and your knowledge of the (new) game state. In
     contrast to act, this method has no time limit.
     """
-    self.logger.debug(f'Encountered {len(self.events)} game event(s)')
-    self.logger.info(f'Events: {self.events}')
+    # self.logger.debug(f'Encountered {len(self.events)} game event(s)')
+    # self.logger.info(f'Events: {self.events}')
 
-    arena = self.game_state['arena']
-    x, y, _, _, _ = self.game_state['self']
-    coins = np.array(self.game_state['coins'])
-    self.logger.info(f'Coins: {coins.any()}')
-    #observation = create_observation(coins, arena, x, y)
-    self.obs_object.set_state(derive_state_representation(self))
-    observation = self.obs_object.create_observation(np.array([0]))[0]
-    warnings.simplefilter(action='ignore', category=FutureWarning)
-    observation_ind = np.where((self.observation_db == observation).all(axis=1))[0]
-    if observation_ind.shape[0] == 0:
-        current_best_value = 0
-    else:
-        current_best_value = self.q_table[observation_ind].max()
-
-    reward = getReward(self.events, self.old_observation)  
-    self.q_table[self.last_q_ind, self.last_action_ind] = (1-self.learning_rate) * self.q_table[self.last_q_ind, self.last_action_ind] \
-                                                                + self.learning_rate * (reward + self.discount * current_best_value)
+    # arena = self.game_state['arena']
+    # x, y, _, _, _ = self.game_state['self']
+    # coins = np.array(self.game_state['coins'])
+    # # self.logger.info(f'Coins: {coins.any()}')
+    # bombs = self.game_state['bombs']
+    # # self.logger.info(f'BOMBSReward: {bombs}')
+    # self.obs_object.set_state(derive_state_representation(self, "REWARD"))
+    # observation = self.obs_object.create_observation(np.array([0]))[0]
+    # observation = np.delete(observation, [0])
+    # warnings.simplefilter(action='ignore', category=FutureWarning)
+    # observation_ind = np.where((self.observation_db == observation).all(axis=1))[0]
+    # if observation_ind.shape[0] == 0:
+    #     current_best_value = 0
+    # else:
+    #     current_best_value = self.q_table[observation_ind].max()
+    # reward = getReward(self.events, self.old_observation)
+    # self.q_table[self.last_q_ind, self.last_action_ind] = (1-self.learning_rate) * self.q_table[self.last_q_ind, self.last_action_ind] \
+    #                                                             + self.learning_rate * (reward + self.discount * current_best_value)
 
 def end_of_episode(self):
     """Called at the end of each game to hand out final rewards and do training.
@@ -157,10 +165,16 @@ def end_of_episode(self):
     final step. You should place your actual learning code in this method.
     """
     # Do the same as in reward_update
-    reward_update(self)
+    # reward_update(self)
     filename = self.obs_object.get_file_name_string()
-    np.save(os.path.join('agent_code', 'merged_agent', 'observation-' + filename), self.observation_db)
-    np.save(os.path.join('agent_code', 'merged_agent', 'q_table-' + filename), self.q_table)
+    # np.save(os.path.join('agent_code', 'merged_agent', 'observation-' + filename), self.observation_db)
+    # np.save(os.path.join('agent_code', 'merged_agent', 'q_table-' + filename), self.q_table)
+    self.total_steps_over_episodes += self.game_state['step']
+    if 13 in self.events or 14 in self.events: self.total_deaths_over_episodes += 1
+    self.number_of_episode +=1
+    if self.number_of_episode % 250 == 0: 
+        self.logger.info(f'Episode number, Total Steps and Deaths: {self.number_of_episode, self.total_steps_over_episodes, self.total_deaths_over_episodes}')
+        self.total_steps_over_episodes, self.total_deaths_over_episodes = 0, 0
 
 def getReward(events, old_observation):
     reward = 0
@@ -169,81 +183,37 @@ def getReward(events, old_observation):
         # if old_observation[9] == 1 or old_observation[3] == 3:
         #     if old_observation[9] == 1: reward += 5 # Reward when agent chooses direction to next coin (coin_flag)
         # else:
-            reward -= 5
+            reward -= 1
     elif 1 in events:
         # if old_observation[9] == 2 or old_observation[5] == 3:
         #     if old_observation[9] == 2: reward += 5
         # else:
-            reward -= 5
+            reward -= 1
     elif 2 in events:
         # if old_observation[9] == 3 or old_observation[1] == 3:
         #     if old_observation[9] == 3: reward += 5
         # else:
-            reward -= 5
+            reward -= 1
     elif 3 in events:
         # if old_observation[9] == 4 or old_observation[7] == 3:
         #     if old_observation[9] == 4: reward += 5
         # else:
-            reward -= 5
-    # waited
-    if 4 in events:
-        reward -= 10
-    # Interrupted
-    if 5 in events:
-        reward -= 0
-    # Invalid action
-    if 6 in events:
-        reward -= 500
-    # Bomb dropped
-    if 7 in events:
-        reward -= 500
-    # Crate destroyed
-    if 9 in events:
-        reward += 10
-    # Coin found
-    if 10 in events:
-        reward += 10
-    # Coin collected
-    if 11 in events:
-        reward += 500
-    # Killed self
-    if 13 in events:
-        reward -= 50
-    # Got killed
-    if 14 in events:
-        reward -= 50
+            reward -= 1
+    if 4 in events: reward -= 10 # Waited
+    if 5 in events: reward -= 0 # Interrupted 
+    if 6 in events: reward -= 500 # Invalid action
+    if 7 in events: reward -= 500 # Bomb dropped
+    if 8 in events: reward += 0 # Bomb exploded
+    if 9 in events: reward += 0 # Crate destroyed
+    if 10 in events: reward += 0 # Coin found
+    if 11 in events: reward += 500 # Coin collected
+    if 12 in events: reward += 500 # Killed opponent
+    if 13 in events: reward -= 1000 # Killed self
+    if 14 in events: reward -= 0 # Got killed either by himself or by enemy
+    if 15 in events: reward -= 0 # Opponent eliminated
+    if 16 in events: reward -= 0 # Survived round
+        
     return reward
-
-def determine_flag(best_step, x, y):
-    flag = 0
-    if best_step == (x-1,y):
-        # move left
-        flag = 1
-    elif best_step == (x+1,y):
-        # move right
-        flag = 2
-    elif best_step == (x,y-1):
-        # move up
-        flag = 3
-    elif best_step == (x,y+1):
-        # move down
-        flag = 4
-    elif best_step == (x,y):
-        # Collected???? This case does not make sense. TODO: Find out when it occurs
-        flag = 5
-    return flag
-
-def create_observation(coins, arena, x, y):
-    free_space = arena == 0
-    for c in coins:
-        arena[c[0],c[1]] = 3 # Coin
-    if coins.shape[0] > 0:
-        (coin_x, coin_y) = look_for_targets(free_space, (x, y), coins, None)
-        coin_flag = determine_flag((coin_x, coin_y), x, y)
-    else:
-        coin_flag = 0 # no Coin available
-
-    return np.array([coin_flag])
 
 def look_for_targets(free_space, start, targets, logger):
     """Find direction of closest target that can be reached via free tiles.
@@ -293,8 +263,7 @@ def look_for_targets(free_space, start, targets, logger):
         if parent_dict[current] == start: return current
         current = parent_dict[current]
 
-
-def derive_state_representation(self):
+def derive_state_representation(self, where):
     """
     From provided game_state, extract array state representation. Use this when playing game (not training)
 
@@ -302,29 +271,17 @@ def derive_state_representation(self):
     :param self:
     :return: State representation in specified format
     """
-
     player_block = 4+17
-
     state = np.zeros(indices.x_y_to_index(s.cols - 2, s.rows - 2, s.cols, s.rows) + 4 * player_block + 1)
-
     state[-1] = self.game_state['step']
-
     arena = self.game_state['arena']
-
     explosions = self.game_state['explosions']
-
     coins = self.game_state['coins']
-
     players = self.game_state['others']
-
     bombs = self.game_state['bombs']
-
     me = self.game_state['self']
-
     for x, y in coins:
-
         ind = indices.x_y_to_index(x, y, s.cols, s.rows) - 1
-
         state[ind] = 3
 
     for x in range(arena.shape[0] ):
@@ -333,42 +290,31 @@ def derive_state_representation(self):
         for y in range(arena.shape[1]):
             if y == 0 or arena.shape[1] - 1 or (x + 1) * (y + 1) % 2 == 1:
                 continue
-
             ind = indices.x_y_to_index(x, y, s.cols, s.rows) - 1
-
             coin = state[ind] == 3
-
             if not coin:
-
                 state[ind] = arena[x, y]  # replace '17' with values from settings.py
-
             if explosions[x, y] != 0:
-
                 state[ind] = -1 * 3**int(coin) * 2**explosions[x, y]
 
     startplayers = indices.x_y_to_index(15, 15, s.cols, s.rows)  # player blocks start here
-
-    players.insert(0, me)
-
+    # self.logger.info(f'PLAYER BEFORE: {players, where}')
+    # Strange behaviour of game_state('others') which returns self (plus others) as others when called from act() except for the first step 
+    # where only others are returned for both methods
+    if me not in players: 
+        players.insert(0, me)
     player_ind = 0
-
     bomb_ind = 0
-
+    # self.logger.info(f'PLAYER AFTER: {players, where}')
+    #self.logger.info(f'PLAYER: {players}')
     for player in players:  # keep track of player locations and bombs
         state[startplayers + player_block * player_ind] = indices.x_y_to_index(player[0], player[1], s.cols, s.rows)
-
         if player[3] == 0:
-
             player_bomb = bombs[bomb_ind]  # count through bombs and assign a dropped bomb to each player
             # who is not holding a bomb
-
             state[startplayers + player_block*player_ind + 2] = indices.x_y_to_index(player_bomb[0], player_bomb[1],
                                                                                      s.cols, s.rows)
-
             state[startplayers + player_block * player_ind + 3] = player_bomb[2]  # bomb timer
-
             bomb_ind += 1
-
         player_ind += 1
-
     return state

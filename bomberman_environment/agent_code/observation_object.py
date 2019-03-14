@@ -18,9 +18,7 @@ Available Features:
         remaining_enemies,
         remaining_crates,
         remaining_coins,
-        
         closest_coin_old
-        
 """
 
 
@@ -29,7 +27,7 @@ class ObservationObject:
     class to keep track of constants such as window size, number of features, etc..
     """
 
-    def __init__(self, radius, logger, FEATURE_LIST:list):
+    def __init__(self, radius, FEATURE_LIST:list, logger=None):
         """
         Initialize Observation Object using window radius and list of features to create.
         :param radius: Radius in observation window (radius = 1 => 3x3 window)
@@ -67,15 +65,12 @@ class ObservationObject:
 
 
     def set_state(self, state):
-
         """
         Set the state for the observation object and initialize useful feature values.
         :param state:
         :return:
         """
-
         self.state = state
-
         self.initialize_feature_helpers()
 
     def create_observation(self, AGENTS):
@@ -86,22 +81,14 @@ class ObservationObject:
         :param AGENTS: List of player indices (0 to 3 inclusive)
         :return: Array of observations
         """
-
         radius, board, player_locs, bomb_locs, bomb_timers, window_size = self.radius, self.board, self.player_locs, \
                                                              self.bomb_locs, self.bomb_timers, self.window_size
-
         observations = np.zeros((AGENTS.shape[0], self.obs_length))
-
         features = self._get_features(AGENTS)  # find features for all agents
-
         for count, player_index in enumerate(AGENTS):  # construct the window for all agents
-
             player_x, player_y = index_to_x_y(self.player_locs[int(player_index)])
-
             window = self._make_window(radius, player_x, player_y)
-
             observations[count] = np.concatenate((window.flatten(), features[count]))  # concatenate window and features
-
         return observations
 
     def _make_window(self, radius_custom, center_x, center_y):
@@ -115,11 +102,8 @@ class ObservationObject:
 
         window_size_custom = 2*radius_custom + 1
         window = np.zeros((window_size_custom, window_size_custom))
-
         lower_x = center_x - radius_custom
-
         lower_y = center_y - radius_custom
-
         for i in np.arange(window_size_custom):
             for j in np.arange(window_size_custom):
                 try:
@@ -136,10 +120,8 @@ class ObservationObject:
             if player_loc > 0:
                 try:
                     location_value = self.get_window(window, *index_to_x_y(player_loc), radius_custom, center_x, center_y)
-
                     if location_value > 0:  # if player is on a bomb, multiply bomb timer and player value
                         self.set_window(window, player_loc, center_x, center_y, radius_custom, location_value * 5)
-
                     else:  # else set field to player value
                         self.set_window(window, player_loc, center_x, center_y, radius_custom, 5)
                 except:
@@ -155,12 +137,9 @@ class ObservationObject:
         :param radius: Radius of window
         :return: True iff in window
         """
-
         obj_x, obj_y = index_to_x_y(obj_index)
-
         if abs(obj_x - origin_x) > radius or abs(obj_y - origin_y) > radius:
             return False
-
         return True
 
     def get_window(self, window, board_x, board_y, window_radius, window_origin_x, window_origin_y):
@@ -174,18 +153,14 @@ class ObservationObject:
         :param window_origin_y:
         :return:
         """
-
         if not self.is_in_window(x_y_to_index(board_x, board_y), window_origin_x, window_origin_y, window_radius):
             raise ValueError("Board coordinates not in window. ")
-
         return window[board_x - (window_origin_x - window_radius), board_y - (window_origin_y - window_radius)]
 
     def set_window(self, window, board_index, window_origin_x, window_origin_y, window_radius, val):
         if not self.is_in_window(board_index, window_origin_x, window_origin_y, window_radius):
             return
-
         board_x, board_y = index_to_x_y(board_index)
-
         window[board_x - (window_origin_x - window_radius), board_y - (window_origin_y - window_radius)] = val
 
 
@@ -215,27 +190,22 @@ class ObservationObject:
         :param AGENTS: List of player indices (0 to 3) for which to generate observations.
         :return:
         """
-
         return_features = np.zeros((AGENTS.shape[0], len(self.features)))
-
         for count, agent_index in enumerate(AGENTS):
             self.player = _Player(self, agent_index)
             for feature_index, feature in enumerate(self.features):
                 method_to_call = getattr(self, feature)
                 val = method_to_call()
                 return_features[count][feature_index] = val
-
         return return_features
 
     def _is_holding_bomb(self, player_index):
         """
         Internal function, do not call.
-
         Return 1 if player with player_index is currently holding a bomb, else 0
         :param player_index:
         :return:
         """
-
         begin = self.state.shape[0] - (1 + (4 - player_index) * 21)
         end = self.state.shape[0] - (1 + (4 - player_index - 1) * 21)
         player = self.state[begin: end]
@@ -349,16 +319,12 @@ class ObservationObject:
         x, y = self.player.me_loc[0], self.player.me_loc[1]
         (best_step) = self._look_for_targets(free_space, (x, y), coins_coords, None)
 
-        # move left
-        if best_step == (x-1,y): return 1
-        # move right
-        if best_step == (x+1,y): return 2
-        # move up
-        if best_step == (x,y-1): return 3
-        # move down
-        if best_step == (x,y+1): return 4
-        # Something is wrong
-        if best_step == (x,y): return 5
+        if best_step == (x-1,y): return 1 # move left
+        if best_step == (x+1,y): return 2 # move right
+        if best_step == (x,y-1): return 3 # move up
+        if best_step == (x,y+1): return 4 # move down
+        if best_step == (x,y): return 5 # Something is wrong
+        if best_step == None: return 6 # No targets exist.
 
     def closest_foe_dist(self):
         """

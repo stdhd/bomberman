@@ -6,7 +6,7 @@ from os.path import isfile, join
 from agent_code.observation_object import ObservationObject
 from Q.manage_training_data import *
 
-def q_train_from_games_jakob(train_data, write_path, obs:ObservationObject):
+def q_train_from_games_jakob(train_data, write_path, obs:ObservationObject, a = 0.8, g = 0.8, START = 176):
     """
     Trains from all files in a directory using an existing q- and observation-table under write_path.
 
@@ -18,7 +18,10 @@ def q_train_from_games_jakob(train_data, write_path, obs:ObservationObject):
 
     :param train_data: Directory containing training episodes
     :param write_path: Directory to which to output Q-learning results and json files.
-    :param KNOWN Observation Object containing training settings (view radius etc.)
+    :param obs Observation Object containing training settings (view radius etc.)
+    :param a alpha (learning rate)
+    :param g gamma (discount)
+    :param START number of free grids in board
     :return:
     """
 
@@ -29,11 +32,6 @@ def q_train_from_games_jakob(train_data, write_path, obs:ObservationObject):
         print("Error loading learned q table. using empty table instead.")
         QTABLE = np.zeros([0,6])
         KNOWN = np.zeros([0, obs.obs_length])
-
-    START = 176  # number of free grids in board
-
-    a = 0.8  # alpha (learning rate)
-    g = 0.8  # gamma (discount)
 
     for file in [f for f in listdir(train_data) if isfile(join(train_data, f))]:
         # go through files
@@ -74,6 +72,8 @@ def q_train_from_games_jakob(train_data, write_path, obs:ObservationObject):
                     QTABLE[last_index, last_actions[player_index]] = (1 - a) * QTABLE[last_index, last_actions[player_index]] + a * (get_reward(step_state, player_index) + g * best_choice_current_state)
 
             last_index = index_current
+
+        add_to_trained(write_path+"/records.json", file)  # update json table
 
         np.save(write_path + "/observations.npy", KNOWN)
         np.save(write_path + "/learned.npy", QTABLE)

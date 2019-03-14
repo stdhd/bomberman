@@ -72,9 +72,11 @@ def q_train_from_games_jakob(train_data, write_path, obs:ObservationObject):
 
             last_index = index_current
 
+        add_to_trained(write_path+"/records.json", file)
+
         np.save(write_path + "/observations.npy", KNOWN)
         np.save(write_path + "/learned.npy", QTABLE)
-        print("Trained one file")
+        print("Trained file", file)
 
     return KNOWN, QTABLE
 

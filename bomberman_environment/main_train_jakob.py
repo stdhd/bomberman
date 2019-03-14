@@ -15,7 +15,8 @@ def main():
     os.chdir(os.path.dirname(__file__))
     cwd = os.getcwd()
 
-    KNOWN, Q = q_train_from_games_jakob(cwd + "/" + 'data/games/coins_only_one_player', 'data/qtables/jakob', ObservationObject(2, ['dist_to_center']))
+    KNOWN, Q = q_train_from_games_jakob(cwd + "/" + 'data/games/coins_only_one_player', 'data/qtables/jakob',
+                                        ObservationObject(2, None, ['closest_coin_old']))
 
 
 if __name__ == '__main__':

@@ -38,7 +38,7 @@ def q_train_from_games_jakob(train_data, write_path, obs:ObservationObject, a = 
 
         try:
             if is_trained(write_path+"/records.json", file):
-                print("Skipping known training datum", file, "in folder", write_path)
+                print("Skipping known training datum", file, "in folder", train_data)
                 continue
         except IOError:
             print("Error accessing .json records for file", file, "in folder", train_data)
@@ -63,7 +63,7 @@ def q_train_from_games_jakob(train_data, write_path, obs:ObservationObject, a = 
             step_observations = obs.create_observation(living_players)
 
             for observation in step_observations:
-                KNOWN, index_current, QTABLE = update_and_get_obs_new(KNOWN,observation, QTABLE, obs, None)
+                KNOWN, index_current, QTABLE = update_and_get_obs_new(KNOWN,observation, QTABLE, obs, None)  # FIXME
 
                 best_choice_current_state = np.max(QTABLE[index_current])
 
@@ -96,7 +96,7 @@ def update_and_get_obs(db, new_obs, learned):
 
 def update_and_get_obs_new(db, new_obs, learned, observation_object, direction_sensitive):
     """
-    Seach an observation table for a (potentially rotated) match for a given new observation.
+    Search an observation table for a (potentially rotated) match for a given new observation.
 
     If a match is found, return the index in the table, as well as a rotation encoding.
     :param db: Database of known observations

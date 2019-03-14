@@ -4,13 +4,14 @@ import numpy as np
 
 
 """
-Available Features: 
+Available Features:
+Features described by the directions left, up, right, down (1,2,3,4) are named starting with 'd_' 
 
         me_has_bomb,
         closest_coin_dist,
-        closest_coin_dir,
+        d_closest_coin_dir,
         closest_foe_dist,
-        closest_foe_dir,
+        d_closest_foe_dir,
         closest_foe_has_bomb,
         nearest_foe_to_closest_coin,
         smallest_enemy_dist,
@@ -53,16 +54,17 @@ class ObservationObject:
         self.name_dict = {
         "me_has_bomb": "mhb",
         "closest_coin_dist": "ccdist",
-        "closest_coin_dir": "ccdir",
+        "d_closest_coin_dir": "ccdir",
         "closest_foe_dist": "cfdist",
-        "closest_foe_dir": "cfdir",
+        "d_closest_foe_dir": "cfdir",
         "closest_foe_has_bomb": "cfhb",
         "nearest_foe_to_closest_coin": "nftcc",
         "dist_to_center": "dtc",
         "smallest_enemy_dist": "smd",
         "remaining_enemies": "re",
         "remaining_crates": "rcrates",
-        "remaining_coins": "rcoins"
+        "remaining_coins": "rcoins",
+        "closest_coin_old": "cco"
         }
 
 
@@ -338,7 +340,7 @@ class ObservationObject:
         # manhattan dist. to coins
         return np.min(player.coin_dists)
 
-    def closest_coin_dir(self):
+    def d_losest_coin_dir(self):
         """
         Direction to player's nearest coin.
         """
@@ -378,7 +380,7 @@ class ObservationObject:
 
         return np.min(player.foe_dists)
 
-    def closest_foe_dir(self):
+    def d_closest_foe_dir(self):
 
         """
         Direction to player's nearest foe.
@@ -438,16 +440,37 @@ class ObservationObject:
         return self.coins.shape[0]
 
     def get_observation_size(self):
+        """
+        Integer of the total size of the observation vector
+        :return:
+        """
         return self.obs_length
 
     def get_file_name_string(self):
+        """
+        String contsining the short names of the current feature configuration
+        :return:
+        """
         temp = ""
         for i,full_name in enumerate(self.features):
             if i > 0:
                 temp = temp + "_" + self.name_dict[full_name]
             else:
-                temp = self.name_dict[full_name]
+                temp = "r" + str(self.radius) + "_" + self.name_dict[full_name]
 
+        return temp
+
+    def get_direction_sensitivity(self):
+        """
+        Boolean array indicating, if features are direction sensitive
+        :return:
+        """
+        temp = np.array([])
+        for f in self.features:
+            if f.startswith("d_"):
+                temp = np.append(np.array([True]), temp)
+            else:
+                temp = np.append(np.array([False]), temp)
         return temp
 
     def closest_coin_old(self):
@@ -457,9 +480,14 @@ class ObservationObject:
                 """
 
         player = self.player
+        if player.coin_dists is None:
+            player.coin_dists = np.array([np.linalg.norm(player.me_loc - np.array([*index_to_x_y(coin)]), ord=1)
+                                          for coin in self.coins])
+            player.closest_coin = np.argmin(player.coin_dists) if player.coin_dists.shape[0] != 0 else None
 
-        return self._get_path_dir(self.player_locs[player.player_index], self.player_locs[player.closest_coin])
-
+        if player.closest_coin is None:
+            return 0
+        return self._get_path_dir(self.player_locs[player.player_index], self.coins[player.closest_coin])
 
 
 class _Player:

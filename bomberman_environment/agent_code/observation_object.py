@@ -469,12 +469,9 @@ class ObservationObject:
         String contsining the short names of the current feature configuration
         :return:
         """
-        temp = ""
+        temp = "r" + str(self.radius)
         for i,full_name in enumerate(self.features):
-            if i > 0:
                 temp = temp + "_" + self.name_dict[full_name]
-            else:
-                temp = "r" + str(self.radius) + "_" + self.name_dict[full_name]
 
         return temp
 

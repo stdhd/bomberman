@@ -10,8 +10,8 @@ import numpy as np
 import multiprocessing as mp
 import threading
 
-from environment_updated import BombeRLeWorld, ReplayWorld
-from settings import s
+from environment_updated import BombeRLeWorld, ReplayWorld  # FIXME custom game environment
+from settings_agent_evaluation import s  # FIXME custom settings
 
 
 # Function to run the game logic in a separate thread
@@ -33,35 +33,34 @@ def game_logic(world, user_inputs):
                     raise
 
 
-def main():
+def main(evaluate_agents: list, agent_feature_strings: list, savepath:str):
     """
-    Run a game using environment_save_states.py. Save the resultant episodes in a file.
-    :param filename: Filepath to save directory for episodes
+    Run a normal game with a list of custom chosen agents vs. the remaining number of simple agents.
+    Save game states to savepath for later review.
+    :param evaluate_agents: Test these agents in a game against each other and (4 - len) simple agents
+    :param savepath: Save game files here
     :return:
     """
     pygame.init()
+
+    if savepath[-1] not in ("/", "\\"):
+        savepath += "/"
 
     # Emulate Windows process spawning behaviour under Unix (for testing)
     # mp.set_start_method('spawn')
 
     # Initialize environment and agents
 
-    # for saving games
-    save_path = 'data/games/'
-    world = BombeRLeWorld([
-    
-            ('simple_agent', False),
-            #('simple_agent', False),
-            #('simple_agent', False),
-            #('simple_agent', False)
-            
+    if len(evaluate_agents) > 4:
+        raise RuntimeError("Got too many agents (expected <=4, got", len(evaluate_agents), ")")
+    if len(evaluate_agents) != len(agent_feature_strings):
+        raise RuntimeError("Mismatch between agents to evaluate and number of feature combinations received.")
+    world = BombeRLeWorld(
 
-            #('random_agent', False),
-            #('random_agent', False),
-            #('random_agent', False),
-            #('random_agent', False)
+        [(agent_name, False) for agent_name in evaluate_agents] + [("simple_agent", False) for i in
+                                                                   range(4 - len(evaluate_agents))]
+            , agent_feature_strings, savepath)
 
-        ], save_path)
     # world = ReplayWorld('Replay 2019-01-30 16:57:42')
     user_inputs = []
 

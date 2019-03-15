@@ -9,6 +9,8 @@ import pickle
 from pygame.locals import *
 from pygame.transform import smoothscale
 
+import datetime
+
 import logging
 
 from agents import *
@@ -19,7 +21,7 @@ from agent_code.merged_agent.indices import *
 
 class BombeRLeWorld(object):
 
-    def __init__(self, agents, savepath):
+    def __init__(self, agents, agent_feature_strings, savepath):
         self.setup_logging()
         if s.gui:
             self.setup_gui()
@@ -27,6 +29,10 @@ class BombeRLeWorld(object):
         # Available robot colors
         self.colors = ['blue', 'green', 'yellow', 'pink']
         self.setup_agents(agents)
+
+        for agent_index, features in enumerate(agent_feature_strings):
+            ...  # FIXME Initiailze custom agents using features
+
 
         # Get the game going
         self.round = 0
@@ -36,7 +42,7 @@ class BombeRLeWorld(object):
 
         # state saving attributes
 
-        self.savepath = savepath
+        self.savepath = savepath + datetime.datetime.fromtimestamp(time()).strftime('%Y-%m-%d %H-%M-%S')
         self.free_grids = x_y_to_index(s.cols - 2, s.rows - 2, s.cols, s.rows) if (s.cols - 1) * (s.rows - 1) % 2 == 0 \
             else x_y_to_index(s.cols - 3, s.rows - 2, s.cols, s.rows)  # number of free states (used to reserve memory)
         self.free_grids = int(self.free_grids)

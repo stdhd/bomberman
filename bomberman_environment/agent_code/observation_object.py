@@ -35,7 +35,7 @@ class ObservationObject:
         :param radius: Radius in observation window (radius = 1 => 3x3 window)
         :param FEATURE_LIST: list of features by name
         """
-        sorted(FEATURE_LIST, key=str.lower)
+        FEATURE_LIST = sorted(FEATURE_LIST, key=str.lower)
         self.features = FEATURE_LIST
         self.features.sort()
 
@@ -469,6 +469,8 @@ class ObservationObject:
         String contsining the short names of the current feature configuration
         :return:
         """
+        self.features = sorted(self.features)
+
         temp = ""
         for i,full_name in enumerate(self.features):
             if i > 0:

@@ -1,6 +1,6 @@
 
 
-def get_subsets_recursively(find_subsets):
+def get_subsets_recursively(find_subsets: list) -> list:
     if len(find_subsets) == 1:
         return [[], find_subsets.copy()]
 

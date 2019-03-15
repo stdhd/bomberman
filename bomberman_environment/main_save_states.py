@@ -47,7 +47,7 @@ def main():
     # Initialize environment and agents
 
     # for saving games
-    save_path = 'data/games/'
+    save_path = 'data/games/one_player_only_coins/'
     world = BombeRLeWorld([
     
             ('simple_agent', False),
@@ -61,7 +61,7 @@ def main():
             #('random_agent', False),
             #('random_agent', False)
 
-        ], save_path)
+        ], None,save_path)
     # world = ReplayWorld('Replay 2019-01-30 16:57:42')
     user_inputs = []
 

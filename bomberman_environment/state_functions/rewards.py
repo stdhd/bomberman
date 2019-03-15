@@ -12,19 +12,20 @@ def get_reward(state, player_index):
     :return: Reward
     """
 
-    rewards = {'INVALID_ACTION': -10,
+    rewards = {'INVALID_ACTION': 0,
             'KILLED_OPPONENT': 500,
             'KILLED_SELF': -1000,
-            'COIN_COLLECTED': 100}
+            'COIN_COLLECTED': 100,
+            'WAITED': -10}
 
     begin = state.shape[0]-(1 + (4 - player_index)*21)
     end = state.shape[0]-(1 + (4 - player_index - 1)*21)
     player = state[begin: end]
 
     reward = 0
-    for event_index, count in player[4:]:
+    for event_index, multiplicity in enumerate(player[4:]):
         event = events[event_index]
-        reward += rewards[event]*count if event in rewards.keys() else 0
+        reward += rewards[event]*multiplicity if event in rewards.keys() else 0
 
     return reward
 

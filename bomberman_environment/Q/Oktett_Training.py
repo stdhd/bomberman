@@ -1,9 +1,9 @@
 from agent_code.merged_agent.indices import *
-from Q.rewards import *
 from os import listdir, getcwd
 from os.path import isfile, join
 
 from agent_code.observation_object import ObservationObject
+from state_functions.rewards import *
 from Q.manage_training_data import *
 
 def q_train_from_games_jakob(train_data, write_path, obs:ObservationObject, a = 0.8, g = 0.8, START = 176):
@@ -25,9 +25,10 @@ def q_train_from_games_jakob(train_data, write_path, obs:ObservationObject, a = 
     :return:
     """
 
+    filename = obs.get_file_name_string()
     try:
-        QTABLE = np.load(write_path+"/learned.npy")
-        KNOWN = np.load(write_path + "/observations.npy")
+        QTABLE = np.load(write_path + '/q_table-' + filename)
+        KNOWN = np.load(write_path + '/observation-' + filename)
     except:
         print("Error loading learned q table. using empty table instead.")
         QTABLE = np.zeros([0,6])
@@ -43,17 +44,21 @@ def q_train_from_games_jakob(train_data, write_path, obs:ObservationObject, a = 
         except IOError:
             print("Error accessing .json records for file", file, "in folder", train_data)
 
-        game = np.load(train_data+"/"+file)
+        try:
+            game = np.load(train_data+"/"+file)
+        except OSError:
+            print("Skipping " + file + ". Is it a .npy file?")
+            continue
 
         these_actions = np.zeros(6)
 
         for ind, step_state in enumerate(game):
 
             last_actions = these_actions.astype(int)
-
+            pass
             for player in range(4):
                 actions_taken = step_state[int(START + 4 + player * 21): int(START + 9 + player * 21)]
-                actions_taken = np.append(actions_taken, int(START + 11 + player * 21))
+                actions_taken = np.append(actions_taken, step_state[int(START + 11 + player * 21)])
                 these_actions[player] = np.argmax(actions_taken)
 
             obs.set_state(step_state)
@@ -74,9 +79,6 @@ def q_train_from_games_jakob(train_data, write_path, obs:ObservationObject, a = 
                         temp = np.where((KNOWN == np.array([cand])).all(axis=1))[0]
                         if temp.shape[0] > 0:
                             index_current = np.append(index_current, temp[0])
-                            #print(temp[0])
-                    # print(index_current)
-                    # print("xxxx")
 
                 else:
                     new_obs = get_transformations(observation, obs.radius, obs.get_direction_sensitivity())
@@ -100,8 +102,8 @@ def q_train_from_games_jakob(train_data, write_path, obs:ObservationObject, a = 
 
         print("Trained with file", file)
 
-        np.save(write_path + "/observations.npy", KNOWN)
-        np.save(write_path + "/learned.npy", QTABLE)
+        np.save(write_path + '/observation-' + filename, KNOWN)
+        np.save(write_path + '/q_table-' + filename, QTABLE)
 
     return KNOWN, QTABLE
 

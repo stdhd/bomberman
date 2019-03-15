@@ -50,7 +50,9 @@ def q_train_from_games_jakob(train_data, write_path, obs:ObservationObject, a = 
             print("Skipping " + file + ". Is it a .npy file?")
             continue
 
-        these_actions = np.zeros(6)
+        these_actions = np.zeros(4)
+
+        last_index = []
 
         for ind, step_state in enumerate(game):
 
@@ -66,7 +68,7 @@ def q_train_from_games_jakob(train_data, write_path, obs:ObservationObject, a = 
             living_players = np.arange(4)[np.where(obs.player_locs != 0)]
             step_observations = obs.create_observation(living_players)
 
-            for player_index, observation in enumerate(step_observations):
+            for count, observation in enumerate(step_observations):
 
                 findings = np.where((KNOWN == np.array([observation])).all(axis=1))[0]
                 if findings.shape[0] > 0:
@@ -87,16 +89,17 @@ def q_train_from_games_jakob(train_data, write_path, obs:ObservationObject, a = 
                     QTABLE = np.append(QTABLE, np.zeros([n_new_indices, QTABLE.shape[1]]), axis=0)
                     index_current = np.arange(KNOWN.shape[0] - n_new_indices, KNOWN.shape[0])
 
-            if ind > 0:
-                #print(index_current)
-                for player_index in living_players:
-                    for l_ind in last_index:
+                if ind > 0:
+                    for l_ind in last_index[living_players[count]]:
 
                         best_choice_current_state = np.max(QTABLE[int(index_current[0])])
                         #print(l_ind)
-                        QTABLE[int(l_ind), int(last_actions[player_index])] = (1 - a) * QTABLE[int(l_ind), int(last_actions[player_index])] + a * (get_reward(step_state, player_index) + g * best_choice_current_state)
+                        QTABLE[int(l_ind), int(last_actions[living_players[count]])] = (1 - a) * QTABLE[int(l_ind), int(living_players[count])] +\
+                        a * (get_reward(step_state, living_players[count]) + g * best_choice_current_state)
 
-            last_index = index_current
+                        # FIXME Take into account rotated actions when updating Q table
+
+                last_index[living_players[count]] = index_current
 
         add_to_trained(write_path+"/records.json", file)  # update json table
 

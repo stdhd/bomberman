@@ -52,7 +52,7 @@ def q_train_from_games_jakob(train_data, write_path, obs:ObservationObject, a = 
 
         these_actions = np.zeros(4)
 
-        last_index = []
+        last_index = [None, None, None, None]
 
         for ind, step_state in enumerate(game):
 
@@ -73,7 +73,7 @@ def q_train_from_games_jakob(train_data, write_path, obs:ObservationObject, a = 
                 findings = np.where((KNOWN == np.array([observation])).all(axis=1))[0]
                 if findings.shape[0] > 0:
 
-                    candidates = get_transformations(observation, obs.radius,
+                    candidates, rotations_current = get_transformations(observation, obs.radius,
                                                      obs.get_direction_sensitivity())
 
                     index_current = np.array([])
@@ -83,23 +83,22 @@ def q_train_from_games_jakob(train_data, write_path, obs:ObservationObject, a = 
                             index_current = np.append(index_current, temp[0])
 
                 else:
-                    new_obs = get_transformations(observation, obs.radius, obs.get_direction_sensitivity())
+                    new_obs, rotations_current = get_transformations(observation, obs.radius, obs.get_direction_sensitivity())
                     n_new_indices = new_obs.shape[0]
                     KNOWN = np.concatenate(np.array([KNOWN, new_obs]))
                     QTABLE = np.append(QTABLE, np.zeros([n_new_indices, QTABLE.shape[1]]), axis=0)
                     index_current = np.arange(KNOWN.shape[0] - n_new_indices, KNOWN.shape[0])
 
                 if ind > 0:
-                    for l_ind in last_index[living_players[count]]:
-
+                    for i in range(last_index[living_players[count]][0].shape[0]):
+                        l_ind, l_rot = last_index[living_players[count]][0][i], last_index[living_players[count]][1][i]
                         best_choice_current_state = np.max(QTABLE[int(index_current[0])])
-                        #print(l_ind)
-                        QTABLE[int(l_ind), int(last_actions[living_players[count]])] = (1 - a) * QTABLE[int(l_ind), int(living_players[count])] +\
+
+                        QTABLE[int(l_ind), int(l_rot[int(last_actions[living_players[count]])])] = (1 - a) *  \
+                        QTABLE[int(l_ind), int(l_rot[int(last_actions[living_players[count]])])] +\
                         a * (get_reward(step_state, living_players[count]) + g * best_choice_current_state)
 
-                        # FIXME Take into account rotated actions when updating Q table
-
-                last_index[living_players[count]] = index_current
+                last_index[living_players[count]] = (index_current, rotations_current)
 
         add_to_trained(write_path+"/records.json", file)  # update json table
 
@@ -116,16 +115,16 @@ def get_transformations(obs, radius, direction_sensitive):
     new_rest = obs[new_window.shape[0]:]
     new_window_reshaped = new_window.reshape([radius * 2 + 1, radius * 2 + 1])
 
-    # All in all transformations, the direction sensitive features are replaced by the corresponding value 1-4
-    # Non transformed data: 1=up, 2=right, 3=down, 4=left
-    # Array positions are the values to replace: position 0 = normal up is replaced by the value in the array on
+    # All in all transformations, the direction sensitive features are replaced by the corresponding value 0-3
+    # Non transformed data: 0=left, 1=right, 2=up, 3=down
+    # Array positions are the values to replace: position 0 = normal left is replaced by the value in the array on
     # the 0. position
 
     transformations = np.array(
-        [[3, 2, 1, 0], [2, 1, 0, 3], [0, 3, 2, 1], [3, 0, 1, 2], [1, 2, 3, 0], [2, 3, 0, 1], [1, 0, 3, 2]])
+        [[2, 3, 0, 1], [0, 1, 3, 2], [1, 0, 2, 3], [3, 2, 0, 1], [2, 3, 1, 0], [1, 0, 3, 2], [3, 2, 1, 0]])
 
     all_transformed = np.zeros([7, new_rest.shape[0]])
-
+    direction_change = np.zeros([8, 6])
     for i in range(7):
         all_transformed[i][new_rest == 0] = transformations[i, 0]
         all_transformed[i][new_rest == 1] = transformations[i, 1]
@@ -148,83 +147,9 @@ def get_transformations(obs, radius, direction_sensitive):
 
     for i in range(7):
         results[i] = np.append(candidates[i], transformed_rest[i])
+        direction_change[i] = np.append(transformations[i], np.array([4, 5]))
+
+    direction_change[7] = np.array([0,1,2,3,4,5])
     results[7] = obs
 
-    return np.unique(results, axis=0)
-
-def update_and_get_obs(db, new_obs, learned):
-    findings = np.where((db == np.array([new_obs])).all(axis=1))[0]
-    if findings.shape[0] > 0:
-        return db, findings[0], learned
-    else:
-        learned = np.append(learned, np.zeros([1, learned.shape[1]]), axis = 0)
-        db = np.append(db, np.array([new_obs]), axis=0)
-        return db, db.shape[0] - 1, learned
-
-
-
-def update_and_get_obs_new(db, new_obs, learned, observation_object, direction_sensitive):
-    """
-    Seach an observation table for a (potentially rotated) match for a given new observation.
-
-    If a match is found, return the index in the table, as well as a rotation encoding.
-    :param db: Database of known observations
-    :param new_obs: New observation to find in the database
-    :param learned: Q Table
-    :param observation_object: Object containing observation info (use to derive radius)
-    :param direction_sensitive: FIXME
-    :return: updated database, index of observation, q table, rotation encoding
-    """
-    findings = np.where((db == np.array([new_obs])).all(axis=1))[0]
-
-    if findings.shape[0] > 0:
-        # print("Found without transformation")
-        return db, findings[0], learned, np.array([1, 2, 3, 4])
-
-    # Observation not found in collection of observations, so try to find a transformation:
-
-    radius = observation_object.radius
-    new_window = new_obs[:(radius * 2 + 1) ** 2]
-    new_rest = new_obs[new_window.shape[0]:]
-    new_window_reshaped = new_window.reshape([radius * 2 + 1, radius * 2 + 1])
-
-    # All in all transformations, the direction sensitive features are replaced by the corresponding value 1-4
-    # Non transformed data: 1=up, 2=right, 3=down, 4=left
-    # Array positions are the values to replace: position 0 = normal up is replaced by the value in the array on
-    # the 0. position
-    transformations = np.array(
-        [[3,2,1,0], [2, 1, 0, 3], [0, 3, 2, 1], [3, 0, 1, 2], [1, 2, 3, 0], [2, 3, 0, 1], [1, 0, 3, 2]])
-
-    all_transformed = np.zeros([7, new_rest.shape[0]])
-
-    for i in range(7):
-        all_transformed[i][new_rest == 1] = transformations[i, 0]
-        all_transformed[i][new_rest == 2] = transformations[i, 1]
-        all_transformed[i][new_rest == 3] = transformations[i, 2]
-        all_transformed[i][new_rest == 4] = transformations[i, 3]
-
-    transformed_rest = np.zeros([7, new_rest.shape[0]])
-    for i in range(7):
-        transformed_rest[i] = np.where(direction_sensitive, all_transformed[i], new_rest)
-
-    candidates = np.zeros([7, radius * 2 + 1, radius * 2 + 1])
-    candidates[0] = new_window_reshaped.T
-    candidates[1] = np.flip(new_window_reshaped, 0)
-    candidates[2] = np.flip(new_window_reshaped, 1)
-    candidates[3] = np.flip(new_window_reshaped.T, 0)
-    candidates[4] = np.flip(new_window_reshaped.T, 1)
-    candidates[5] = np.fliplr(np.flip(new_window_reshaped, 0))
-    candidates[6] = np.fliplr(np.flip(new_window_reshaped.T, 0))
-
-    for i in range(7):
-        alternative = np.append(candidates[i], transformed_rest[i])
-        findings = np.where((db == np.array([alternative])).all(axis=1))[0]
-        if findings.shape[0]:
-            # Found transformed alternative
-            # print("Found as transformation")
-            return db, findings[0], learned, transformations[i]
-
-    learned = np.append(learned, np.zeros([1, learned.shape[1]]), axis=0)
-    db = np.append(db, np.array([new_obs]), axis=0)
-    # print("Not Found")
-    return db, db.shape[0] - 1, learned, np.array([1, 2, 3, 4])
+    return results, direction_change

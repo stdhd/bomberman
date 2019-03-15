@@ -6,7 +6,7 @@ from os.path import isfile, join
 from agent_code.observation_object import ObservationObject
 from Q.manage_training_data import *
 
-def q_train_from_games_jakob(train_data, write_path, obs:ObservationObject, a = 0.8, g = 0.8, START = 176):
+def q_train_from_games(train_data, write_path, obs:ObservationObject, a = 0.8, g = 0.8, START = 176):
     """
     Trains from all files in a directory using an existing q- and observation-table under write_path.
 

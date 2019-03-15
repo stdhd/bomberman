@@ -127,7 +127,7 @@ def act(self):
             print("unknown observation")
             self.last_action_ind = np.random.randint(0,6)
 
-    self.next_action = ['UP', 'DOWN', 'LEFT', 'RIGHT', 'BOMB', 'WAIT'][self.last_action_ind]
+    self.next_action = ['LEFT', 'RIGHT', 'UP', 'DOWN', 'WAIT', 'BOMB'][self.last_action_ind]
     print(self.next_action)
 
 def reward_update(self):

@@ -48,7 +48,7 @@ def main():
     # Initialize environment and agents
 
     # for saving games
-    filename = 'data/games/coins_only_one_player/'
+    filename = 'data/games/'
     filename += datetime.datetime.fromtimestamp(time()).strftime('%Y-%m-%d %H-%M-%S')
     world = BombeRLeWorld([
     

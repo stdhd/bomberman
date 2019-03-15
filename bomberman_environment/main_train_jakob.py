@@ -1,6 +1,6 @@
 
 
-from Q.Training import q_train_from_games_jakob
+from Q.Oktett_Training import q_train_from_games_jakob
 
 import os
 
@@ -15,8 +15,14 @@ def main():
     os.chdir(os.path.dirname(__file__))
     cwd = os.getcwd()
 
-    KNOWN, Q = q_train_from_games_jakob(cwd + "/" + 'data/games/coins_only_one_player', 'data/qtables/jakob',
-                                        ObservationObject(2, None, ['closest_coin_old']))
+    obs = ObservationObject(2, ['dist_to_center'], None)
+
+    write_path = 'data/qtables/' + obs.get_file_name_string()
+    if not os.path.exists(write_path):
+        os.makedirs(write_path)
+
+    KNOWN, Q = q_train_from_games_jakob(cwd + "/" + 'data/games', write_path,
+                                        obs)
 
 
 if __name__ == '__main__':

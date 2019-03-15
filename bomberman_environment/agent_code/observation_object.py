@@ -36,6 +36,8 @@ class ObservationObject:
         """
         sorted(FEATURE_LIST, key=str.lower)
         self.features = FEATURE_LIST
+        self.features.sort()
+
         self.radius = radius
         self.logger = logger
 

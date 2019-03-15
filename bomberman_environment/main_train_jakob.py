@@ -21,7 +21,7 @@ def main():
     if not os.path.exists(write_path):
         os.makedirs(write_path)
 
-    KNOWN, Q = q_train_from_games_jakob(cwd + "/" + 'data/games', write_path,
+    KNOWN, Q = q_train_from_games_jakob(cwd + "/" + 'data/games/one_player_only_coins/', write_path,
                                         obs)
 
 

@@ -12,11 +12,11 @@ def get_reward(state, player_index):
     :return: Reward
     """
 
-    rewards = {'INVALID_ACTION': 0,
+    rewards = {'INVALID_ACTION': -5,
             'KILLED_OPPONENT': 500,
             'KILLED_SELF': -1000,
             'COIN_COLLECTED': 100,
-            'WAITED': -10}
+            'WAITED': -20}
 
     begin = state.shape[0]-(1 + (4 - player_index)*21)
     end = state.shape[0]-(1 + (4 - player_index - 1)*21)

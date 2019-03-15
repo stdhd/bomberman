@@ -162,7 +162,9 @@ class BombeRLeWorld(object):
         self.active_agents = []
         self.bombs = []
         self.explosions = []
-        self.round_id = f'Replay {datetime.now().strftime("%Y-%m-%d %H-%M-%S")}'
+        #self.round_id = f'Replay {datetime.now().strftime("%Y-%m-%d %H-%M-%S")}'
+        self.round_id = 'hgestrh'
+
 
         # Arena with wall and crate layout
         self.arena = (np.random.rand(s.cols, s.rows) < s.crate_density).astype(int)

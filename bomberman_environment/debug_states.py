@@ -17,6 +17,8 @@ def main():
 
     for file in [f for f in listdir(directory) if isfile(join(directory, f))]:
         # go through files
+        if file == ".DS_Store":
+            continue
         game = np.load(directory+"/"+file)
 
         obs = ObservationObject(0, None, [])

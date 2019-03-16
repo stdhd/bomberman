@@ -19,7 +19,7 @@ Available Features:
         remaining_crates,
         remaining_coins,
         closest_coin_old,
-        closest_safe_field_dir
+        d_closest_safe_field_dir
 """
 
 
@@ -64,8 +64,9 @@ class ObservationObject:
         "remaining_enemies": "re",
         "remaining_crates": "rcrates",
         "remaining_coins": "rcoins",
-        "closest_safe_field_dir": "csfdir",
-        "closest_coin_old": "cco"
+        "d_closest_safe_field_dir": "csfdir",
+        "closest_coin_old": "cco",
+
         }
 
 
@@ -320,12 +321,12 @@ class ObservationObject:
             current = parent_dict[current]
 
     def _determine_direction(self, best_step, x, y):
-        if best_step == (x-1,y): return 1 # move left
-        if best_step == (x+1,y): return 2 # move right
-        if best_step == (x,y-1): return 3 # move up
-        if best_step == (x,y+1): return 4 # move down
-        if best_step == (x,y): return 5 # Something is wrong
-        if best_step == None: return 6 # No targets exist.
+        if best_step == (x-1,y): return 0 # move left
+        if best_step == (x+1,y): return 1 # move right
+        if best_step == (x,y-1): return 2 # move up
+        if best_step == (x,y+1): return 3 # move down
+        if best_step == (x,y): return 4 # Something is wrong
+        if best_step == None: return 5 # No targets exist.
         return 7 # Something else is wrong
 
     def me_has_bomb(self):
@@ -336,7 +337,7 @@ class ObservationObject:
         """
         return self._is_holding_bomb(self.player.player_index)
 
-    def closest_coin_dist(self):
+    def d_closest_coin_dist(self):
         """
         Shortest distance from a certain player to a coin
         :param player_index:
@@ -470,7 +471,7 @@ class ObservationObject:
         player = self.player
         return self._get_path_dir(self.player_locs[player.player_index], self.player_locs[player.closest_coin])
 
-    def closest_safe_field_dir(self):
+    def d_closest_safe_field_dir(self):
         """
         Direction to next safe field.
         Bomb on arena: (16), 8, 4, 2
@@ -526,10 +527,51 @@ class _Player:
     Helper class to store useful attributes for a certain player.
     """
 
-    def __init__(player_self, observation_self, player_index):
-        player_self.player_index = player_index
-        player_self.me_loc = np.array([*index_to_x_y(observation_self.player_locs[int(player_index)])])
-        player_self.coin_dists, player_self.closest_coin = None, None  # distances of all coins, index of closest coin
-        player_self.foes = [foe_loc for ind, foe_loc in enumerate(observation_self.player_locs) if ind != player_index]
-        player_self.foe_dists, player_self.closest_foe = None, None
+    def __init__(self, observation_self, player_index):
+        """
+        Setup basic members (but not distances to foes or coins, use setup methods when creating features)
+        :param observation_self: self member of Obervation Object
+        :param player_index:
+        """
+        self.observation_self = observation_self
+        self.player_index = player_index  # index of player in game state vector (0 to 3)
+        self.me_loc = np.array([*index_to_x_y(observation_self.player_locs[int(player_index)])])
+        self.coin_dists, self.closest_coin = None, None  # distances of all coins, index of closest coin
+        self.foes = np.array([foe_loc for ind, foe_loc in enumerate(observation_self.player_locs) if ind != player_index
+                              and foe_loc != 0])  # count LIVING enemies
+        self.foe_dists, self.closest_foe = None, None
 
+        self._is_setup_coins, self._is_setup_foes = False, False
+
+    def setup_coin_dists(self):
+        """
+        Set a list of coin distances and find closest coin (set to None if no coins)
+        :return:
+        """
+        if self._is_setup_coins:
+            return  # don't calculate values twice
+
+        self.coin_dists = np.array([np.linalg.norm(self.me_loc - np.array([*index_to_x_y(coin)]), ord=1)
+                                      for coin in self.observation_self.coins])  # manhattan dist. to coins
+        self.closest_coin = np.argmin(self.coin_dists) if self.observation_self.coins.shape[0] != 0 else None
+
+        self._is_setup_coins = True
+
+    def setup_foe_dists(self):
+        """
+        Set a list of foe distances and find closest coin (set to None if no coins)
+        :return:
+        """
+
+        if self._is_setup_foes:
+            return  # don't calculate values twice
+        self.foe_dists = np.array([self.observation_self.player_distance_matrix[min(self.player_index, foe_index),
+                                                                 max(foe_index, self.player_index)]
+                                     for foe_index in range(4) if foe_index != self.player_index])
+        # manhattan dist. to foes
+        self.closest_foe = int(np.argmin(self.foe_dists)) if self.foes.shape[0] != 0 else None   # player index of closest foe
+
+        if self.closest_foe is not None:
+            self.closest_foe += 1 if self.closest_foe >= self.player_index else 0  # me not in foe_dists
+
+        self._is_setup_foes = True

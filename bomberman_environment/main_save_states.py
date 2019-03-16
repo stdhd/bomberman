@@ -1,7 +1,6 @@
 
 from time import time, sleep
 import contextlib
-import datetime
 from time import time
 
 with contextlib.redirect_stdout(None):
@@ -48,11 +47,10 @@ def main():
     # Initialize environment and agents
 
     # for saving games
-    filename = 'data/games/coins_only_one_player/'
-    filename += datetime.datetime.fromtimestamp(time()).strftime('%Y-%m-%d %H-%M-%S')
+    save_path = 'data/games/one_player_only_coins/'
     world = BombeRLeWorld([
     
-            ('simple_agent', False),
+            ('random_agent', False),
             #('simple_agent', False),
             #('simple_agent', False),
             #('simple_agent', False)
@@ -63,7 +61,7 @@ def main():
             #('random_agent', False),
             #('random_agent', False)
 
-        ], filename)
+        ], None,save_path)
     # world = ReplayWorld('Replay 2019-01-30 16:57:42')
     user_inputs = []
 

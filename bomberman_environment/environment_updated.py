@@ -9,6 +9,8 @@ import pickle
 from pygame.locals import *
 from pygame.transform import smoothscale
 
+import datetime
+
 import logging
 
 from agents import *
@@ -19,7 +21,7 @@ from agent_code.merged_agent.indices import *
 
 class BombeRLeWorld(object):
 
-    def __init__(self, agents, savepath):
+    def __init__(self, agents, agent_feature_strings, savepath):
         self.setup_logging()
         if s.gui:
             self.setup_gui()
@@ -28,19 +30,23 @@ class BombeRLeWorld(object):
         self.colors = ['blue', 'green', 'yellow', 'pink']
         self.setup_agents(agents)
 
+        # for agent_index, features in enumerate(agent_feature_strings):
+        #     ...  # FIXME Initiailze custom agents using features
+
+
         # Get the game going
         self.round = 0
         self.running = False
         self.ready_for_restart_flag = mp.Event()
-        self.new_round()
 
         # state saving attributes
 
-        self.savepath = savepath
+        self.savepath = savepath + datetime.datetime.fromtimestamp(time()).strftime('%Y-%m-%d %H-%M-%S')
         self.free_grids = x_y_to_index(s.cols - 2, s.rows - 2, s.cols, s.rows) if (s.cols - 1) * (s.rows - 1) % 2 == 0 \
             else x_y_to_index(s.cols - 3, s.rows - 2, s.cols, s.rows)  # number of free states (used to reserve memory)
         self.free_grids = int(self.free_grids)
         self.save_list = []
+        self.new_round()
 
 
     def capture_state(self):
@@ -156,7 +162,9 @@ class BombeRLeWorld(object):
         self.active_agents = []
         self.bombs = []
         self.explosions = []
-        self.round_id = f'Replay {datetime.now().strftime("%Y-%m-%d %H-%M-%S")}'
+        #self.round_id = f'Replay {datetime.now().strftime("%Y-%m-%d %H-%M-%S")}'
+        self.round_id = 'hgestrh'
+
 
         # Arena with wall and crate layout
         self.arena = (np.random.rand(s.cols, s.rows) < s.crate_density).astype(int)
@@ -207,6 +215,7 @@ class BombeRLeWorld(object):
             }
 
         self.running = True
+        self.capture_state()
 
 
     def add_agent(self, agent_dir, name, train=False):
@@ -260,23 +269,42 @@ class BombeRLeWorld(object):
 
     def perform_agent_action(self, agent, action):
         # Perform the specified action if possible, wait otherwise
-        if action == 'UP' and self.tile_is_free(agent.x, agent.y - 1):
-            agent.y -= 1
+        if action == 'UP':
             agent.events.append(e.MOVED_UP)
-        elif action == 'DOWN' and self.tile_is_free(agent.x, agent.y + 1):
-            agent.y += 1
+            if not self.tile_is_free(agent.x, agent.y - 1):
+                agent.events.append(e.INVALID_ACTION)
+            else:
+                agent.y -= 1
+        elif action == 'DOWN':
             agent.events.append(e.MOVED_DOWN)
-        elif action == 'LEFT' and self.tile_is_free(agent.x - 1, agent.y):
-            agent.x -= 1
+            if not self.tile_is_free(agent.x, agent.y + 1):
+                agent.events.append(e.INVALID_ACTION)
+            else:
+                agent.y += 1
+
+        elif action == 'LEFT':
             agent.events.append(e.MOVED_LEFT)
-        elif action == 'RIGHT' and self.tile_is_free(agent.x + 1, agent.y):
-            agent.x += 1
+            if not self.tile_is_free(agent.x - 1, agent.y):
+                agent.events.append(e.INVALID_ACTION)
+            else:
+                agent.x -= 1
+
+        elif action == 'RIGHT':
             agent.events.append(e.MOVED_RIGHT)
-        elif action == 'BOMB' and agent.bombs_left > 0:
-            self.logger.info(f'Agent <{agent.name}> drops bomb at {(agent.x, agent.y)}')
-            self.bombs.append(agent.make_bomb())
-            agent.bombs_left -= 1
+            if not self.tile_is_free(agent.x + 1, agent.y):
+                agent.events.append(e.INVALID_ACTION)
+            else:
+                agent.x += 1
+
+        elif action == 'BOMB':
             agent.events.append(e.BOMB_DROPPED)
+            if not agent.bombs_left > 0:
+                agent.events.append(e.INVALID_ACTION)
+            else:
+                self.logger.info(f'Agent <{agent.name}> drops bomb at {(agent.x, agent.y)}')
+                self.bombs.append(agent.make_bomb())
+                agent.bombs_left -= 1
+
         elif action == 'WAIT':
             agent.events.append(e.WAITED)
         else:

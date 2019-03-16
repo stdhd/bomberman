@@ -8,9 +8,9 @@ Available Features:
 
         me_has_bomb,
         closest_coin_dist,
-        closest_coin_dir,
+        d_closest_coin_dir,
         closest_foe_dist,
-        closest_foe_dir,
+        d_closest_foe_dir,
         closest_foe_has_bomb,
         nearest_foe_to_closest_coin,
         smallest_enemy_dist,
@@ -28,14 +28,16 @@ class ObservationObject:
     class to keep track of constants such as window size, number of features, etc..
     """
 
-    def __init__(self, radius, FEATURE_LIST:list, logger=None):
+    def __init__(self, radius, logger, FEATURE_LIST:list):
         """
         Initialize Observation Object using window radius and list of features to create.
         :param radius: Radius in observation window (radius = 1 => 3x3 window)
         :param FEATURE_LIST: list of features by name
         """
-        sorted(FEATURE_LIST, key=str.lower)
+        FEATURE_LIST = sorted(FEATURE_LIST, key=str.lower)
         self.features = FEATURE_LIST
+        self.features.sort()
+
         self.radius = radius
         self.logger = logger
 
@@ -52,9 +54,9 @@ class ObservationObject:
         self.name_dict = {
         "me_has_bomb": "mhb",
         "closest_coin_dist": "ccdist",
-        "closest_coin_dir": "ccdir",
+        "d_closest_coin_dir": "ccdir",
         "closest_foe_dist": "cfdist",
-        "closest_foe_dir": "cfdir",
+        "d_closest_foe_dir": "cfdir",
         "closest_foe_has_bomb": "cfhb",
         "nearest_foe_to_closest_coin": "nftcc",
         "dist_to_center": "dtc",
@@ -62,17 +64,21 @@ class ObservationObject:
         "remaining_enemies": "re",
         "remaining_crates": "rcrates",
         "remaining_coins": "rcoins",
-        "closest_safe_field_dir": "csfdir"
+        "closest_safe_field_dir": "csfdir",
+        "closest_coin_old": "cco"
         }
 
 
     def set_state(self, state):
+
         """
         Set the state for the observation object and initialize useful feature values.
         :param state:
         :return:
         """
+
         self.state = state
+
         self.initialize_feature_helpers()
 
     def create_observation(self, AGENTS):
@@ -83,14 +89,22 @@ class ObservationObject:
         :param AGENTS: List of player indices (0 to 3 inclusive)
         :return: Array of observations
         """
+
         radius, board, player_locs, bomb_locs, bomb_timers, window_size = self.radius, self.board, self.player_locs, \
                                                              self.bomb_locs, self.bomb_timers, self.window_size
+
         observations = np.zeros((AGENTS.shape[0], self.obs_length))
+
         features = self._get_features(AGENTS)  # find features for all agents
+
         for count, player_index in enumerate(AGENTS):  # construct the window for all agents
+
             player_x, player_y = index_to_x_y(self.player_locs[int(player_index)])
+
             window = self._make_window(radius, player_x, player_y)
+
             observations[count] = np.concatenate((window.flatten(), features[count]))  # concatenate window and features
+
         return observations
 
     def _make_window(self, radius_custom, center_x, center_y):
@@ -104,8 +118,11 @@ class ObservationObject:
 
         window_size_custom = 2*radius_custom + 1
         window = np.zeros((window_size_custom, window_size_custom))
+
         lower_x = center_x - radius_custom
+
         lower_y = center_y - radius_custom
+
         for i in np.arange(window_size_custom):
             for j in np.arange(window_size_custom):
                 try:
@@ -122,8 +139,10 @@ class ObservationObject:
             if player_loc > 0:
                 try:
                     location_value = self.get_window(window, *index_to_x_y(player_loc), radius_custom, center_x, center_y)
+
                     if location_value > 0:  # if player is on a bomb, multiply bomb timer and player value
                         self.set_window(window, player_loc, center_x, center_y, radius_custom, location_value * 5)
+
                     else:  # else set field to player value
                         self.set_window(window, player_loc, center_x, center_y, radius_custom, 5)
                 except:
@@ -139,9 +158,12 @@ class ObservationObject:
         :param radius: Radius of window
         :return: True iff in window
         """
+
         obj_x, obj_y = index_to_x_y(obj_index)
+
         if abs(obj_x - origin_x) > radius or abs(obj_y - origin_y) > radius:
             return False
+
         return True
 
     def get_window(self, window, board_x, board_y, window_radius, window_origin_x, window_origin_y):
@@ -155,14 +177,18 @@ class ObservationObject:
         :param window_origin_y:
         :return:
         """
+
         if not self.is_in_window(x_y_to_index(board_x, board_y), window_origin_x, window_origin_y, window_radius):
             raise ValueError("Board coordinates not in window. ")
+
         return window[board_x - (window_origin_x - window_radius), board_y - (window_origin_y - window_radius)]
 
     def set_window(self, window, board_index, window_origin_x, window_origin_y, window_radius, val):
         if not self.is_in_window(board_index, window_origin_x, window_origin_y, window_radius):
             return
+
         board_x, board_y = index_to_x_y(board_index)
+
         window[board_x - (window_origin_x - window_radius), board_y - (window_origin_y - window_radius)] = val
 
 
@@ -192,22 +218,27 @@ class ObservationObject:
         :param AGENTS: List of player indices (0 to 3) for which to generate observations.
         :return:
         """
+
         return_features = np.zeros((AGENTS.shape[0], len(self.features)))
+
         for count, agent_index in enumerate(AGENTS):
             self.player = _Player(self, agent_index)
             for feature_index, feature in enumerate(self.features):
                 method_to_call = getattr(self, feature)
                 val = method_to_call()
                 return_features[count][feature_index] = val
+
         return return_features
 
     def _is_holding_bomb(self, player_index):
         """
         Internal function, do not call.
+
         Return 1 if player with player_index is currently holding a bomb, else 0
         :param player_index:
         :return:
         """
+
         begin = self.state.shape[0] - (1 + (4 - player_index) * 21)
         end = self.state.shape[0] - (1 + (4 - player_index - 1) * 21)
         player = self.state[begin: end]
@@ -319,7 +350,7 @@ class ObservationObject:
         # manhattan dist. to coins
         return np.min(player.coin_dists)
 
-    def closest_coin_dir(self):
+    def d_closest_coin_dir(self):
         """
         Direction to player's nearest coin.
         """
@@ -345,7 +376,7 @@ class ObservationObject:
         player.closest_foe += 1 if player.closest_foe >= player.player_index else 0  # me not in foe_dists
         return np.min(player.foe_dists)
 
-    def closest_foe_dir(self):
+    def d_closest_foe_dir(self):
         """
         Direction to player's nearest foe.
         :return:
@@ -400,15 +431,35 @@ class ObservationObject:
         return self.coins.shape[0]
 
     def get_observation_size(self):
+        """
+        Integer of the total size of the observation vector
+        :return:
+        """
         return self.obs_length
 
     def get_file_name_string(self):
-        temp = ""
+        """
+        String contsining the short names of the current feature configuration
+        :return:
+        """
+        temp = "r" + str(self.radius)
+        self.features = sorted(self.features)
         for i,full_name in enumerate(self.features):
-            if i > 0:
                 temp = temp + "_" + self.name_dict[full_name]
+
+        return temp
+
+    def get_direction_sensitivity(self):
+        """
+        Boolean array indicating, if features are direction sensitive
+        :return:
+        """
+        temp = np.array([])
+        for f in self.features:
+            if f.startswith("d_"):
+                temp = np.append(np.array([True]), temp)
             else:
-                temp = self.name_dict[full_name]
+                temp = np.append(np.array([False]), temp)
         return temp
 
     def closest_coin_old(self):

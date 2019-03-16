@@ -26,7 +26,7 @@ settings = {
     #'crate_density': 0.75,
     # For task one no creates are required
     'crate_density': 0,
-    'actions': ['UP', 'DOWN', 'LEFT', 'RIGHT', 'BOMB', 'WAIT'],
+    'actions': ['LEFT', 'RIGHT', 'UP', 'DOWN', 'WAIT', 'BOMB'],
     'max_agents': 4,
     'max_steps': 400,
     'stop_if_not_training': False,

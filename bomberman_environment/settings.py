@@ -25,7 +25,7 @@ settings = {
     'grid_size': 30,
     #'crate_density': 0.75,
     # For task one no creates are required
-    'crate_density': 0,
+    'crate_density': 0.2,
     'actions': ['LEFT', 'RIGHT', 'UP', 'DOWN', 'WAIT', 'BOMB'],
     'max_agents': 4,
     'max_steps': 400,

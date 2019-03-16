@@ -6,7 +6,7 @@ from agent_code.observation_object import ObservationObject
 from state_functions.rewards import *
 from Q.manage_training_data import *
 
-def q_train_from_games_jakob(train_data, write_path, obs:ObservationObject, a = 0.8, g = 0.8, START = 176):
+def q_train_from_games_jakob(train_data, write_path, obs:ObservationObject, a = 0.5, g = 0.6, START = 176):
     """
     Trains from all files in a directory using an existing q- and observation-table under write_path.
 
@@ -69,8 +69,13 @@ def q_train_from_games_jakob(train_data, write_path, obs:ObservationObject, a = 
             step_observations = obs.create_observation(living_players)
 
             for count, observation in enumerate(step_observations):
+                # print(observation)
+                #print("-----")
+                #print(observation)
+                #print(these_actions)
 
                 findings = np.where((KNOWN == np.array([observation])).all(axis=1))[0]
+
                 if findings.shape[0] > 0:
 
                     candidates, rotations_current = get_transformations(observation, obs.radius,
@@ -88,6 +93,9 @@ def q_train_from_games_jakob(train_data, write_path, obs:ObservationObject, a = 
                     KNOWN = np.concatenate(np.array([KNOWN, new_obs]))
                     QTABLE = np.append(QTABLE, np.zeros([n_new_indices, QTABLE.shape[1]]), axis=0)
                     index_current = np.arange(KNOWN.shape[0] - n_new_indices, KNOWN.shape[0])
+
+                   # print(new_obs)
+
 
                 if ind > 0:
                     for i in range(last_index[living_players[count]][0].shape[0]):
@@ -121,7 +129,7 @@ def get_transformations(obs, radius, direction_sensitive):
     # the 0. position
 
     transformations = np.array(
-        [[2, 3, 0, 1], [0, 1, 3, 2], [1, 0, 2, 3], [3, 2, 0, 1], [2, 3, 1, 0], [1, 0, 3, 2], [3, 2, 1, 0]])
+        [[2, 3, 0, 1], [1, 0, 2, 3], [0, 1, 3, 2], [3, 2, 0, 1], [2, 3, 1, 0], [1, 0, 3, 2], [3, 2, 1, 0]])
 
     all_transformed = np.zeros([7, new_rest.shape[0]])
     direction_change = np.zeros([8, 6])

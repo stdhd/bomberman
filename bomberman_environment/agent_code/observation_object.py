@@ -361,15 +361,15 @@ class ObservationObject:
         (best_step) = self._look_for_targets(free_space, (x, y), coins_coords, None)
 
         # move left
-        if best_step == (x-1,y): return 1
+        if best_step == (x-1,y): return 0
         # move right
-        if best_step == (x+1,y): return 2
+        if best_step == (x+1,y): return 1
         # move up
-        if best_step == (x,y-1): return 3
+        if best_step == (x,y-1): return 2
         # move down
-        if best_step == (x,y+1): return 4
+        if best_step == (x,y+1): return 3
         # Something is wrong
-        if best_step == (x,y): return 5
+        else: return 4
 
     def closest_foe_dist(self):
         """

@@ -20,7 +20,7 @@ def setup(self):
     self.discount = 0.7
     self.epsilon = -1
     self.train_flag = False
-    self.obs_object = ObservationObject(2,self.logger, ['d_closest_coin_dir'])
+    self.obs_object = ObservationObject(1, self.logger, ['d_closest_coin_dir'])
     # Used for plotting
     self.total_steps_over_episodes = 0
     self.total_deaths_over_episodes = 0
@@ -74,6 +74,7 @@ def act(self):
     # self.logger.info(f'BOMBS: {bombs}')
     self.obs_object.set_state(derive_state_representation(self, "ACT"))
     observation = self.obs_object.create_observation(np.array([int(0)]))[0]
+    print(observation)
     # observation = np.delete(observation, [0])
     self.old_observation = observation
     # self.logger.info(f'self: {[x, y]}')
@@ -120,7 +121,10 @@ def act(self):
         # If observation_db has entry the action with the highest value is chosen.
         elif observation_ind.shape[0] != 0:
             print("KNOWN observation")
+            # print(self.observation_db[observation_ind[0]])
+            # print(self.observation_db[observation_ind])
             self.last_action_ind = np.random.choice(np.flatnonzero(self.q_table[observation_ind[0]] == self.q_table[observation_ind[0]].max()))
+            # print(self.q_table[observation_ind[0]])
         # If test mode and observation_db has no entry
         else:
             # TODO: regression

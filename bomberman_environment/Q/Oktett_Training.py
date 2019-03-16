@@ -63,8 +63,11 @@ def q_train_from_games_jakob(train_data, write_path, obs:ObservationObject, a = 
                 actions_taken = np.append(actions_taken, step_state[int(START + 11 + player * 21)])
                 these_actions[player] = np.argmax(actions_taken)
 
-            obs.set_state(step_state)
+                if actions_taken[np.where(actions_taken != 0)].shape[0] != 1:
+                    print("Warning: Incorrect number of actions taken in one step for player index", player, "in step"
+                    " number", ind, "in file", file)
 
+            obs.set_state(step_state)
 
             living_players = np.arange(4)[np.where(obs.player_locs != 0)]
             step_observations = obs.create_observation(living_players)

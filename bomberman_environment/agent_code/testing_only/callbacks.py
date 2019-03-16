@@ -120,11 +120,14 @@ def act(self):
             self.last_q_ind = self.q_table.shape[0] - 1
         # If observation_db has entry the action with the highest value is chosen.
         elif observation_ind.shape[0] != 0:
+            print("---")
             print("KNOWN observation")
-            # print(self.observation_db[observation_ind[0]])
+            print(self.observation_db[observation_ind[0]])
             # print(self.observation_db[observation_ind])
+            print('LEFT', 'RIGHT', 'UP', 'DOWN', 'WAIT', 'BOMB')
+            print(self.q_table[observation_ind[0]])
             self.last_action_ind = np.random.choice(np.flatnonzero(self.q_table[observation_ind[0]] == self.q_table[observation_ind[0]].max()))
-            # print(self.q_table[observation_ind[0]])
+
         # If test mode and observation_db has no entry
         else:
             # TODO: regression

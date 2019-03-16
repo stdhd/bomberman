@@ -50,7 +50,7 @@ def main():
     save_path = 'data/games/one_player_only_coins/'
     world = BombeRLeWorld([
     
-            ('simple_agent', False),
+            ('random_agent', False),
             #('simple_agent', False),
             #('simple_agent', False),
             #('simple_agent', False)

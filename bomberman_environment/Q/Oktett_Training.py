@@ -65,11 +65,12 @@ def q_train_from_games_jakob(train_data, write_path, obs:ObservationObject, a = 
 
             obs.set_state(step_state)
 
+
             living_players = np.arange(4)[np.where(obs.player_locs != 0)]
             step_observations = obs.create_observation(living_players)
 
             for count, observation in enumerate(step_observations):
-                # print(observation)
+                #print(observation)
                 #print("-----")
                 #print(observation)
                 #print(these_actions)
@@ -94,7 +95,9 @@ def q_train_from_games_jakob(train_data, write_path, obs:ObservationObject, a = 
                     QTABLE = np.append(QTABLE, np.zeros([n_new_indices, QTABLE.shape[1]]), axis=0)
                     index_current = np.arange(KNOWN.shape[0] - n_new_indices, KNOWN.shape[0])
 
-                   # print(new_obs)
+                    #print(new_obs)
+                    #print("-----")
+
 
 
                 if ind > 0:
@@ -105,12 +108,15 @@ def q_train_from_games_jakob(train_data, write_path, obs:ObservationObject, a = 
                         QTABLE[int(l_ind), int(l_rot[int(last_actions[living_players[count]])])] = (1 - a) *  \
                         QTABLE[int(l_ind), int(l_rot[int(last_actions[living_players[count]])])] +\
                         a * (get_reward(step_state, living_players[count]) + g * best_choice_current_state)
+                        abc = 123
 
                 last_index[living_players[count]] = (index_current, rotations_current)
 
         add_to_trained(write_path+"/records.json", file)  # update json table
 
         print("Trained with file", file)
+        #print(KNOWN)
+        #print(QTABLE)
 
         np.save(write_path + '/observation-' + filename, KNOWN)
         np.save(write_path + '/q_table-' + filename, QTABLE)

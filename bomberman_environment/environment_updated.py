@@ -38,7 +38,6 @@ class BombeRLeWorld(object):
         self.round = 0
         self.running = False
         self.ready_for_restart_flag = mp.Event()
-        self.new_round()
 
         # state saving attributes
 
@@ -47,6 +46,7 @@ class BombeRLeWorld(object):
             else x_y_to_index(s.cols - 3, s.rows - 2, s.cols, s.rows)  # number of free states (used to reserve memory)
         self.free_grids = int(self.free_grids)
         self.save_list = []
+        self.new_round()
 
 
     def capture_state(self):
@@ -215,6 +215,7 @@ class BombeRLeWorld(object):
             }
 
         self.running = True
+        self.capture_state()
 
 
     def add_agent(self, agent_dir, name, train=False):

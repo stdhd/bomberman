@@ -19,14 +19,16 @@ def setup(self):
     self.learning_rate = 0.4
     self.discount = 0.7
     self.epsilon = 0.2
-    self.train_flag = False
-    self.obs_object = ObservationObject(0, ["closest_coin_dir"], self.logger)
+    self.train_flag = True
+    # self.obs_object = ObservationObject(1, ["closest_coin_dir", "closest_safe_field_dir"], self.logger)
+    self.obs_object = ObservationObject(1, ["closest_coin_dir", "closest_safe_field_dir"], self.logger)
     # Used for plotting
     self.total_steps_over_episodes = 0
     self.total_deaths_over_episodes = 0
     self.number_of_episode = 0
 
-    observation_size = self.obs_object.get_observation_size() - 1 #cut out field radius
+    observation_size = self.obs_object.get_observation_size() #cut out field 
+    self.logger.info(f'observation_size: {observation_size}')
     # Zx6 array with actions ['UP', 'DOWN', 'LEFT', 'RIGHT', 'BOMB', 'WAIT']
     filename = self.obs_object.get_file_name_string()
 
@@ -44,7 +46,7 @@ def setup(self):
         self.observation_db = np.load(os.path.join('agent_code', 'merged_agent', 'observation-' + filename + '.npy'))
         self.logger.debug('LOADED Obs')
     except:
-        self.observation_db = np.empty([0,observation_size])
+        self.observation_db = np.empty([0, observation_size])
         if self.observation_db.shape[1] != observation_size:
             raise Exception('observation_db size does not fit') 
 
@@ -74,10 +76,9 @@ def act(self):
     # self.logger.info(f'BOMBS: {bombs}')
     self.obs_object.set_state(derive_state_representation(self, "ACT"))
     observation = self.obs_object.create_observation(np.array([int(0)]))[0]
-    observation = np.delete(observation, [0])
     self.old_observation = observation
     # self.logger.info(f'self: {[x, y]}')
-    # self.logger.info(f'Observation: {observation}')
+    self.logger.info(f'Observation: {observation}')
     
 
     # Search for state in observation_db
@@ -138,24 +139,23 @@ def reward_update(self):
     # self.logger.debug(f'Encountered {len(self.events)} game event(s)')
     # self.logger.info(f'Events: {self.events}')
 
-    # arena = self.game_state['arena']
-    # x, y, _, _, _ = self.game_state['self']
-    # coins = np.array(self.game_state['coins'])
-    # # self.logger.info(f'Coins: {coins.any()}')
-    # bombs = self.game_state['bombs']
-    # # self.logger.info(f'BOMBSReward: {bombs}')
-    # self.obs_object.set_state(derive_state_representation(self, "REWARD"))
-    # observation = self.obs_object.create_observation(np.array([0]))[0]
-    # observation = np.delete(observation, [0])
-    # warnings.simplefilter(action='ignore', category=FutureWarning)
-    # observation_ind = np.where((self.observation_db == observation).all(axis=1))[0]
-    # if observation_ind.shape[0] == 0:
-    #     current_best_value = 0
-    # else:
-    #     current_best_value = self.q_table[observation_ind].max()
-    # reward = getReward(self.events, self.old_observation)
-    # self.q_table[self.last_q_ind, self.last_action_ind] = (1-self.learning_rate) * self.q_table[self.last_q_ind, self.last_action_ind] \
-    #                                                             + self.learning_rate * (reward + self.discount * current_best_value)
+    arena = self.game_state['arena']
+    x, y, _, _, _ = self.game_state['self']
+    coins = np.array(self.game_state['coins'])
+    # self.logger.info(f'Coins: {coins.any()}')
+    bombs = self.game_state['bombs']
+    # self.logger.info(f'BOMBSReward: {bombs}')
+    self.obs_object.set_state(derive_state_representation(self, "REWARD"))
+    observation = self.obs_object.create_observation(np.array([0]))[0]
+    warnings.simplefilter(action='ignore', category=FutureWarning)
+    observation_ind = np.where((self.observation_db == observation).all(axis=1))[0]
+    if observation_ind.shape[0] == 0:
+        current_best_value = 0
+    else:
+        current_best_value = self.q_table[observation_ind].max()
+    reward = getReward(self.events, self.old_observation)
+    self.q_table[self.last_q_ind, self.last_action_ind] = (1-self.learning_rate) * self.q_table[self.last_q_ind, self.last_action_ind] \
+                                                                + self.learning_rate * (reward + self.discount * current_best_value)
 
 def end_of_episode(self):
     """Called at the end of each game to hand out final rewards and do training.
@@ -165,10 +165,10 @@ def end_of_episode(self):
     final step. You should place your actual learning code in this method.
     """
     # Do the same as in reward_update
-    # reward_update(self)
+    reward_update(self)
     filename = self.obs_object.get_file_name_string()
-    # np.save(os.path.join('agent_code', 'merged_agent', 'observation-' + filename), self.observation_db)
-    # np.save(os.path.join('agent_code', 'merged_agent', 'q_table-' + filename), self.q_table)
+    np.save(os.path.join('agent_code', 'merged_agent', 'observation-' + filename), self.observation_db)
+    np.save(os.path.join('agent_code', 'merged_agent', 'q_table-' + filename), self.q_table)
     self.total_steps_over_episodes += self.game_state['step']
     if 13 in self.events or 14 in self.events: self.total_deaths_over_episodes += 1
     self.number_of_episode +=1
@@ -199,10 +199,10 @@ def getReward(events, old_observation):
         #     if old_observation[9] == 4: reward += 5
         # else:
             reward -= 1
-    if 4 in events: reward -= 10 # Waited
+    if 4 in events: reward -= -50 # Waited
     if 5 in events: reward -= 0 # Interrupted 
     if 6 in events: reward -= 500 # Invalid action
-    if 7 in events: reward -= 500 # Bomb dropped
+    if 7 in events: reward -= 0 # Bomb dropped
     if 8 in events: reward += 0 # Bomb exploded
     if 9 in events: reward += 0 # Crate destroyed
     if 10 in events: reward += 0 # Coin found

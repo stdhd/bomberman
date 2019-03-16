@@ -73,16 +73,16 @@ def q_train_from_games_jakob(train_data, write_path, obs:ObservationObject, a = 
 
             for count, observation in enumerate(step_observations):
 
-                # findings = np.where((KNOWN == np.array([observation])).all(axis=1))[0]  # FIXME use sorted search
-
                 findings = np.searchsorted(KNOWN, observation)
 
-                # if findings.shape[0] > 0:
-
-                if np.array_equal(KNOWN[findings],  observation):  # if we were able to locate the observation in the table
+                if KNOWN.shape[0] > 0 and np.array_equal(KNOWN[findings],  observation):  # if we were able to locate the observation in the table
 
                     candidates, rotations_current = get_transformations(observation, obs.radius,
                                                      obs.get_direction_sensitivity())
+
+                    sort = np.argsort(candidates)
+                    candidates = candidates[sort]
+                    rotations_current = rotations_current[sort]
 
                     index_current = np.zeros(8)
 
@@ -97,21 +97,17 @@ def q_train_from_games_jakob(train_data, write_path, obs:ObservationObject, a = 
 
                         index_current[ind] = cand_pos
 
-                        # temp = np.where((KNOWN == np.array([cand])).all(axis=1))[0]  # FIXME use sorted search
-                        # if temp.shape[0] > 0:
-                        #     index_current = np.append(index_current, temp[0])
-
                 else:  # we were unable to find the observation
                     new_obs, rotations_current = get_transformations(observation, obs.radius, obs.get_direction_sensitivity())
-                    n_new_indices = new_obs.shape[0]
+                    sort = np.argsort(new_obs)
+                    new_obs = new_obs[sort]
+                    rotations_current = rotations_current[sort]
 
+                    n_new_indices = new_obs.shape[0]
                     insertion_points = np.array([np.searchsorted(KNOWN, obs) for obs in new_obs])
 
                     KNOWN = np.insert(KNOWN, insertion_points, new_obs)
-                    # KNOWN = np.concatenate(np.array([KNOWN, new_obs]))  # FIXME Insert
-                    # QTABLE = np.append(QTABLE, np.zeros([n_new_indices, QTABLE.shape[1]]), axis=0)  # FIXME Insert
                     QTABLE = np.insert(QTABLE, insertion_points, np.zeros((n_new_indices, QTABLE.shape[1])))
-                    #index_current = np.arange(KNOWN.shape[0] - n_new_indices, KNOWN.shape[0])  # FIXME use insertion points
 
                     index_current = np.array([ind + i for (ind, i) in zip(insertion_points, range(n_new_indices))])
 

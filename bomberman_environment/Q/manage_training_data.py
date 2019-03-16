@@ -19,7 +19,6 @@ def is_trained(records_file, train_data_file):
     try:
         file = open(records_file, 'r')
         records = json.load(file)
-        pass
         if train_data_file in records:
             return True
         return False
@@ -54,5 +53,36 @@ def add_to_trained(records_file, train_data_file):
 
 
 
+def get_index(index_file):
+    """
+    Access the current active length of the Q- and observation tables.
+    :param index_file: Filename with index record
+    :return:
+    """
 
+    try:
+        file = open(index_file, 'r')
+        index = json.load(file)
+        file.close()
+        return index
+    except:
+        print("json file", index_file, "empty, initializing with index = 1.")
+        file = open(index_file, 'w')
+        json.dump(1, file)
+        file.close()
+        return 1
 
+def set_index(index_file, new_index_value):
+
+    """
+    Set the index value to a new value.
+    :param index_file: Filename with index record
+    :param new_index_value: New value to update with
+    :return:
+    """
+
+    f = open(index_file, "w")
+
+    json.dump(new_index_value, f)
+
+    f.close()

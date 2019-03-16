@@ -6,7 +6,7 @@ from agent_code.observation_object import ObservationObject
 from state_functions.rewards import *
 from Q.manage_training_data import *
 
-def q_train_from_games_jakob(train_data, write_path, obs:ObservationObject, a = 0.5, g = 0.6, START = 176):
+def q_train_from_games_jakob(train_data, write_path, obs:ObservationObject, a = 0.5, g = 0.6):
     """
     Trains from all files in a directory using an existing q- and observation-table under write_path.
 
@@ -21,7 +21,6 @@ def q_train_from_games_jakob(train_data, write_path, obs:ObservationObject, a = 
     :param obs Observation Object containing training settings (view radius etc.)
     :param a alpha (learning rate)
     :param g gamma (discount)
-    :param START number of free grids in board
     :return:
     """
 
@@ -56,29 +55,25 @@ def q_train_from_games_jakob(train_data, write_path, obs:ObservationObject, a = 
 
         for ind, step_state in enumerate(game):
 
+            obs.set_state(step_state)
+            living_players = np.arange(4)[np.where(obs.player_locs != 0)]
+
             last_actions = these_actions.astype(int)
-            pass
+
             for player in range(4):
-                actions_taken = step_state[int(START + 4 + player * 21): int(START + 9 + player * 21)]
-                actions_taken = np.append(actions_taken, step_state[int(START + 11 + player * 21)])
+                actions_taken = step_state[int(obs.board.shape[0] + 4 + player * 21): int(obs.board.shape[0] + 9 + player * 21)]
+                actions_taken = np.append(actions_taken, step_state[int(obs.board.shape[0] + 11 + player * 21)])
                 these_actions[player] = np.argmax(actions_taken)
 
-                if actions_taken[np.where(actions_taken != 0)].shape[0] != 1:
+                if ind != 0 and player in living_players and actions_taken[np.where(actions_taken != 0)].shape[0] != 1:
                     print("Warning: Incorrect number of actions taken in one step for player index", player, "in step"
                     " number", ind, "in file", file)
 
-            obs.set_state(step_state)
-
-            living_players = np.arange(4)[np.where(obs.player_locs != 0)]
             step_observations = obs.create_observation(living_players)
 
             for count, observation in enumerate(step_observations):
-                #print(observation)
-                #print("-----")
-                #print(observation)
-                #print(these_actions)
 
-                findings = np.where((KNOWN == np.array([observation])).all(axis=1))[0]
+                findings = np.where((KNOWN == np.array([observation])).all(axis=1))[0]  # FIXME use sorted search
 
                 if findings.shape[0] > 0:
 
@@ -87,21 +82,16 @@ def q_train_from_games_jakob(train_data, write_path, obs:ObservationObject, a = 
 
                     index_current = np.array([])
                     for cand in candidates:
-                        temp = np.where((KNOWN == np.array([cand])).all(axis=1))[0]
+                        temp = np.where((KNOWN == np.array([cand])).all(axis=1))[0]  # FIXME use sorted search
                         if temp.shape[0] > 0:
                             index_current = np.append(index_current, temp[0])
 
                 else:
                     new_obs, rotations_current = get_transformations(observation, obs.radius, obs.get_direction_sensitivity())
                     n_new_indices = new_obs.shape[0]
-                    KNOWN = np.concatenate(np.array([KNOWN, new_obs]))
-                    QTABLE = np.append(QTABLE, np.zeros([n_new_indices, QTABLE.shape[1]]), axis=0)
-                    index_current = np.arange(KNOWN.shape[0] - n_new_indices, KNOWN.shape[0])
-
-                    #print(new_obs)
-                    #print("-----")
-
-
+                    KNOWN = np.concatenate(np.array([KNOWN, new_obs]))  # FIXME Insert
+                    QTABLE = np.append(QTABLE, np.zeros([n_new_indices, QTABLE.shape[1]]), axis=0)  # FIXME Insert
+                    index_current = np.arange(KNOWN.shape[0] - n_new_indices, KNOWN.shape[0])  # FIXME use insertion points
 
                 if ind > 0:
                     for i in range(last_index[living_players[count]][0].shape[0]):
@@ -111,15 +101,12 @@ def q_train_from_games_jakob(train_data, write_path, obs:ObservationObject, a = 
                         QTABLE[int(l_ind), int(l_rot[int(last_actions[living_players[count]])])] = (1 - a) *  \
                         QTABLE[int(l_ind), int(l_rot[int(last_actions[living_players[count]])])] +\
                         a * (get_reward(step_state, living_players[count]) + g * best_choice_current_state)
-                        abc = 123
 
                 last_index[living_players[count]] = (index_current, rotations_current)
 
         add_to_trained(write_path+"/records.json", file)  # update json table
 
         print("Trained with file", file)
-        #print(KNOWN)
-        #print(QTABLE)
 
         np.save(write_path + '/observation-' + filename, KNOWN)
         np.save(write_path + '/q_table-' + filename, QTABLE)

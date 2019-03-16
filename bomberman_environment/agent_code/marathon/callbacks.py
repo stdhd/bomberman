@@ -166,5 +166,4 @@ def derive_state_representation(self):
 
             bomb_ind += 1
 
-
-    return state
+    return state.astype(int)

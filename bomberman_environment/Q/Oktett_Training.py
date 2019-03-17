@@ -108,6 +108,9 @@ def q_train_from_games_jakob(train_data, write_path, obs:ObservationObject, a = 
 
         print("Trained with file", file)
 
+        if not KNOWN.shape[0] % 8 == 0:
+            raise ValueError("Size of observation database must be product of 8*n")
+
         np.save(write_path + '/observation-' + filename, KNOWN)
         np.save(write_path + '/q_table-' + filename, QTABLE)
 

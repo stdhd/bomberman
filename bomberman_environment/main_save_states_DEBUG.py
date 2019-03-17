@@ -10,7 +10,7 @@ import numpy as np
 import multiprocessing as mp
 import threading
 
-from environment_updated import BombeRLeWorld, ReplayWorld
+from environment_updated_DEBUG import BombeRLeWorld, ReplayWorld
 from settings import s
 
 
@@ -47,10 +47,10 @@ def main():
     # Initialize environment and agents
 
     # for saving games
-    save_path = 'data/games/one_player_crates_new_random/'
+    save_path = 'data/games/one_player_coins_and_crates/'
     world = BombeRLeWorld([
     
-            ('random_agent', False),
+            ('simple_agent', False),
             #('simple_agent', False),
             #('simple_agent', False),
             #('simple_agent', False)

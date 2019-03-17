@@ -18,6 +18,7 @@ from items import *
 from settings import s, e
 
 from agent_code.merged_agent.indices import *
+from agent_code.observation_object import ObservationObject
 
 class BombeRLeWorld(object):
 
@@ -46,6 +47,8 @@ class BombeRLeWorld(object):
             else x_y_to_index(s.cols - 3, s.rows - 2, s.cols, s.rows)  # number of free states (used to reserve memory)
         self.free_grids = int(self.free_grids)
         self.save_list = []
+        self.window_list = []
+        self.observation_list = []
         self.new_round()
 
 
@@ -100,7 +103,15 @@ class BombeRLeWorld(object):
                 coin = int(state[ind] == 3)
                 state[ind] = -1 * 3**coin * 2**explosion_map[x,y]  # note explosions
 
+        obs = ObservationObject(1, None, [])
+        obs.set_state(state.astype(int))
+        arr = obs._make_window(8, 8, 8)
+        observations = obs.create_observation(np.array([0]))
+        events = obs._name_player_events()
+
         self.save_list.append(state.astype(int))
+        self.observation_list.append(observations)
+        self.window_list.append(arr)
 
     def setup_logging(self):
         self.logger = logging.getLogger('BombeRLeWorld')
@@ -454,7 +465,7 @@ class BombeRLeWorld(object):
             self.put_down_agent(a)
         self.explosions = [e for e in self.explosions if e.active]
 
-        self.capture_state()  #  FIXME capture state
+        self.capture_state()  # FIXME capture state
 
         if self.time_to_stop():
             self.end_round()

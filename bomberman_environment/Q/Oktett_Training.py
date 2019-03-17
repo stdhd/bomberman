@@ -71,6 +71,8 @@ def q_train_from_games_jakob(train_data, write_path, obs:ObservationObject, a = 
 
             step_observations = obs.create_observation(living_players)
 
+            window = obs._make_window(8, 8, 8)  # FIXME debug view
+
             for count, observation in enumerate(step_observations):
 
                 findings = np.where((KNOWN == np.array([observation])).all(axis=1))[0]  # FIXME use sorted search

@@ -15,13 +15,14 @@ def main():
     os.chdir(os.path.dirname(__file__))
     cwd = os.getcwd()
 
-    obs = ObservationObject(0, None, ['d_closest_coin_dir','d_closest_safe_field_dir'])
+    obs = ObservationObject(1, None, ['d_closest_coin_dir','d_closest_safe_field_dir'])
 
     write_path = 'data/qtables/' + obs.get_file_name_string()
+
     if not os.path.exists(write_path):
         os.makedirs(write_path)
 
-    KNOWN, Q = q_train_from_games_jakob(cwd + "/" + 'data/games/one_player_coins_and_crates/', write_path,
+    KNOWN, Q = q_train_from_games_jakob(cwd + "/" + 'data/games/one_player_crates_new_random/', write_path,
                                         obs, a=0.1)
 
 

@@ -20,7 +20,7 @@ def setup(self):
     self.discount = 0.7
     self.epsilon = -1
     self.train_flag = False
-    self.obs_object = ObservationObject(1, self.logger, ['d_closest_coin_dir'])
+    self.obs_object = ObservationObject(1, self.logger, ['d_closest_coin_dir','d_closest_safe_field_dir'])
     # Used for plotting
     self.total_steps_over_episodes = 0
     self.total_deaths_over_episodes = 0
@@ -74,7 +74,6 @@ def act(self):
     # self.logger.info(f'BOMBS: {bombs}')
     self.obs_object.set_state(derive_state_representation(self, "ACT"))
     observation = self.obs_object.create_observation(np.array([int(0)]))[0]
-    print(observation)
     # observation = np.delete(observation, [0])
     self.old_observation = observation
     # self.logger.info(f'self: {[x, y]}')

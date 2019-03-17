@@ -88,6 +88,13 @@ def act(self):
     in settings.py, execution is interrupted by the game and the current value
     of self.next_action will be used. The default value is 'WAIT'.
     """
+
+
+    if np.random.rand() <= 0.2:
+        self.next_action = np.random.choice(['RIGHT', 'LEFT', 'UP', 'DOWN', 'WAIT', 'BOMB'],
+                                             p=[.20, .20, .20, .20, .12,
+                                                .08])  # FIXME Modified to wait
+        return
     self.logger.info('Picking action according to rule set')
 
     # Gather information about the game state

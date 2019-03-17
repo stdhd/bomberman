@@ -215,7 +215,7 @@ class BombeRLeWorld(object):
             }
 
         self.running = True
-        self.capture_state()
+        self.capture_state()  # get state 0
 
 
     def add_agent(self, agent_dir, name, train=False):

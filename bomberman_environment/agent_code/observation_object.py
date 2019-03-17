@@ -1,6 +1,7 @@
 from agent_code.merged_agent.indices import *
 from random import shuffle
 import numpy as np
+import settings
 
 
 """
@@ -82,7 +83,7 @@ class ObservationObject:
 
         self.initialize_feature_helpers()
 
-    def create_observation(self, AGENTS):
+    def create_observation(self, AGENTS:np.array):
         """
         From state, view radius and list of players, return a list of observations.
         :param state: Game state
@@ -520,6 +521,21 @@ class ObservationObject:
 
         return self._determine_direction(best_step, x, y)
 
+    def _name_player_events(self):
+        """
+        Debugging function to return events from this state.
+        :return:
+        """
+        events = []
+
+        for i in range(4):
+            events.append([False for i in range(17)])
+            for j, count in enumerate(self.state[self.board.shape[0] + 4 + i * 21: self.board.shape[0] + 4 + i * 21 + 17]):
+                if count != 0:
+                    events[i][j] = True
+
+            events[i] = np.array(settings.events)[np.array(events[i])]
+        return events
 
 class _Player:
     """

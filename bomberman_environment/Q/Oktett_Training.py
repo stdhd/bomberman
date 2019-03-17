@@ -26,8 +26,8 @@ def q_train_from_games_jakob(train_data, write_path, obs:ObservationObject, a = 
 
     filename = obs.get_file_name_string()
     try:
-        QTABLE = np.load(write_path + '/q_table-' + filename)
-        KNOWN = np.load(write_path + '/observation-' + filename)
+        QTABLE = np.load(write_path + '/q_table-' + filename + '.npy')
+        KNOWN = np.load(write_path + '/observation-' + filename + '.npy')
     except:
         print("Error loading learned q table. using empty table instead.")
         QTABLE = np.zeros([0,6])
@@ -38,7 +38,7 @@ def q_train_from_games_jakob(train_data, write_path, obs:ObservationObject, a = 
 
         try:
             if is_trained(write_path+"/records.json", file):
-                print("Skipping known training datum", file, "in folder", write_path)
+                print("Skipping known training datum", file, "in folder", train_data)
                 continue
         except IOError:
             print("Error accessing .json records for file", file, "in folder", train_data)
@@ -70,6 +70,8 @@ def q_train_from_games_jakob(train_data, write_path, obs:ObservationObject, a = 
                     " number", ind, "in file", file)
 
             step_observations = obs.create_observation(living_players)
+
+            window = obs._make_window(8, 8, 8)  # FIXME debug view
 
             for count, observation in enumerate(step_observations):
 

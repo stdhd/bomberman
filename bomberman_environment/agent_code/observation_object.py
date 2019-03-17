@@ -125,10 +125,18 @@ class ObservationObject:
 
         lower_y = center_y - radius_custom
 
+        for player_loc in self.player_locs:
+            if player_loc > 0:
+                try:
+                    self.set_window(window, player_loc, center_x, center_y, radius_custom, 5)
+                except:
+                    continue
+
         for i in np.arange(window_size_custom):
             for j in np.arange(window_size_custom):
                 try:
                     window[i, j] = self.board[x_y_to_index(lower_x + i, lower_y + j) - 1]
+
                     if window[i, j] == 3:
                         window[i, j] = 0
                 except Exception as e:  # wall squares throw exception
@@ -140,14 +148,6 @@ class ObservationObject:
                     self.set_window(window, bomb_loc, center_x, center_y, radius_custom, 2)
                 else:
                     self.set_window(window, bomb_loc, center_x, center_y, radius_custom, 4)
-
-
-        for player_loc in self.player_locs:
-            if player_loc > 0:
-                try:
-                    self.set_window(window, player_loc, center_x, center_y, radius_custom, 5)
-                except:
-                    continue
 
         return window
 

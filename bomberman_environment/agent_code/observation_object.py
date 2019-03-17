@@ -128,24 +128,23 @@ class ObservationObject:
             for j in np.arange(window_size_custom):
                 try:
                     window[i, j] = self.board[x_y_to_index(lower_x + i, lower_y + j) - 1]
-
+                    if window[i, j] == 3:
+                        window[i, j] = 0
                 except Exception as e:  # wall squares throw exception
                     window[i, j] = -1
 
         for ind, bomb_loc in enumerate(self.bomb_locs):  # bombs have precedence over explosions
             if bomb_loc > 0:
-                self.set_window(window, bomb_loc, center_x, center_y, radius_custom, 2 ** self.bomb_timers[ind])
+                if self.bomb_timers[ind] == 1:
+                    self.set_window(window, bomb_loc, center_x, center_y, radius_custom, 2)
+                else:
+                    self.set_window(window, bomb_loc, center_x, center_y, radius_custom, 4)
+
 
         for player_loc in self.player_locs:
             if player_loc > 0:
                 try:
-                    location_value = self.get_window(window, *index_to_x_y(player_loc), radius_custom, center_x, center_y)
-
-                    if location_value > 0:  # if player is on a bomb, multiply bomb timer and player value
-                        self.set_window(window, player_loc, center_x, center_y, radius_custom, location_value * 5)
-
-                    else:  # else set field to player value
-                        self.set_window(window, player_loc, center_x, center_y, radius_custom, 5)
+                    self.set_window(window, player_loc, center_x, center_y, radius_custom, 5)
                 except:
                     continue
 
@@ -327,7 +326,7 @@ class ObservationObject:
         if best_step == (x,y+1): return 3 # move down
         if best_step == (x,y): return 4 # Something is wrong
         if best_step == None: return 5 # No targets exist.
-        return 7 # Something else is wrong
+        return 4 # Something else is wrong
 
     def me_has_bomb(self):
         """

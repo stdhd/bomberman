@@ -13,7 +13,7 @@ def main():
     :return:
     """
 
-    directory = 'data/games/one_player_only_coins'
+    directory = 'data/games/special_game'
 
     for file in [f for f in listdir(directory) if isfile(join(directory, f))]:
         # go through files

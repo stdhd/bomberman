@@ -20,7 +20,7 @@ def setup(self):
     self.discount = 0.7
     self.epsilon = -1
     self.train_flag = False
-    self.obs_object = ObservationObject(1, self.logger, ['d_closest_coin_dir','d_closest_safe_field_dir'])
+    self.obs_object = ObservationObject(0, self.logger, ['d_closest_coin_dir','d_closest_safe_field_dir','me_has_bomb'])
     # Used for plotting
     self.total_steps_over_episodes = 0
     self.total_deaths_over_episodes = 0
@@ -134,6 +134,8 @@ def act(self):
             self.last_action_ind = np.random.randint(0,6)
 
     self.next_action = ['LEFT', 'RIGHT', 'UP', 'DOWN', 'WAIT', 'BOMB'][self.last_action_ind]
+   # if self.total_steps_over_episodes == 0:
+    #    self.next_action = 'UP'
     print(self.next_action)
 
 def reward_update(self):
@@ -183,17 +185,25 @@ def derive_state_representation(self, where):
         state[ind] = 3
 
     for x in range(arena.shape[0] ):
-        if x == 0 or arena.shape[0] - 1:
-            continue
+        #if x == 0 or x == arena.shape[0] - 1:
+          #  continue
         for y in range(arena.shape[1]):
-            if y == 0 or arena.shape[1] - 1 or (x + 1) * (y + 1) % 2 == 1:
-                continue
-            ind = indices.x_y_to_index(x, y, s.cols, s.rows) - 1
-            coin = state[ind] == 3
-            if not coin:
-                state[ind] = arena[x, y]  # replace '17' with values from settings.py
-            if explosions[x, y] != 0:
-                state[ind] = -1 * 3**int(coin) * 2**explosions[x, y]
+
+            #if y == 0 or arena.shape[1] - 1 or (x + 1) * (y + 1) % 2 == 1:
+             #   continue
+            try:
+                ind = indices.x_y_to_index(x, y, s.cols, s.rows) - 1
+                coin = state[ind] == 3
+                if not coin:
+                    state[ind] = arena[x, y]  # replace '17' with values from settings.py
+
+                if arena[x, y] == 1:
+                    state[ind] = arena[x, y]
+
+                if explosions[x, y] != 0:
+                    state[ind] = -1 * 3 ** int(coin) * 2 ** explosions[x, y]
+            except:
+                pass
 
     startplayers = indices.x_y_to_index(15, 15, s.cols, s.rows)  # player blocks start here
     # self.logger.info(f'PLAYER BEFORE: {players, where}')

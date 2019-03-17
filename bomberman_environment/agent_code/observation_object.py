@@ -325,8 +325,8 @@ class ObservationObject:
         if best_step == (x+1,y): return 1 # move right
         if best_step == (x,y-1): return 2 # move up
         if best_step == (x,y+1): return 3 # move down
-        if best_step == (x,y): return 4 # Something is wrong
-        if best_step == None: return 5 # No targets exist.
+        # if best_step == (x,y): return 4 # Something is wrong
+        # if best_step == None: return 5 # No targets exist.
         return 4 # Something else is wrong
 
     def me_has_bomb(self):
@@ -470,6 +470,12 @@ class ObservationObject:
         """
         player = self.player
         return self._get_path_dir(self.player_locs[player.player_index], self.player_locs[player.closest_coin])
+
+
+    def d_closest_safe_state_dirNEW(self):
+        # TODO
+        pass
+
 
     def d_closest_safe_field_dir(self):
         """

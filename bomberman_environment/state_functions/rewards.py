@@ -12,7 +12,7 @@ def get_reward(state, player_index):
     :return: Reward
     """
     debug_mode = False
-    rewards = {'INVALID_ACTION': -1000,
+    rewards = {'INVALID_ACTION': -5000,
             'KILLED_OPPONENT': 500,
             'KILLED_SELF': -2000,
             'COIN_COLLECTED': 600,

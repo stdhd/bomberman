@@ -146,7 +146,7 @@ class ObservationObject:
 
         for ind, bomb_loc in enumerate(self.bomb_locs):  # bombs have precedence over explosions
             if bomb_loc > 0:
-                if self.bomb_timers[ind] == 1:
+                if self.bomb_timers[ind] <= 1:
                     self.set_window(window, bomb_loc, center_x, center_y, radius_custom, 2)
                 else:
                     self.set_window(window, bomb_loc, center_x, center_y, radius_custom, 4)

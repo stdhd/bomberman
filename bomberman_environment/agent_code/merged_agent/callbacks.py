@@ -1,7 +1,7 @@
 import numpy as np
 import warnings
 from random import shuffle
-from agent_code.merged_agent import indices
+from state_functions import indices
 from agent_code.observation_object import ObservationObject
 import os
 

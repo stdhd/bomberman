@@ -1,5 +1,4 @@
-from agent_code.merged_agent.indices import *
-from os import listdir, getcwd
+from os import listdir
 from os.path import isfile, join
 
 from agent_code.observation_object import ObservationObject
@@ -51,7 +50,6 @@ def q_train_from_games_jakob(train_data, write_path, obs:ObservationObject, a = 
         except OSError:
             print("Skipping " + file + ". Is it a .npy file?")
             continue
-
 
         last_index = [None, None, None, None]
 

@@ -141,7 +141,7 @@ class ObservationObject:
 
                     if window[i, j] == 3:
                         window[i, j] = 0
-                except Exception as e:  # wall squares throw exception
+                except ValueError as e:  # wall squares throw exception
                     window[i, j] = -1
 
         for ind, bomb_loc in enumerate(self.bomb_locs):  # bombs have precedence over explosions

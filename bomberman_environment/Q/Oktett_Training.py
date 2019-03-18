@@ -23,7 +23,7 @@ def q_train_from_games_jakob(train_data, write_path, obs:ObservationObject, a = 
     :return:
     """
 
-    debug_mode = True
+    debug_mode = False
     filename = obs.get_file_name_string()
     try:
         QTABLE = np.load(write_path + '/q_table-' + filename + '.npy')
@@ -52,11 +52,15 @@ def q_train_from_games_jakob(train_data, write_path, obs:ObservationObject, a = 
             continue
 
         last_index = [None, None, None, None]
+        old_locs = np.array([0,0,0,0])
 
         for ind, step_state in enumerate(game):
 
             obs.set_state(step_state)
+            # living_players = np.arange(4)[np.where(obs.player_locs != 0 | ((old_locs != 0) & (obs.player_locs == 0)))]
             living_players = np.arange(4)[np.where(obs.player_locs != 0)]
+            # living_players = np.arange(4)[np.where(obs.player_locs != 0 | (obs.player_locs == 0 and old_locs != 0))]
+            #old_locs = obs.player_locs
             last_actions = np.zeros(4)
 
             for player in range(4):
@@ -67,6 +71,7 @@ def q_train_from_games_jakob(train_data, write_path, obs:ObservationObject, a = 
                 if ind != 0 and player in living_players and actions_taken[np.where(actions_taken != 0)].shape[0] != 1:
                     print("Warning: Incorrect number of actions taken in one step for player index", player, "in step"
                     " number", ind, "in file", file)
+
 
             step_observations = obs.create_observation(living_players)
 
@@ -105,12 +110,14 @@ def q_train_from_games_jakob(train_data, write_path, obs:ObservationObject, a = 
 
                         QUANTITY[int(l_ind), rotated_action] += 1
 
-                        # if i == 0 and reward != -3 and debug_mode:
-                        #     print("-----")
-                        #     print("DID: " + str(rotated_action))
-                        #     print("Reward: " + str(reward))
+                        if i == 0 and reward != -3 and debug_mode:
+                            print("-----")
+                            print("DID: " + str(rotated_action))
+                            print("Reward: " + str(reward))
 
                 last_index[living_players[count]] = (index_current, rotations_current)
+
+
 
         add_to_trained(write_path+"/records.json", file)  # update json table
 

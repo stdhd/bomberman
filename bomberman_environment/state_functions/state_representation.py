@@ -28,28 +28,25 @@ def derive_state_representation(self):
 
     me = self.game_state['self']
 
+
+    for x in range(arena.shape[0]):
+        if x != 0 and x != arena.shape[0] - 1:
+            for y in range(arena.shape[1]):
+                if y != 0 and y != arena.shape[1] - 1 and (x + 1) * (y + 1) % 2 != 1:
+
+                    ind = x_y_to_index(x, y, s.cols, s.rows) - 1
+                    coin = state[ind] == 3
+                    #if not coin:
+                    state[ind] = arena[x, y]  # either crates or empty space
+
+                    if explosions[x, y] != 0:
+                        state[ind] = -1 * 3 ** int(coin) * 2 ** explosions[x, y]
+
+
     for x, y in coins:
         ind = x_y_to_index(x, y, s.cols, s.rows) - 1
 
         state[ind] = 3
-
-    for x in range(arena.shape[0]):
-        if x == 0 or arena.shape[0] - 1:
-            continue
-        for y in range(arena.shape[1]):
-            if y == 0 or arena.shape[1] - 1 or (x + 1) * (y + 1) % 2 == 1:
-                continue
-
-            ind = x_y_to_index(x, y, s.cols, s.rows) - 1
-
-            coin = state[ind] == 3
-
-            #if not coin:
-            state[ind] = arena[x, y]  # either crates or empty space
-
-            if explosions[x, y] != 0:
-                state[ind] = -1 * 3 ** int(coin) * 2 ** explosions[x, y]
-
     startplayers = x_y_to_index(15, 15, s.cols, s.rows)  # player blocks start here
 
     players.insert(0, me)

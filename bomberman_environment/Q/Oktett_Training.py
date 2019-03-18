@@ -6,7 +6,7 @@ from agent_code.observation_object import ObservationObject
 from state_functions.rewards import *
 from Q.manage_training_data import *
 
-def q_train_from_games_jakob(train_data, write_path, obs:ObservationObject, a = 0.5, g = 0.6):
+def q_train_from_games_jakob(train_data, write_path, obs:ObservationObject, a = 0.8, g = 0.8):
     """
     Trains from all files in a directory using an existing q- and observation-table under write_path.
 
@@ -24,13 +24,16 @@ def q_train_from_games_jakob(train_data, write_path, obs:ObservationObject, a = 
     :return:
     """
 
+    debug_mode = False
     filename = obs.get_file_name_string()
     try:
         QTABLE = np.load(write_path + '/q_table-' + filename + '.npy')
         KNOWN = np.load(write_path + '/observation-' + filename + '.npy')
+        QUANTITY = np.load(write_path + '/quantity-' + filename + '.npy')
     except:
         print("Error loading learned q table. using empty table instead.")
         QTABLE = np.zeros([0,6])
+        QUANTITY = np.zeros([0,6])
         KNOWN = np.zeros([0, obs.obs_length])
 
     for file in [f for f in listdir(train_data) if isfile(join(train_data, f))]:
@@ -49,7 +52,6 @@ def q_train_from_games_jakob(train_data, write_path, obs:ObservationObject, a = 
             print("Skipping " + file + ". Is it a .npy file?")
             continue
 
-        these_actions = np.zeros(4)
 
         last_index = [None, None, None, None]
 
@@ -57,13 +59,12 @@ def q_train_from_games_jakob(train_data, write_path, obs:ObservationObject, a = 
 
             obs.set_state(step_state)
             living_players = np.arange(4)[np.where(obs.player_locs != 0)]
-
-            last_actions = these_actions.astype(int)
+            last_actions = np.zeros(4)
 
             for player in range(4):
                 actions_taken = step_state[int(obs.board.shape[0] + 4 + player * 21): int(obs.board.shape[0] + 9 + player * 21)]
                 actions_taken = np.append(actions_taken, step_state[int(obs.board.shape[0] + 11 + player * 21)])
-                these_actions[player] = np.argmax(actions_taken)
+                last_actions[player] = np.argmax(actions_taken)
 
                 if ind != 0 and player in living_players and actions_taken[np.where(actions_taken != 0)].shape[0] != 1:
                     print("Warning: Incorrect number of actions taken in one step for player index", player, "in step"
@@ -71,11 +72,11 @@ def q_train_from_games_jakob(train_data, write_path, obs:ObservationObject, a = 
 
             step_observations = obs.create_observation(living_players)
 
-            window = obs._make_window(8, 8, 8)  # FIXME debug view
+            window = obs._make_window(8, 8, 8)
 
             for count, observation in enumerate(step_observations):
 
-                findings = np.where((KNOWN == np.array([observation])).all(axis=1))[0]  # FIXME use sorted search
+                findings = np.where((KNOWN == np.array([observation])).all(axis=1))[0]
 
                 if findings.shape[0] > 0:
 
@@ -84,25 +85,34 @@ def q_train_from_games_jakob(train_data, write_path, obs:ObservationObject, a = 
 
                     index_current = np.array([])
                     for cand in candidates:
-                        temp = np.where((KNOWN == np.array([cand])).all(axis=1))[0]  # FIXME use sorted search
+                        temp = np.where((KNOWN == np.array([cand])).all(axis=1))[0]
                         if temp.shape[0] > 0:
                             index_current = np.append(index_current, temp[0])
 
                 else:
                     new_obs, rotations_current = get_transformations(observation, obs.radius, obs.get_direction_sensitivity())
                     n_new_indices = new_obs.shape[0]
-                    KNOWN = np.concatenate(np.array([KNOWN, new_obs]))  # FIXME Insert
-                    QTABLE = np.append(QTABLE, np.zeros([n_new_indices, QTABLE.shape[1]]), axis=0)  # FIXME Insert
-                    index_current = np.arange(KNOWN.shape[0] - n_new_indices, KNOWN.shape[0])  # FIXME use insertion points
+                    KNOWN = np.concatenate(np.array([KNOWN, new_obs]))
+                    QTABLE = np.append(QTABLE, np.zeros([n_new_indices, QTABLE.shape[1]]), axis=0)
+                    QUANTITY = np.append(QUANTITY, np.zeros([n_new_indices, QTABLE.shape[1]]), axis=0)
+                    index_current = np.arange(KNOWN.shape[0] - n_new_indices, KNOWN.shape[0])
 
                 if ind > 0:
                     for i in range(last_index[living_players[count]][0].shape[0]):
                         l_ind, l_rot = last_index[living_players[count]][0][i], last_index[living_players[count]][1][i]
                         best_choice_current_state = np.max(QTABLE[int(index_current[0])])
+                        reward = get_reward(step_state, living_players[count])
+                        rotated_action = np.where(l_rot == last_actions[living_players[count]])[0][0]
+                        QTABLE[int(l_ind), rotated_action] = (1 - a) *  \
+                        QTABLE[int(l_ind), rotated_action] +\
+                        a * (reward + g * best_choice_current_state)
 
-                        QTABLE[int(l_ind), int(l_rot[int(last_actions[living_players[count]])])] = (1 - a) *  \
-                        QTABLE[int(l_ind), int(l_rot[int(last_actions[living_players[count]])])] +\
-                        a * (get_reward(step_state, living_players[count]) + g * best_choice_current_state)
+                        QUANTITY[int(l_ind), rotated_action] += 1
+
+                        if i == 0 and reward != -3 and debug_mode:
+                            print("-----")
+                            print("DID: " + str(rotated_action))
+                            print("Reward: " + str(reward))
 
                 last_index[living_players[count]] = (index_current, rotations_current)
 
@@ -115,6 +125,7 @@ def q_train_from_games_jakob(train_data, write_path, obs:ObservationObject, a = 
 
         np.save(write_path + '/observation-' + filename, KNOWN)
         np.save(write_path + '/q_table-' + filename, QTABLE)
+        np.save(write_path + '/quantity-' + filename, QUANTITY)
 
     return KNOWN, QTABLE
 
@@ -139,6 +150,8 @@ def get_transformations(obs, radius, direction_sensitive):
         all_transformed[i][new_rest == 1] = transformations[i, 1]
         all_transformed[i][new_rest == 2] = transformations[i, 2]
         all_transformed[i][new_rest == 3] = transformations[i, 3]
+        all_transformed[i][new_rest == 4] = 4
+        all_transformed[i][new_rest == 5] = 5
 
     transformed_rest = np.zeros([7, new_rest.shape[0]])
     results = np.zeros([8, obs.shape[0]])

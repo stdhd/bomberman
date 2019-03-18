@@ -11,13 +11,14 @@ def get_reward(state, player_index):
     :param player_index: Player index in array (0 to 3)
     :return: Reward
     """
-
-    rewards = {'INVALID_ACTION': -200,
+    debug_mode = False
+    rewards = {'INVALID_ACTION': -5000,
             'KILLED_OPPONENT': 500,
-            'KILLED_SELF': -800,
-            'COIN_COLLECTED': 100,
-            'WAITED': -20,
-               'CRATE_DESTROYED': 30}
+            'KILLED_SELF': -2000,
+            'COIN_COLLECTED': 600,
+            'WAITED': -100,
+            'CRATE_DESTROYED': 0,
+            'GOT_KILLED': -2000}
 
     begin = state.shape[0]-(1 + (4 - player_index)*21)
     end = state.shape[0]-(1 + (4 - player_index - 1)*21)
@@ -27,6 +28,13 @@ def get_reward(state, player_index):
     for event_index, multiplicity in enumerate(player[4:]):
         event = events[event_index]
         reward += rewards[event]*multiplicity if event in rewards.keys() else 0
+        if multiplicity > 0 and debug_mode:
+
+            print("---")
+            print(event)
+            print(reward)
+        if event == 'KILLED_SELF' and multiplicity > 0:
+            return rewards[event]
     if reward == 0:
         reward = -3
     return reward

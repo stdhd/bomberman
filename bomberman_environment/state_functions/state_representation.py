@@ -1,5 +1,6 @@
 from state_functions.indices import *
 
+
 def derive_state_representation(self):
     """
     From provided game_state, extract array state representation. Use this when playing game (not training)
@@ -11,7 +12,7 @@ def derive_state_representation(self):
 
     player_block = 4 + 17
 
-    state = np.zeros(self.x_y_to_index(s.cols - 2, s.rows - 2, s.cols, s.rows) + 4 * player_block + 1)
+    state = np.zeros(x_y_to_index(s.cols - 2, s.rows - 2) + 4 * player_block + 1)
 
     state[-1] = self.game_state['step']
 
@@ -28,7 +29,7 @@ def derive_state_representation(self):
     me = self.game_state['self']
 
     for x, y in coins:
-        ind = self.x_y_to_index(x, y, s.cols, s.rows) - 1
+        ind = x_y_to_index(x, y, s.cols, s.rows) - 1
 
         state[ind] = 3
 
@@ -39,29 +40,29 @@ def derive_state_representation(self):
             if y == 0 or arena.shape[1] - 1 or (x + 1) * (y + 1) % 2 == 1:
                 continue
 
-            ind = self.x_y_to_index(x, y, s.cols, s.rows) - 1
+            ind = x_y_to_index(x, y, s.cols, s.rows) - 1
 
             coin = state[ind] == 3
 
-            if not coin:
-                state[ind] = arena[x, y]  # either crates or empty space
+            #if not coin:
+            state[ind] = arena[x, y]  # either crates or empty space
 
             if explosions[x, y] != 0:
                 state[ind] = -1 * 3 ** int(coin) * 2 ** explosions[x, y]
 
-    startplayers = self.x_y_to_index(15, 15, s.cols, s.rows)  # player blocks start here
+    startplayers = x_y_to_index(15, 15, s.cols, s.rows)  # player blocks start here
 
     players.insert(0, me)
 
     bomb_ind = 0
 
     for player_ind, player in enumerate(players):  # keep track of player locations and bombs
-        state[startplayers + player_block * player_ind] = self.x_y_to_index(player[0], player[1], s.cols, s.rows)
+        state[startplayers + player_block * player_ind] = x_y_to_index(player[0], player[1], s.cols, s.rows)
 
         if player[3] == 0:
             player_bomb = bombs[bomb_ind]  # count through bombs and assign a dropped bomb to each player
             # who is not holding a bomb
-            state[startplayers + player_block * player_ind + 2] = self.x_y_to_index(player_bomb[0], player_bomb[1],
+            state[startplayers + player_block * player_ind + 2] = x_y_to_index(player_bomb[0], player_bomb[1],
                                                                                     s.cols, s.rows)
 
             state[startplayers + player_block * player_ind + 3] = player_bomb[2]  # bomb timer

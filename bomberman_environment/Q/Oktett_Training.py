@@ -23,7 +23,7 @@ def q_train_from_games_jakob(train_data, write_path, obs:ObservationObject, a = 
     :return:
     """
 
-    debug_mode = False
+    debug_mode = True
     filename = obs.get_file_name_string()
     try:
         QTABLE = np.load(write_path + '/q_table-' + filename + '.npy')
@@ -70,8 +70,6 @@ def q_train_from_games_jakob(train_data, write_path, obs:ObservationObject, a = 
 
             step_observations = obs.create_observation(living_players)
 
-            window = obs._make_window(8, 8, 8)
-
             for count, observation in enumerate(step_observations):
 
                 findings = np.where((KNOWN == np.array([observation])).all(axis=1))[0]
@@ -107,10 +105,10 @@ def q_train_from_games_jakob(train_data, write_path, obs:ObservationObject, a = 
 
                         QUANTITY[int(l_ind), rotated_action] += 1
 
-                        if i == 0 and reward != -3 and debug_mode:
-                            print("-----")
-                            print("DID: " + str(rotated_action))
-                            print("Reward: " + str(reward))
+                        # if i == 0 and reward != -3 and debug_mode:
+                        #     print("-----")
+                        #     print("DID: " + str(rotated_action))
+                        #     print("Reward: " + str(reward))
 
                 last_index[living_players[count]] = (index_current, rotations_current)
 

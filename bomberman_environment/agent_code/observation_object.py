@@ -489,11 +489,13 @@ class ObservationObject:
         if not bool:
             targets = np.where(threat_map)
             target_coords = np.vstack((targets[0], targets[1])).T
-            free_space = threat_map
+            free_space = np.copy(threat_map)
+            free_space[x, y] = True
             best_step = self._look_for_targets(free_space, (x, y), target_coords, None)
             if best_step == (x, y):
                 return 4
             else:
+                temp = self._determine_direction(best_step,x,y)
                 return self._determine_direction(best_step,x,y)
         return 4 # By default return 4: There is no explosion threatening current field
 

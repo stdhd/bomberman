@@ -1,4 +1,4 @@
-from agent_code.merged_agent.indices import *
+from state_functions.indices import *
 from random import shuffle
 import numpy as np
 import settings

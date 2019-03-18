@@ -1,5 +1,4 @@
-from agent_code.merged_agent.indices import *
-from os import listdir, getcwd
+from os import listdir
 from os.path import isfile, join
 
 from agent_code.observation_object import ObservationObject

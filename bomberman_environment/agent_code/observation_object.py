@@ -21,6 +21,7 @@ Available Features:
         remaining_coins,
         closest_coin_old,
         d_closest_safe_field_dir
+        d_closest_safe_field_dirNEW
 """
 
 
@@ -67,6 +68,7 @@ class ObservationObject:
         "remaining_coins": "rcoins",
         "d_closest_safe_field_dir": "csfdir",
         "closest_coin_old": "cco",
+        "d_closest_safe_field_dirNEW" : "csfdirN"
 
         }
 
@@ -144,7 +146,7 @@ class ObservationObject:
 
         for ind, bomb_loc in enumerate(self.bomb_locs):  # bombs have precedence over explosions
             if bomb_loc > 0:
-                if self.bomb_timers[ind] == 1:
+                if self.bomb_timers[ind] <= 1:
                     self.set_window(window, bomb_loc, center_x, center_y, radius_custom, 2)
                 else:
                     self.set_window(window, bomb_loc, center_x, center_y, radius_custom, 4)
@@ -471,11 +473,55 @@ class ObservationObject:
         player = self.player
         return self._get_path_dir(self.player_locs[player.player_index], self.player_locs[player.closest_coin])
 
+    def d_closest_safe_field_dirNEW(self):
+        """
 
-    def d_closest_safe_state_dirNEW(self):
-        # TODO
-        pass
+        :return: Direction to take towards nearest field which is not threatened by bomb explosion
+        """
+        x, y = self.player.me_loc[0], self.player.me_loc[1]
 
+        # Is agent already within safe zone?
+        threat_map = self._get_threat_map()
+        bool = threat_map[x,y]
+        if not bool:
+            targets = np.where(threat_map)
+            target_coords = np.vstack((targets[0], targets[1])).T
+            free_space = threat_map
+            best_step = self._look_for_targets(free_space, (x, y), target_coords, None)
+            if best_step == (x, y):
+                return 4
+            else:
+                return self._determine_direction(best_step,x,y)
+        return 4 # By default return 4: There is no explosion threatening current field
+
+    def _get_threat_map(self):
+        """
+
+        :return: Boolean map: True for Free/Coin, False for Wall/Threatened/Crate
+        """
+        arena = self._make_window(8, 8, 8)
+        arena_bool = (arena == 0) | (arena == 3)
+        for loc in self.bomb_locs:
+            if loc == 0:
+                continue
+            tx,ty = index_to_x_y(loc, 17, 17)
+            for i in range(5):
+                if arena[tx, ty + i] == -1:
+                    break
+                arena_bool[tx, ty + i] = False
+            for i in range(5):
+                if arena[tx, ty - i] == -1:
+                    break
+                arena_bool[tx, ty - i] = False
+            for i in range(5):
+                if arena[tx + i, ty] == -1:
+                    break
+                arena_bool[tx + 1, ty] = False
+            for i in range(5):
+                if arena[tx - i, ty] == -1:
+                    break
+                arena_bool[tx - i, ty] = False
+        return arena_bool
 
     def d_closest_safe_field_dir(self):
         """

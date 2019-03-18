@@ -181,7 +181,7 @@ def end_of_episode(self):
     self.logger.debug(f'Encountered {len(self.events)} game event(s) in final step')
 
 
-def get_min_time_to_explode(self,x,y):
+def _is_field_threatened(self,x,y):
     """
 
     :param x: x coordinate of agent
@@ -190,32 +190,29 @@ def get_min_time_to_explode(self,x,y):
     """
 
     arena = self.game_state['arena']
-    min_time = 1000
-    for tx, ty, time in self.game_state['bombs']:
-        if time < min_time:
 
-            for i in range(5):
-                if arena[tx,ty + i] == -1:
-                    break
-                if (tx,ty + i) == (x,y):
-                    min_time = time
-            for i in range(5):
-                if arena[tx,ty - i] == -1:
-                    break
-                if (tx,ty - i) == (x,y):
-                    min_time = time
-            for i in range(5):
-                if arena[tx + i,ty] == -1:
-                    break
-                if (tx + i,ty) == (x,y):
-                    min_time = time
-            for i in range(5):
-                if arena[tx - i,ty] == -1:
-                    break
-                if (tx - i,ty) == (x,y):
-                    min_time = time
-
-    return min_time
+    for tx, ty in arena:
+        for i in range(5):
+            if arena[tx, ty + i] == -1:
+                break
+            if arena[tx, ty + i] == 2 or arena[tx, ty + i] == 4:
+                return True
+        for i in range(5):
+            if arena[tx, ty - i] == -1:
+                break
+            if arena[tx, ty - i] == 2 or arena[tx, ty - i] == 4:
+                return True
+        for i in range(5):
+            if arena[tx + i, ty] == -1:
+                break
+            if arena[tx + i, ty] or arena[tx + i, ty] == 4:
+                return True
+        for i in range(5):
+            if arena[tx - i, ty] == -1:
+                break
+            if arena[tx - i, ty] == 2 or arena[tx - i, ty] == 4:
+                return True
+    return False
 
 
 

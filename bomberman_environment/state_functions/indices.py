@@ -233,7 +233,7 @@ def index_to_x_y(ind, ncols=s.cols, nrows=s.rows):
     if ind == 0:
         raise ValueError("Got zero index (dead player)")
 
-    if ind > 176 or ind > 1:
+    if ind > 176 or ind < 1:
         raise ValueError("Index out of range. (max 176, min 1, got", ind, ")")
 
     return index_to_x_y_data[ind - 1]

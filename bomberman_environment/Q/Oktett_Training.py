@@ -52,7 +52,6 @@ def q_train_from_games_jakob(train_data, write_path, obs:ObservationObject, a = 
             print("Skipping " + file + ". Is it a .npy file?")
             continue
 
-
         last_index = [None, None, None, None]
 
         for ind, step_state in enumerate(game):

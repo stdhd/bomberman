@@ -48,6 +48,8 @@ class ObservationObject:
 
         self.state, self.board, self.player_locs, self.coins, self.player_distance_matrix = None, None, None, None, None
 
+        self.arena = None
+
         self.bomb_locs, self.bomb_timers = None, None
 
         self.player = None  # helper variable for creating features (not observation window)
@@ -196,22 +198,24 @@ class ObservationObject:
     def initialize_feature_helpers(self):
         if self.state is None:
             raise AttributeError("State not set (call set_state)")
-        state = self.state
-        board_end = state.shape[0] - (1 + 4 * 21)
-        self.board = state[0: board_end]
-        player_blocks = state[board_end:]
-        self.player_locs = np.array([player_blocks[i * 21] for i in range(4)])  # player locations
-        self.coins = np.arange(self.board.shape[0] + 1)[1:][np.where(self.board == 3)]  # list of coin indices
-        self.bomb_locs = np.array([player_blocks[i * 21 + 2] for i in range(4)])  # bomb locations
-        self.bomb_timers = np.array([player_blocks[i * 21 + 3] for i in range(4)])  # bomb timers
-        # manhattan dist. to coins
-        self.player_distance_matrix = np.zeros((4, 4))
-        for p1 in np.arange(self.player_distance_matrix.shape[0]):
-            for p2 in np.arange(start=p1 + 1, stop=self.player_distance_matrix.shape[1]):
-                if self.player_locs[p1] == 0 or self.player_locs[p2] == 0:
-                    continue  # skip dead players
-                self.player_distance_matrix[p1, p2] = np.linalg.norm(np.array([*index_to_x_y(self.player_locs[p1])])
-                                                                - np.array([*index_to_x_y(self.player_locs[p2])]), ord=1)
+
+        self.arena = self._make_window(8, 8, 8)
+        # state = self.state
+        # board_end = state.shape[0] - (1 + 4 * 21)
+        # self.board = state[0: board_end]
+        # player_blocks = state[board_end:]
+        # self.player_locs = np.array([player_blocks[i * 21] for i in range(4)])  # player locations
+        # self.coins = np.arange(self.board.shape[0] + 1)[1:][np.where(self.board == 3)]  # list of coin indices
+        # self.bomb_locs = np.array([player_blocks[i * 21 + 2] for i in range(4)])  # bomb locations
+        # self.bomb_timers = np.array([player_blocks[i * 21 + 3] for i in range(4)])  # bomb timers
+        # # manhattan dist. to coins
+        # self.player_distance_matrix = np.zeros((4, 4))
+        # for p1 in np.arange(self.player_distance_matrix.shape[0]):
+        #     for p2 in np.arange(start=p1 + 1, stop=self.player_distance_matrix.shape[1]):
+        #         if self.player_locs[p1] == 0 or self.player_locs[p2] == 0:
+        #             continue  # skip dead players
+        #         self.player_distance_matrix[p1, p2] = np.linalg.norm(np.array([*index_to_x_y(self.player_locs[p1])])
+        #                                                         - np.array([*index_to_x_y(self.player_locs[p2])]), ord=1)
 
     def _get_features(self, AGENTS):
         """
@@ -355,7 +359,7 @@ class ObservationObject:
         """
         Direction to player's nearest coin.
         """
-        arena = self._make_window(8, 8, 8)
+        arena = self.arena
         coins_ind = np.where(arena == 3)
         coins_coords = np.vstack((coins_ind[0], coins_ind[1])).T
         free_space = (arena == 0) | (arena == 3)
@@ -484,7 +488,7 @@ class ObservationObject:
         Bomb and enemy on arena: 80, 40, 20, 10
         """
         x, y = self.player.me_loc[0], self.player.me_loc[1]
-        arena = self._make_window(8, 8, 8)
+        arena = self.arena
         # self.logger.info(f'ARENA: {arena}')
         bombs_ind1 = np.where(arena == 80)
         bombs_ind2 = np.where(arena == 40)

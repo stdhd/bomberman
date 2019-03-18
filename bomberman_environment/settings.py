@@ -9,12 +9,12 @@ settings = {
     # Display
     'width': 1000,
     'height': 600,
-    'gui': True,
+    'gui': False,
     'fps': 15,
 
     # Main loop
     'update_interval': 0.01, # 0.33,
-    'turn_based': True,
+    'turn_based': False,
     'n_rounds': 1000,
     'save_replay': False,
     'make_video_from_replay': False,
@@ -25,7 +25,7 @@ settings = {
     'grid_size': 30,
     #'crate_density': 0.75,
     # For task one no creates are required
-    'crate_density': 0.1,
+    'crate_density': 0.2,
     'actions': ['LEFT', 'RIGHT', 'UP', 'DOWN', 'WAIT', 'BOMB'],
     'max_agents': 4,
     'max_steps': 400,

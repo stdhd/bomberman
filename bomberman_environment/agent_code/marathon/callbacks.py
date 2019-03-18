@@ -3,6 +3,7 @@ import numpy as np
 from settings import s
 
 from agent_code.marathon.kernel_regression import *
+from state_functions.indices import *
 
 
 def setup(self):
@@ -96,6 +97,8 @@ def regression_action(self, observation):
         q_approx_values[i] = kernel_vects.dot(self.alpha)[0]  # do kernel regression
 
     return np.random.choice(np.flatnonzero(q_approx_values == q_approx_values.max()))
+
+
 
 
 def derive_state_representation(self):

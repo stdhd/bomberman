@@ -213,6 +213,9 @@ def x_y_to_index(x, y, ncols=s.cols, nrows=s.rows):
     :return: Index of square x, y coords point to
     """
 
+    x = int(x)
+    y = int(y)
+
     if x >= ncols - 1 or x <= 0 or y >= nrows - 1 or y <= 0:
         raise ValueError("Coordinates outside of game grid")
     if (x + 1) * (y + 1) % 2 == 1:
@@ -229,6 +232,8 @@ def index_to_x_y(ind, ncols=s.cols, nrows=s.rows):
     :param nrows:
     :return: x, y coordinates
     """
+
+    ind = int(ind)
 
     if ind == 0:
         raise ValueError("Got zero index (dead player)")

@@ -13,7 +13,7 @@ settings = {
     'fps': 15,
 
     # Main loop
-    'update_interval': 0.01, # 0.33,
+    'update_interval': 0.33, # 0.33,
     'turn_based': True,
     'n_rounds': 1000,
     'save_replay': False,

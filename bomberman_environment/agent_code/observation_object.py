@@ -141,8 +141,6 @@ class ObservationObject:
                 try:
                     window[i, j] = self.board[x_y_to_index(lower_x + i, lower_y + j) - 1]
 
-                    if window[i, j] == 3:
-                        window[i, j] = 0
                 except ValueError as e:  # wall squares throw exception
                     window[i, j] = -1
 
@@ -218,6 +216,7 @@ class ObservationObject:
                     continue  # skip dead players
                 self.player_distance_matrix[p1, p2] = np.linalg.norm(np.array([*index_to_x_y(self.player_locs[p1])])
                                                                 - np.array([*index_to_x_y(self.player_locs[p2])]), ord=1)
+
 
     def _get_features(self, AGENTS):
         """
@@ -503,7 +502,7 @@ class ObservationObject:
 
         :return: Boolean map: True for Free/Coin, False for Wall/Threatened/Crate
         """
-        arena = self._make_window(8, 8, 8)
+        arena = self.arena
         arena_bool = (arena == 0) | (arena == 3)
         for loc in self.bomb_locs:
             if loc == 0:

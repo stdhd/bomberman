@@ -29,9 +29,11 @@ def q_train_from_games_jakob(train_data, write_path, obs:ObservationObject, a = 
     try:
         QTABLE = np.load(write_path + '/q_table-' + filename + '.npy')
         KNOWN = np.load(write_path + '/observation-' + filename + '.npy')
+        QUANTITY = np.load(write_path + '/quantity-' + filename + '.npy')
     except:
         print("Error loading learned q table. using empty table instead.")
         QTABLE = np.zeros([0,6])
+        QUANTITY = np.zeros([0,6])
         KNOWN = np.zeros([0, obs.obs_length])
 
     for file in [f for f in listdir(train_data) if isfile(join(train_data, f))]:
@@ -92,6 +94,7 @@ def q_train_from_games_jakob(train_data, write_path, obs:ObservationObject, a = 
                     n_new_indices = new_obs.shape[0]
                     KNOWN = np.concatenate(np.array([KNOWN, new_obs]))
                     QTABLE = np.append(QTABLE, np.zeros([n_new_indices, QTABLE.shape[1]]), axis=0)
+                    QUANTITY = np.append(QUANTITY, np.zeros([n_new_indices, QTABLE.shape[1]]), axis=0)
                     index_current = np.arange(KNOWN.shape[0] - n_new_indices, KNOWN.shape[0])
 
                 if ind > 0:
@@ -103,6 +106,9 @@ def q_train_from_games_jakob(train_data, write_path, obs:ObservationObject, a = 
                         QTABLE[int(l_ind), rotated_action] = (1 - a) *  \
                         QTABLE[int(l_ind), rotated_action] +\
                         a * (reward + g * best_choice_current_state)
+
+                        QUANTITY[int(l_ind), rotated_action] += 1
+
                         if i == 0 and reward != -3 and debug_mode:
                             print("-----")
                             print("DID: " + str(rotated_action))
@@ -119,6 +125,7 @@ def q_train_from_games_jakob(train_data, write_path, obs:ObservationObject, a = 
 
         np.save(write_path + '/observation-' + filename, KNOWN)
         np.save(write_path + '/q_table-' + filename, QTABLE)
+        np.save(write_path + '/quantity-' + filename, QUANTITY)
 
     return KNOWN, QTABLE
 

@@ -32,19 +32,19 @@ def is_trained(records_file, train_data_file):
 
 
 
-def add_to_trained(records_file, train_data_file):
+def add_to_trained(records_file, train_data_files):
     """
-    Add a file used for training to records file.
+    Add files used for training to records file.
     Assumes records file exists and contains a list.
     :param records_file: File containing list of training files already used for training.
-    :param train_data_file: File containing training data.
+    :param train_data_files: Files containing training data.
     :return: True iff file loading successful
     """
 
     with open(records_file, "r") as f:
         records = json.load(f)
 
-    records.append(train_data_file)
+    records.extend(train_data_files)
 
     f = open(records_file, "w")
 

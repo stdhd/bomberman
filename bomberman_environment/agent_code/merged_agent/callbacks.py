@@ -18,20 +18,20 @@ def setup(self):
     """
     self.learning_rate = 0.4
     self.discount = 0.7
-    self.epsilon = 0.2
+    self.epsilon = 0.15
     self.train_flag = True
-    # self.obs_object = ObservationObject(1, ["closest_coin_dir", "closest_safe_field_dir"], self.logger)
-    self.obs_object = ObservationObject(1, ["closest_coin_dir", "closest_safe_field_dir"], self.logger)
+    self.obs_object = ObservationObject(1, ["d_closest_coin_dir", "d_closest_safe_field_dir"], self.logger)
     # Used for plotting
     self.total_steps_over_episodes = 0
     self.total_deaths_over_episodes = 0
     self.number_of_episode = 0
 
-    observation_size = self.obs_object.get_observation_size() #cut out field 
+    observation_size = self.obs_object.get_observation_size()
     self.logger.info(f'observation_size: {observation_size}')
-    # Zx6 array with actions ['UP', 'DOWN', 'LEFT', 'RIGHT', 'BOMB', 'WAIT']
     filename = self.obs_object.get_file_name_string()
 
+    
+    # Zx6 array with actions ['UP', 'DOWN', 'LEFT', 'RIGHT', 'BOMB', 'WAIT'] containing their learned rewards
     try:
         self.q_table = np.load(os.path.join('agent_code', 'merged_agent', 'q_table-' + filename + '.npy'))
         self.logger.debug('LOADED Q')
@@ -41,7 +41,7 @@ def setup(self):
         self.q_table = np.empty([0,6])
         self.logger.info(f'OVERWRITTEN: {e}')
 
-    # Zx10 array with 3x3 observation around agent plus coin_flag
+    # observation_db contains learned states
     try:
         self.observation_db = np.load(os.path.join('agent_code', 'merged_agent', 'observation-' + filename + '.npy'))
         self.logger.debug('LOADED Obs')
@@ -73,11 +73,12 @@ def act(self):
     arena = self.game_state['arena']
     x, y, _, bombs_left, score = self.game_state['self']
     bombs = self.game_state['bombs']
-    # self.logger.info(f'BOMBS: {bombs}')
-    self.obs_object.set_state(derive_state_representation(self, "ACT"))
+    self.obs_object.set_state(_derive_state_representation(self, "ACT"))
     observation = self.obs_object.create_observation(np.array([int(0)]))[0]
     self.old_observation = observation
-    # self.logger.info(f'self: {[x, y]}')
+    
+    self.logger.info(f'BOMBS: {bombs}')
+    self.logger.info(f'self: {[x, y]}')
     self.logger.info(f'Observation: {observation}')
     
 
@@ -145,7 +146,7 @@ def reward_update(self):
     # self.logger.info(f'Coins: {coins.any()}')
     bombs = self.game_state['bombs']
     # self.logger.info(f'BOMBSReward: {bombs}')
-    self.obs_object.set_state(derive_state_representation(self, "REWARD"))
+    self.obs_object.set_state(_derive_state_representation(self, "REWARD"))
     observation = self.obs_object.create_observation(np.array([0]))[0]
     warnings.simplefilter(action='ignore', category=FutureWarning)
     observation_ind = np.where((self.observation_db == observation).all(axis=1))[0]
@@ -153,7 +154,7 @@ def reward_update(self):
         current_best_value = 0
     else:
         current_best_value = self.q_table[observation_ind].max()
-    reward = getReward(self.events, self.old_observation)
+    reward = _getReward(self.events, self.old_observation)
     self.q_table[self.last_q_ind, self.last_action_ind] = (1-self.learning_rate) * self.q_table[self.last_q_ind, self.last_action_ind] \
                                                                 + self.learning_rate * (reward + self.discount * current_best_value)
 
@@ -172,34 +173,28 @@ def end_of_episode(self):
     self.total_steps_over_episodes += self.game_state['step']
     if 13 in self.events or 14 in self.events: self.total_deaths_over_episodes += 1
     self.number_of_episode +=1
-    if self.number_of_episode % 250 == 0: 
+    if self.number_of_episode % 50 == 0: 
         self.logger.info(f'Episode number, Total Steps and Deaths: {self.number_of_episode, self.total_steps_over_episodes, self.total_deaths_over_episodes}')
         self.total_steps_over_episodes, self.total_deaths_over_episodes = 0, 0
 
-def getReward(events, old_observation):
+def _getReward(events, old_observation):
     reward = 0
+    ccdir_feature_ind = 9
+    csfdir_feature_ind = 10
     # Left, right, up, down (0-3) check for coin flag (old_observation[9])
     if 0 in events:
-        # if old_observation[9] == 1 or old_observation[3] == 3:
-        #     if old_observation[9] == 1: reward += 5 # Reward when agent chooses direction to next coin (coin_flag)
-        # else:
-            reward -= 1
+        if old_observation[csfdir_feature_ind] == 8: reward += 250 # Reward when agent chooses direction safe field
+        reward -= 50
     elif 1 in events:
-        # if old_observation[9] == 2 or old_observation[5] == 3:
-        #     if old_observation[9] == 2: reward += 5
-        # else:
-            reward -= 1
+        if old_observation[csfdir_feature_ind] == 16: reward += 250
+        reward -= 50
     elif 2 in events:
-        # if old_observation[9] == 3 or old_observation[1] == 3:
-        #     if old_observation[9] == 3: reward += 5
-        # else:
-            reward -= 1
+        if old_observation[csfdir_feature_ind] == 24: reward += 250
+        reward -= 50
     elif 3 in events:
-        # if old_observation[9] == 4 or old_observation[7] == 3:
-        #     if old_observation[9] == 4: reward += 5
-        # else:
-            reward -= 1
-    if 4 in events: reward -= -50 # Waited
+        if old_observation[csfdir_feature_ind] == 32: reward += 250
+        reward -= 50
+    if 4 in events: reward -= 500 # Waited
     if 5 in events: reward -= 0 # Interrupted 
     if 6 in events: reward -= 500 # Invalid action
     if 7 in events: reward -= 0 # Bomb dropped
@@ -208,62 +203,14 @@ def getReward(events, old_observation):
     if 10 in events: reward += 0 # Coin found
     if 11 in events: reward += 500 # Coin collected
     if 12 in events: reward += 500 # Killed opponent
-    if 13 in events: reward -= 1000 # Killed self
+    if 13 in events: reward -= 10000 # Killed self
     if 14 in events: reward -= 0 # Got killed either by himself or by enemy
     if 15 in events: reward -= 0 # Opponent eliminated
     if 16 in events: reward -= 0 # Survived round
         
     return reward
 
-def look_for_targets(free_space, start, targets, logger):
-    """Find direction of closest target that can be reached via free tiles.
-
-    Performs a breadth-first search of the reachable free tiles until a target is encountered.
-    If no target can be reached, the path that takes the agent closest to any target is chosen.
-
-    Args:
-        free_space: Boolean numpy array. True for free tiles and False for obstacles.
-        start: the coordinate from which to begin the search.
-        targets: list or array holding the coordinates of all target tiles.
-        logger: optional logger object for debugging.
-    Returns:
-        coordinate of first step towards closest target or towards tile closest to any target.
-    """
-    if len(targets) == 0: return None
-    frontier = [start]
-    parent_dict = {start: start}
-    dist_so_far = {start: 0}
-    best = start
-    best_dist = np.sum(np.abs(np.subtract(targets, start)), axis=1).min()
-
-    while len(frontier) > 0:
-        current = frontier.pop(0)
-        # Find distance from current position to all targets, track closest
-        d = np.sum(np.abs(np.subtract(targets, current)), axis=1).min()
-        if d + dist_so_far[current] <= best_dist:
-            best = current
-            best_dist = d + dist_so_far[current]
-        if d == 0:
-            # Found path to a target's exact position, mission accomplished!
-            best = current
-            break
-        # Add unexplored free neighboring tiles to the queue in a random order
-        x, y = current
-        neighbors = [(x,y) for (x,y) in [(x+1,y), (x-1,y), (x,y+1), (x,y-1)] if free_space[x,y]]
-        shuffle(neighbors)
-        for neighbor in neighbors:
-            if neighbor not in parent_dict:
-                frontier.append(neighbor)
-                parent_dict[neighbor] = current
-                dist_so_far[neighbor] = dist_so_far[current] + 1
-    if logger: logger.debug(f'Suitable target found at {best}')
-    # Determine the first step towards the best found target tile
-    current = best
-    while True:
-        if parent_dict[current] == start: return current
-        current = parent_dict[current]
-
-def derive_state_representation(self, where):
+def _derive_state_representation(self, where):
     """
     From provided game_state, extract array state representation. Use this when playing game (not training)
 

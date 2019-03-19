@@ -19,7 +19,7 @@ Available Features:
         remaining_crates,
         remaining_coins,
         closest_coin_old,
-        closest_safe_field_dir
+        d_closest_safe_field_dir
 """
 
 
@@ -28,7 +28,7 @@ class ObservationObject:
     class to keep track of constants such as window size, number of features, etc..
     """
 
-    def __init__(self, radius, logger, FEATURE_LIST:list):
+    def __init__(self, radius, FEATURE_LIST:list, logger):
         """
         Initialize Observation Object using window radius and list of features to create.
         :param radius: Radius in observation window (radius = 1 => 3x3 window)
@@ -64,7 +64,7 @@ class ObservationObject:
         "remaining_enemies": "re",
         "remaining_crates": "rcrates",
         "remaining_coins": "rcoins",
-        "closest_safe_field_dir": "csfdir",
+        "d_closest_safe_field_dir": "csfdir",
         "closest_coin_old": "cco"
         }
 
@@ -324,9 +324,9 @@ class ObservationObject:
         if best_step == (x+1,y): return 2 # move right
         if best_step == (x,y-1): return 3 # move up
         if best_step == (x,y+1): return 4 # move down
-        if best_step == (x,y): return 5 # Something is wrong
+        if best_step == (x,y): return 5 # Something is wrong: This case should not occur
         if best_step == None: return 6 # No targets exist.
-        return 7 # Something else is wrong
+        return 7 # Something else is wrong: This case should not occur
 
     def me_has_bomb(self):
         """
@@ -470,7 +470,7 @@ class ObservationObject:
         player = self.player
         return self._get_path_dir(self.player_locs[player.player_index], self.player_locs[player.closest_coin])
 
-    def closest_safe_field_dir(self):
+    def d_closest_safe_field_dir(self):
         """
         Direction to next safe field.
         Bomb on arena: (16), 8, 4, 2
@@ -478,6 +478,7 @@ class ObservationObject:
         """
         x, y = self.player.me_loc[0], self.player.me_loc[1]
         arena = self._make_window(8, 8, 8)
+        is_on_danger_zone_factor = 1
         # self.logger.info(f'ARENA: {arena}')
         bombs_ind1 = np.where(arena == 80)
         bombs_ind2 = np.where(arena == 40)
@@ -488,6 +489,9 @@ class ObservationObject:
         bombs_ind7 = np.where(arena == 2)
         x_bombs = np.concatenate((bombs_ind1[0], bombs_ind2[0], bombs_ind3[0], bombs_ind4[0], bombs_ind5[0], bombs_ind6[0], bombs_ind7[0]))
         y_bombs = np.concatenate((bombs_ind1[1], bombs_ind2[1], bombs_ind3[1], bombs_ind4[1], bombs_ind5[1], bombs_ind6[1], bombs_ind7[1]))
+        # If there are no bombs on the field the direction should indicate this
+        if x_bombs.shape[0] == 0:
+            return self._determine_direction(None, x, y)
         danger_zone_coords = []
         down, up, left, right = True, True, True, True
         for x_bomb, y_bomb in np.vstack((x_bombs, y_bombs)).T:
@@ -503,7 +507,9 @@ class ObservationObject:
                 if left: danger_zone_coords.append([x_bomb - (i + 1), y_bomb])
                 if right: danger_zone_coords.append([x_bomb + (i + 1), y_bomb])
         
-        # coins_coords = np.vstack((coins_ind[0], coins_ind[1])).T
+        # If agent is on danger zone indicate this by multiplying returned direction with 8
+        if [x,y] in danger_zone_coords:
+            is_on_danger_zone_factor = 8
         danger_zone_coords = np.array(danger_zone_coords)
         free_space = (arena == 0) | (arena == 3)
         free_space_calc = np.copy(free_space)
@@ -518,7 +524,7 @@ class ObservationObject:
         # self.logger.info(f'Self: {x, y}')
         # self.logger.info(f'Best_step: {best_step}')
 
-        return self._determine_direction(best_step, x, y)
+        return self._determine_direction(best_step, x, y) * is_on_danger_zone_factor
 
 
 class _Player:

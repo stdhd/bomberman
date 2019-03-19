@@ -29,7 +29,7 @@ def main():
         os.makedirs(write_path)
 
     KNOWN, Q = q_train_from_games_jakob(cwd + "/" + 'data/games/one_player_crates_esa_0_2/', write_path,
-                                        obs, a=0.5)
+                                        obs, a=0.5, g=0.5)
 
 
 if __name__ == '__main__':

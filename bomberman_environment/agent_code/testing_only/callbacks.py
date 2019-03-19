@@ -20,7 +20,7 @@ def setup(self):
     self.discount = 0.7
     self.epsilon = -1
     self.train_flag = False
-    self.obs_object = ObservationObject(0, self.logger, ['d_closest_coin_dir', 'd_closest_safe_field_dirNEW', 'me_has_bomb'])
+    self.obs_object = ObservationObject(0, ['d_closest_coin_dir', 'd_closest_safe_field_dirNEW', 'me_has_bomb'], None)
     # Used for plotting
     self.total_steps_over_episodes = 0
     self.total_deaths_over_episodes = 0
@@ -73,9 +73,9 @@ def act(self):
     x, y, _, bombs_left, score = self.game_state['self']
     bombs = self.game_state['bombs']
     # self.logger.info(f'BOMBS: {bombs}')
-    rep = derive_state_representation(self)
-    self.obs_object.set_state(derive_state_representation(self))
-    observation = self.obs_object.create_observation(np.array([int(0)]))[0]
+    rep = derive_state_representation(self)  # DEBUG
+    self.obs_object.set_state(rep)
+    observation = self.obs_object.create_observation(np.array([0]))[0]
     # observation = np.delete(observation, [0])
     self.old_observation = observation
     # self.logger.info(f'self: {[x, y]}')
@@ -159,9 +159,3 @@ def end_of_episode(self):
     game. self.events will contain all events that occured during your agent's
     final step. You should place your actual learning code in this method.
     """
-    self.total_steps_over_episodes += self.game_state['step']
-    if 13 in self.events or 14 in self.events: self.total_deaths_over_episodes += 1
-    self.number_of_episode +=1
-    if self.number_of_episode % 250 == 0: 
-        self.logger.info(f'Episode number, Total Steps and Deaths: {self.number_of_episode, self.total_steps_over_episodes, self.total_deaths_over_episodes}')
-        self.total_steps_over_episodes, self.total_deaths_over_episodes = 0, 0

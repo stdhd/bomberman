@@ -376,12 +376,14 @@ class ObservationObject:
         """
         Direction to player's nearest coin.
         """
+        # Case: choose coin with largest distance to an enemy
         arena = self.arena
         coins_ind = np.where(arena == 3)
         coins_coords = np.vstack((coins_ind[0], coins_ind[1])).T
         free_space = (arena == 0) | (arena == 3)
         x, y = self.player.me_loc[0], self.player.me_loc[1]
         best_step = self._look_for_targets(free_space, (x, y), coins_coords, None)
+
         return self._determine_direction(best_step, x, y)
 
     def d_closest_enemy_dir(self):

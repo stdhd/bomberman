@@ -18,12 +18,13 @@ def setup(self):
     """
     self.train_flag = False
     self.obs_object = ObservationObject(1, ['d_closest_coin_dir',
-                                'd_closest_safe_field_dir',
-                                'me_has_bomb',
-                                'd4_is_safe_to_move_a_l',
-                                'd4_is_safe_to_move_b_r',
-                                'd4_is_safe_to_move_c_u',
-                                'd4_is_safe_to_move_d_d'], None)
+                                            'd_closest_safe_field_dir',
+                                            'me_has_bomb',
+                                            'd4_is_safe_to_move_a_l',
+                                            'd4_is_safe_to_move_b_r',
+                                            'd4_is_safe_to_move_c_u',
+                                            'd4_is_safe_to_move_d_d',
+                                            'd_closest_enemy_dir'], None)
     # Used for plotting
     self.total_steps_over_episodes = 0
     self.total_deaths_over_episodes = 0
@@ -51,7 +52,10 @@ def setup(self):
     except:
         self.observation_db = np.empty([0,observation_size])
         if self.observation_db.shape[1] != observation_size:
-            raise Exception('observation_db size does not fit') 
+            raise Exception('observation_db size does not fit')
+
+    self.repeated_deadlock = 1
+    self.last_visited = np.array([2, 0])
 
 def act(self):
     """Called each game step to determine the agent's next action.
@@ -89,6 +93,18 @@ def act(self):
         self.last_action_ind = np.random.choice(
             np.flatnonzero(self.q_table[observation_ind[0]] == self.q_table[observation_ind[0]].max()))
 
+        # Deadlock detection:
+        self.last_visited = np.append(self.last_visited, np.array([x, y]))
+        if self.last_visited[-1] == self.last_visited[-3] & self.last_visited[-2] == self.last_visited[-4] \
+                & self.last_visited[-1] != self.last_visited[-2]:
+            alternatives = np.argsort(self.q_table[observation_ind[0]])
+            print("DEADLOCK DETECTED. DO " + str(self.repeated_deadlock) + " BEST ALTERNATIVE NOW")
+            self.repeated_deadlock += 1
+            self.last_action_ind = alternatives[-np.min(np.array([self.repeated_deadlock, 4]))]
+
+        else:
+            self.repeated_deadlock = 1
+
     # If test mode and observation_db has no entry
     else:
         # TODO: regression
@@ -98,6 +114,7 @@ def act(self):
 
     self.next_action = ['LEFT', 'RIGHT', 'UP', 'DOWN', 'WAIT', 'BOMB'][self.last_action_ind]
     print(self.next_action)
+
 
 def reward_update(self):
     """Called once per step to allow intermediate rewards based on game events.

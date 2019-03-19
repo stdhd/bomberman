@@ -510,19 +510,19 @@ class ObservationObject:
             if loc == 0:
                 continue
             tx,ty = index_to_x_y(loc, 17, 17)
-            for i in range(5):
+            for i in range(4):
                 if arena[tx, ty + i] == -1:
                     break
                 arena_bool[tx, ty + i] = False
-            for i in range(5):
+            for i in range(4):
                 if arena[tx, ty - i] == -1:
                     break
                 arena_bool[tx, ty - i] = False
-            for i in range(5):
+            for i in range(4):
                 if arena[tx + i, ty] == -1:
                     break
                 arena_bool[tx + 1, ty] = False
-            for i in range(5):
+            for i in range(4):
                 if arena[tx - i, ty] == -1:
                     break
                 arena_bool[tx - i, ty] = False

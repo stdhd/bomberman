@@ -170,8 +170,20 @@ def get_transformations(obs, radius, direction_sensitive):
     transformed_rest = np.zeros([7, new_rest.shape[0]])
     results = np.zeros([8, obs.shape[0]])
     for i in range(7):
-        transformed_rest[i] = np.where(direction_sensitive, all_transformed[i], new_rest)
-
+        transformed_rest[i] = np.where(direction_sensitive == 1, all_transformed[i], new_rest)
+        feat2_transformed = np.zeros([4])
+        to_skip = 0
+        for start in range(new_rest.shape[0]):
+            if direction_sensitive[start] == 2 and to_skip < 1:
+                bit = transformed_rest[i,start:start + 4]
+                feat2_transformed[0] = bit[transformations[i,0]]
+                feat2_transformed[1] = bit[transformations[i,1]]
+                feat2_transformed[2] = bit[transformations[i,2]]
+                feat2_transformed[3] = bit[transformations[i,3]]
+                transformed_rest[i,start:start + 4] = feat2_transformed
+                to_skip = 3
+            else:
+                to_skip -= 1
     candidates = np.zeros([7, radius * 2 + 1, radius * 2 + 1])
     candidates[0] = new_window_reshaped.T
     candidates[1] = np.flip(new_window_reshaped, 0)
@@ -185,7 +197,7 @@ def get_transformations(obs, radius, direction_sensitive):
         results[i] = np.append(candidates[i], transformed_rest[i])
         direction_change[i] = np.append(transformations[i], np.array([4, 5]))
 
-    direction_change[7] = np.array([0,1,2,3,4,5,6])
+    direction_change[7] = np.array([0,1,2,3,4,5])
     results[7] = obs
 
     return results, direction_change

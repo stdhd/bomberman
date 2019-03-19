@@ -56,16 +56,14 @@ def q_train_from_games_jakob(train_data, write_path, obs:ObservationObject, a = 
 
         last_index = [None, None, None, None]
 
-        all_died = np.array([]).astype(int)
+        obs.reset_killed_players()  # renew information about killed players
 
         for ind, step_state in enumerate(game):
 
             obs.set_state(step_state)  # Set this first to initialize members
-            living_players = np.where(obs.player_locs != 0)[0]
-            _new_died = obs.died_players
-            just_died = np.array([player for player in _new_died if player not in all_died]).astype(int)  # find players that died in this step
+            living_players = obs.living_players
+            just_died = obs.just_died  # find players that died in this step
             rewards_players = np.concatenate((living_players, just_died))
-            all_died = _new_died
 
             last_actions = np.zeros(4)
 
@@ -110,12 +108,15 @@ def q_train_from_games_jakob(train_data, write_path, obs:ObservationObject, a = 
                     index_current = np.arange(KNOWN.shape[0] - n_new_indices, KNOWN.shape[0])
 
                 if ind > 0:
+                
                     for i in range(last_index[rewards_players[count]][0].shape[0]):
                         l_ind, l_rot = last_index[rewards_players[count]][0][i], last_index[rewards_players[count]][1][i]
                         best_choice_current_state = np.max(QTABLE[int(index_current[0])])
                         # max of current state's Q Table values
                         reward = get_reward(step_state, rewards_players[count])
                         debug_helper = np.where(l_rot == last_actions[rewards_players[count]])[0]
+                        if debug_helper.shape[0] == 0:
+                            print()
                         rotated_action = np.where(l_rot == last_actions[rewards_players[count]])[0][0]
                         QTABLE[int(l_ind), rotated_action] = (1 - a) *  \
                         QTABLE[int(l_ind), rotated_action] +\

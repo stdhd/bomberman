@@ -9,6 +9,7 @@ from pygame.locals import *
 import numpy as np
 import multiprocessing as mp
 import threading
+import os
 
 from environment_updated import BombeRLeWorld, ReplayWorld  # FIXME custom game environment
 from settings_agent_evaluation import s  # FIXME custom settings
@@ -45,6 +46,8 @@ def main(evaluate_agents: list, agent_feature_strings: list, savepath:str):
 
     if savepath[-1] not in ("/", "\\"):
         savepath += "/"
+    if not os.path.exists(savepath):
+        os.makedirs(savepath)
 
     # Emulate Windows process spawning behaviour under Unix (for testing)
     # mp.set_start_method('spawn')

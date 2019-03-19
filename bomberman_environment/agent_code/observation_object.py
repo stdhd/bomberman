@@ -125,6 +125,10 @@ class ObservationObject:
         # manhattan dist. to coin_locs
         self.arena = self._make_window(8, 8, 8)
         self.danger_map = self._get_threat_map()
+
+        self.events = np.array([player_blocks[4 + i*17: (i + 1)*21] for i in range(4)])
+        # get (4 x 17) matrix of events for this step
+
         # self.player_distance_matrix = np.zeros((4, 4))
         # for p1 in np.arange(self.player_distance_matrix.shape[0]):
         #     for p2 in np.arange(start=p1 + 1, stop=self.player_distance_matrix.shape[1]):

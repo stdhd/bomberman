@@ -117,10 +117,10 @@ def q_train_from_games_jakob(train_data, write_path, obs:ObservationObject, a = 
 
                         QUANTITY[int(l_ind), rotated_action] += 1
 
-                        if i == 0 and reward != -3 and debug_mode:
-                            print("-----")
-                            print("DID: " + str(rotated_action))
-                            print("Reward: " + str(reward))
+                        # if i == 0 and reward != -3 and debug_mode:
+                        #     print("-----")
+                        #     print("DID: " + str(rotated_action))
+                        #     print("Reward: " + str(reward))
 
                 last_index[rewards_players[count]] = (index_current, rotations_current)
 

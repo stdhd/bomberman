@@ -1,7 +1,9 @@
 from state_functions.indices import *
+from state_functions.rewards import get_reward
 from random import shuffle
 import numpy as np
 import settings
+
 
 
 """
@@ -595,6 +597,15 @@ class ObservationObject:
 
             events[i] = np.array(settings.events)[np.array(events[i])]
         return events
+
+    def _get_reward(self, indices):
+        """
+        Debugging function to show player rewards
+        :param indices:
+        :return:
+        """
+        rewards = [get_reward(self.state, player_index=player) for player in indices]
+        return rewards
 
 class _Player:
     """

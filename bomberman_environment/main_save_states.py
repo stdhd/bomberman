@@ -47,10 +47,10 @@ def main():
     # Initialize environment and agents
 
     # for saving games
-    save_path = 'data/games/special_game/'
+    save_path = 'data/games/one_player_crates_epsilon_simple/'
     world = BombeRLeWorld([
     
-            ('simple_agent', False),
+            ('epsilon_simple_agent', False),
             #('simple_agent', False),
             #('simple_agent', False),
             #('simple_agent', False)

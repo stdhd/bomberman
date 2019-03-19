@@ -12,6 +12,7 @@ Available Features:
         me_has_bomb,
         closest_coin_dist,
         d_closest_coin_dir,
+        d_closest_crate_dir,
         closest_foe_dist,
         d_closest_foe_dir,
         closest_foe_has_bomb,
@@ -61,6 +62,7 @@ class ObservationObject:
         "me_has_bomb": "mhb",
         "closest_coin_dist": "ccdist",
         "d_closest_coin_dir": "ccdir",
+        "d_closest_crate_dir": "ccrdir",
         "closest_foe_dist": "cfdist",
         "d_closest_foe_dir": "cfdir",
         "closest_foe_has_bomb": "cfhb",
@@ -97,22 +99,14 @@ class ObservationObject:
         :param AGENTS: List of player indices (0 to 3 inclusive)
         :return: Array of observations
         """
-
         radius, board, player_locs, bomb_locs, bomb_timers, window_size = self.radius, self.board, self.player_locs, \
                                                              self.bomb_locs, self.bomb_timers, self.window_size
-
         observations = np.zeros((AGENTS.shape[0], self.obs_length))
-
         features = self._get_features(AGENTS)  # find features for all agents
-
         for count, player_index in enumerate(AGENTS):  # construct the window for all agents
-
             player_x, player_y = index_to_x_y(self.player_locs[int(player_index)])
-
             window = self._make_window(radius, player_x, player_y)
-
             observations[count] = np.concatenate((window.flatten(), features[count]))  # concatenate window and features
-
         return observations
 
     def _make_window(self, radius_custom, center_x, center_y):
@@ -123,12 +117,9 @@ class ObservationObject:
         :param center_y:
         :return:
         """
-
         window_size_custom = 2*radius_custom + 1
         window = np.zeros((window_size_custom, window_size_custom))
-
         lower_x = center_x - radius_custom
-
         lower_y = center_y - radius_custom
 
         for i in np.arange(window_size_custom):
@@ -163,12 +154,9 @@ class ObservationObject:
         :param radius: Radius of window
         :return: True iff in window
         """
-
         obj_x, obj_y = index_to_x_y(obj_index)
-
         if abs(obj_x - origin_x) > radius or abs(obj_y - origin_y) > radius:
             return False
-
         return True
 
     def get_window(self, window, board_x, board_y, window_radius, window_origin_x, window_origin_y):
@@ -182,18 +170,14 @@ class ObservationObject:
         :param window_origin_y:
         :return:
         """
-
         if not self.is_in_window(x_y_to_index(board_x, board_y), window_origin_x, window_origin_y, window_radius):
             raise ValueError("Board coordinates not in window. ")
-
         return window[board_x - (window_origin_x - window_radius), board_y - (window_origin_y - window_radius)]
 
     def set_window(self, window, board_index, window_origin_x, window_origin_y, window_radius, val):
         if not self.is_in_window(board_index, window_origin_x, window_origin_y, window_radius):
             return
-
         board_x, board_y = index_to_x_y(board_index)
-
         window[board_x - (window_origin_x - window_radius), board_y - (window_origin_y - window_radius)] = val
 
 
@@ -335,7 +319,7 @@ class ObservationObject:
         if best_step == (x,y-1): return 2 # move up
         if best_step == (x,y+1): return 3 # move down
         if best_step == None: return 4 # No targets exist.
-        if best_step == (x,y): return 5 # Something is wrong: This case should not occur
+        if best_step == (x,y): return 5 # Target can not be reached. Only occurs if current position is right before the obstacle.
         return 6 # Something else is wrong: This case should not occur
 
     def me_has_bomb(self):
@@ -363,13 +347,25 @@ class ObservationObject:
     def d_closest_coin_dir(self):
         """
         Direction to player's nearest coin.
+        :return: 0 (left), 1 (right), 2 (up), 3 (down), 4 (no crate), 5 (one field before not reachable coin), 6 (something went wrong)
         """
-        arena = self.arena
-        coins_ind = np.where(arena == 3)
+        coins_ind = np.where(self.arena == 3)
         coins_coords = np.vstack((coins_ind[0], coins_ind[1])).T
-        free_space = (arena == 0) | (arena == 3)
+        free_space = (self.arena == 0) | (self.arena == 3)
         x, y = self.player.me_loc[0], self.player.me_loc[1]
         best_step = self._look_for_targets(free_space, (x, y), coins_coords, None)
+        return self._determine_direction(best_step, x, y)
+
+    def d_closest_crate_dir(self):
+        """
+        Direction to player's nearest crate. 
+        :return: 0 (left), 1 (right), 2 (up), 3 (down), 4 (no crate), 5 (one field before crate), 6 (something went wrong)
+        """
+        crate_ind = np.where(self.arena == 1)
+        crate_coords = np.vstack((crate_ind[0], crate_ind[1])).T
+        free_space = (self.arena == 0) | (self.arena == 3)
+        x, y = self.player.me_loc[0], self.player.me_loc[1]
+        best_step = self._look_for_targets(free_space, (x, y), crate_coords, None)
         return self._determine_direction(best_step, x, y)
 
     def closest_foe_dist(self):

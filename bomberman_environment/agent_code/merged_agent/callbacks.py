@@ -21,7 +21,7 @@ def setup(self):
     self.discount = 0.7
     self.epsilon = 0.15
     self.train_flag = True
-    self.obs_object = ObservationObject(1, ["d_closest_coin_dir", "d_closest_safe_field_dir"], self.logger)
+    self.obs_object = ObservationObject(0, ["d_closest_coin_dir", "d_closest_crate_dir", "d_closest_safe_field_dir"], self.logger)
     # Used for plotting
     self.total_steps_over_episodes = 0
     self.total_deaths_over_episodes = 0
@@ -180,25 +180,26 @@ def end_of_episode(self):
 
 def _getReward(events, old_observation):
     reward = 0
-    ccdir_feature_ind = 9
-    csfdir_feature_ind = 10
-    # Left, right, up, down (0-3) check for coin flag (old_observation[9])
-    if 0 in events:
-        if old_observation[csfdir_feature_ind] == 8: reward += 250 # Reward when agent chooses direction safe field
+    ccdir_feature_ind = 1
+    ccrdir_feature_ind = 2
+    csfdir_feature_ind = 3
+    if 0 in events: # Left
+        if old_observation[csfdir_feature_ind] == 0: reward += 250 # Reward when agent chooses direction safe field
         reward -= 50
-    elif 1 in events:
-        if old_observation[csfdir_feature_ind] == 16: reward += 250
+    elif 1 in events: # Right
+        if old_observation[csfdir_feature_ind] == 1: reward += 250
         reward -= 50
-    elif 2 in events:
-        if old_observation[csfdir_feature_ind] == 24: reward += 250
+    elif 2 in events: # Up
+        if old_observation[csfdir_feature_ind] == 2: reward += 250
         reward -= 50
-    elif 3 in events:
-        if old_observation[csfdir_feature_ind] == 32: reward += 250
+    elif 3 in events: # Down
+        if old_observation[csfdir_feature_ind] == 3: reward += 250
         reward -= 50
     if 4 in events: reward -= 500 # Waited
     if 5 in events: reward -= 0 # Interrupted 
     if 6 in events: reward -= 500 # Invalid action
-    if 7 in events: reward -= 0 # Bomb dropped
+    if 7 in events: # Bomb dropped
+        if old_observation[ccrdir_feature_ind] == 5: reward += 250 # Reward when agent chooses direction safe field
     if 8 in events: reward += 0 # Bomb exploded
     if 9 in events: reward += 0 # Crate destroyed
     if 10 in events: reward += 0 # Coin found

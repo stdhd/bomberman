@@ -535,7 +535,7 @@ class ObservationObject:
         Bomb and enemy on arena: 80, 40, 20, 10
         """
         x, y = self.player.me_loc[0], self.player.me_loc[1]
-        is_on_danger_zone_factor = 1
+        is_on_danger_zone_factor = 0
         arena = self.arena # Check if it contains all information?
         # self.logger.info(f'ARENA: {arena}')
         bombs_ind1 = np.where(arena == 80)
@@ -567,7 +567,7 @@ class ObservationObject:
         
         # If agent is on danger zone indicate this by multiplying returned direction with 8
         if [x,y] in danger_zone_coords:
-            is_on_danger_zone_factor = 8
+            is_on_danger_zone_factor = 7
         danger_zone_coords = np.array(danger_zone_coords)
         free_space = (arena == 0) | (arena == 3)
         free_space_calc = np.copy(free_space)
@@ -582,7 +582,7 @@ class ObservationObject:
         # self.logger.info(f'Self: {x, y}')
         # self.logger.info(f'Best_step: {best_step}')
 
-        return self._determine_direction(best_step, x, y) * is_on_danger_zone_factor
+        return (self._determine_direction(best_step, x, y) + 1) * is_on_danger_zone_factor
 
     def _name_player_events(self):
         """

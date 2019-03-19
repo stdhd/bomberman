@@ -90,10 +90,10 @@ def act(self):
     """
 
 
-    if np.random.rand() <= 0.4:
+    if np.random.rand() <= 0.2:
         self.next_action = np.random.choice(['RIGHT', 'LEFT', 'UP', 'DOWN', 'WAIT', 'BOMB'],
-                                             p=[.20, .20, .20, .20, .12,
-                                                .08])  # FIXME Modified to wait
+                                             p=[.20, .20, .20, .20, .10,
+                                                .10])  # FIXME Modified to wait
         return
     self.logger.info('Picking action according to rule set')
 

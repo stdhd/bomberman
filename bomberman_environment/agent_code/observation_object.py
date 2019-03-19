@@ -480,7 +480,6 @@ class ObservationObject:
 
     def d_closest_safe_field_dirNEW(self):
         """
-
         :return: Direction to take towards nearest field which is not threatened by bomb explosion
         """
         x, y = self.player.me_loc[0], self.player.me_loc[1]

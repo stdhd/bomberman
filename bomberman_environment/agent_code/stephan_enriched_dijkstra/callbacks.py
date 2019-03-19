@@ -97,7 +97,7 @@ def create_arena(self):
     for x, y, t, tt, ttt in self.game_state['others']:
         arena[x, y] = 6
 
-    for x, y in self.game_state['coins']:
+    for x, y in self.game_state['coin_locs']:
         arena[x, y] = 10
 
     for i in range(17):
@@ -218,7 +218,7 @@ def _is_field_threatened(self,x,y):
 
 def get_observation(self,spielfeld, x, y):
     '''
-    :param spielfeld: 2D arena array with bombs, crates, walls, enemies, coins
+    :param spielfeld: 2D arena array with bombs, crates, walls, enemies, coin_locs
     :param y: coordiante of agent
     :param x: coordinate of agent
     :return: return observation vector

@@ -58,7 +58,7 @@ def act(self):
     
     arena = self.game_state['arena']
     x, y, _, bombs_left, score = self.game_state['self']
-    coins = np.array(self.game_state['coins'])
+    coins = np.array(self.game_state['coin_locs'])
     bombs = self.game_state['bombs']
     bomb_map = np.ones(arena.shape) * 5
     for xb,yb,t in bombs:
@@ -125,8 +125,8 @@ def reward_update(self):
     arena = self.game_state['arena']
     x, y, _, _, _ = self.game_state['self']
     self.logger.info(f'self: {[x, y]}')
-    coins = np.array(self.game_state['coins'])
-    self.logger.info(f'Coins: {coins.any()}')
+    coins = np.array(self.game_state['coin_locs'])
+    self.logger.info(f'Coins: {coin_locs.any()}')
     bombs = self.game_state['bombs']
     bomb_map = np.ones(arena.shape) * 5
     for xb,yb,t in bombs:

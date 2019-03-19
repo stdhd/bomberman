@@ -93,7 +93,7 @@ def create_arena(self):
     for x, y, t, tt, ttt in self.game_state['others']:
         arena[x, y] = 6
 
-    for x, y in self.game_state['coins']:
+    for x, y in self.game_state['coin_locs']:
         arena[x, y] = 10
 
     return arena

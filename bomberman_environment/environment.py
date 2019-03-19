@@ -114,7 +114,7 @@ class BombeRLeWorld(object):
                 if self.arena[xx,yy] == 1:
                     self.arena[xx,yy] = 0
 
-        # Distribute coins evenly
+        # Distribute coin_locs evenly
         self.coins = []
         for i in range(3):
             for j in range(3):
@@ -137,7 +137,7 @@ class BombeRLeWorld(object):
 
         self.replay = {
                 'arena': np.array(self.arena),
-                'coins': [c.get_state() for c in self.coins],
+                'coin_locs': [c.get_state() for c in self.coins],
                 'agents': [a.get_state() for a in self.agents],
                 'actions': dict([(a.name, []) for a in self.agents]),
                 'permutations': []
@@ -176,7 +176,7 @@ class BombeRLeWorld(object):
         state['self'] = agent.get_state()
         state['others'] = [other.get_state() for other in self.active_agents if other is not agent]
         state['bombs'] = [bomb.get_state() for bomb in self.bombs]
-        state['coins'] = [coin.get_state() for coin in self.coins if coin.collectable]
+        state['coin_locs'] = [coin.get_state() for coin in self.coins if coin.collectable]
         explosion_map = np.zeros(self.arena.shape)
         for e in self.explosions:
             for (x,y) in e.blast_coords:
@@ -561,7 +561,7 @@ class ReplayWorld(BombeRLeWorld):
 
         # Game world and objects
         self.arena = np.array(self.replay['arena'])
-        self.coins = [Coin(xy) for xy in self.replay['coins']]
+        self.coins = [Coin(xy) for xy in self.replay['coin_locs']]
         self.active_agents = [a for a in self.agents]
         for i, agent in enumerate(self.agents):
             agent.reset()

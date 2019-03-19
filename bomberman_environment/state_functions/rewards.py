@@ -4,12 +4,13 @@ import numpy as np
 
 
 event_rewards = np.zeros(len(events))
-event_rewards[4] = -100     # WAITED
-event_rewards[6] = -80000    # INVALID ACTION
+event_rewards[4] = -50     # WAITED
+event_rewards[6] = -10000    # INVALID ACTION
+event_rewards[9] = 50          # DESTROYED CRATES
 event_rewards[10] = 0       # COIN FOUND
-event_rewards[11] = 600     # COIN COLLECTED
+event_rewards[11] = 100     # COIN COLLECTED
 event_rewards[12] = 500     # KILLED OPPONENT
-event_rewards[13] = -2000   # KILLED SELF
+# event_rewards[13] = -2000   # KILLED SELF (implies got killed)
 event_rewards[14] = -2000   # GOT KILLED
 
 def get_reward(state, player_index):
@@ -29,7 +30,7 @@ def get_reward(state, player_index):
     # if player[4:][13] > 0:
     #     print("!!!!")
 
-    return -3 + np.sum(player[4:] * event_rewards)
+    return np.sum(player[4:] * event_rewards)
 
 
 

@@ -73,9 +73,9 @@ def act(self):
     x, y, _, bombs_left, score = self.game_state['self']
     bombs = self.game_state['bombs']
     # self.logger.info(f'BOMBS: {bombs}')
-    rep = derive_state_representation(self)
-    self.obs_object.set_state(derive_state_representation(self))
-    observation = self.obs_object.create_observation(np.array([int(0)]))[0]
+    rep = derive_state_representation(self)  # DEBUG
+    self.obs_object.set_state(rep)
+    observation = self.obs_object.create_observation(np.array([0]))[0]
     # observation = np.delete(observation, [0])
     self.old_observation = observation
     # self.logger.info(f'self: {[x, y]}')

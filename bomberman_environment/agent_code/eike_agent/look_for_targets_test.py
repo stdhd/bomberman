@@ -54,49 +54,39 @@ def look_for_targets(free_space, start, targets, logger):
         if parent_dict[current] == start: return current
         current = parent_dict[current]
 
+arena = np.array(
+ [[-1., -1., -1., -1., -1., -1., -1., -1., -1., -1., -1., -1., -1., -1., -1., -1., -1.],
+  [-1.,  0.,  0.,  0.,  0.,  0.,  0.,  0.,  0.,  0.,  1.,  3.,  1.,  0.,  0.,  0., -1.],
+  [-1.,  0., -1.,  0., -1.,  0., -1.,  0., -1.,  0., -1.,  1., -1.,  0., -1.,  0., -1.],
+  [-1.,  0.,  0.,  0.,  0.,  0.,  0.,  0.,  0.,  0.,  0.,  0.,  0.,  0.,  0.,  0., -1.],
+  [-1.,  0., -1.,  0., -1.,  0., -1.,  0., -1.,  0., -1.,  0., -1.,  0., -1.,  0., -1.],
+  [-1.,  0.,  0.,  0.,  0.,  0.,  0.,  0.,  0.,  0.,  0.,  0.,  0.,  0.,  0.,  0., -1.],
+  [-1.,  0., -1.,  0., -1.,  0., -1.,  0., -1.,  0., -1.,  0., -1.,  0., -1.,  0., -1.],
+  [-1.,  0.,  0.,  0.,  0.,  0.,  0.,  0.,  0.,  0.,  0.,  0.,  0.,  0.,  0.,  0., -1.],
+  [-1.,  0., -1.,  0., -1.,  0., -1.,  0., -1.,  0., -1.,  0., -1.,  0., -1.,  0., -1.],
+  [-1.,  0.,  0.,  0.,  0.,  0.,  0.,  0.,  0.,  0.,  0.,  0.,  0.,  0.,  0.,  0., -1.],
+  [-1.,  0., -1.,  0., -1.,  0., -1.,  0., -1.,  0., -1.,  0., -1.,  0., -1.,  0., -1.],
+  [-1.,  0.,  0.,  0.,  0.,  0.,  0.,  0.,  0.,  0.,  0.,  0.,  0.,  0.,  0.,  0., -1.],
+  [-1.,  0., -1.,  0., -1.,  0., -1.,  0., -1.,  0., -1.,  0., -1.,  0., -1.,  0., -1.],
+  [-1.,  0.,  0.,  0.,  0.,  0.,  0.,  0.,  0.,  0.,  0.,  0.,  0.,  0.,  0.,  0., -1.],
+  [-1.,  0., -1.,  0., -1.,  0., -1.,  0., -1.,  0., -1.,  0., -1.,  0., -1.,  0., -1.],
+  [-1.,  0.,  0.,  0.,  0.,  0.,  0.,  0.,  0.,  0.,  0.,  0.,  0.,  0.,  0.,  0., -1.],
+  [-1., -1., -1., -1., -1., -1., -1., -1., -1., -1., -1., -1., -1., -1., -1., -1., -1.]])
+player_pos = (1,13)
+# coins = np.array([[4, 3], [ 1,  9], [ 2, 11], [ 8,  1],[ 6, 9], [ 9,13], [15,  1], [11,  8], [14, 13]])
+# coins = np.array([[1, 11]])
+crate = np.array([[1, 12]])
 
-free_space = np.array([[False, False, False, False, False, False, False, False, False, False, False, False, False, False, False, False, False],
- [False,  True,  True,  True,  True,  True,  True,  True,  True,  True,  True,  True, True,  True,  True,  True, False],
- [False,  True, False, False, False,  True, False,  True, False,  True, False, False,
-  False,  True, False,  True, False],
- [False,  True,  True,  True,  True,  True,  True,  True,  True, False,  True,  True,
-   True,  True,  True,  True, False],
- [False,  True, False,  True, False,  True, False,  True, False,  True, False,  True,
-  False,  True, False,  True, False],
- [False,  True,  True,  True,  True,  True,  True,  True,  True,  True,  True,  True,
-   True,  True,  True,  True, False],
- [False,  True, False,  True, False,  True, False,  True, False,  True, False,  True,
-  False,  True, False,  True, False],
- [False,  True, False,  True,  True,  True,  True,  True,  True,  True,  True,  True,
-   True,  True, False,  True, False],
- [False,  True, False,  True, False,  True, False,  True, False,  True, False,  True,
-  False,  True, False,  True, False],
- [False,  True,  True,  True,  True,  True,  True,  True,  True,  True,  True,  True,
-   True,  True,  True,  True, False],
- [False,  True, False,  True, False,  True, False,  True, False, False, False,  True,
-  False,  True, False,  True, False],
- [False,  True,  True,  True,  True,  True,  True,  True,  True,  True,  True,  True,
-   True,  True,  True,  True, False],
- [False, False, False,  True, False,  True, False,  True, False,  True, False, False,
-  False,  True, False,  True, False],
- [False,  True,  True,  True,  True,  True,  True,  True, False,  True,  True,  True,
-   True,  True,  True,  True, False],
- [False,  True, False,  True, False,  True, False,  True, False,  True, False,  True,
-  False,  True, False,  True, False],
- [False,  True,  True,  True,  True,  True,  True,  True,  True,  True,  True,  True,
-   True,  True,  True,  True, False],
- [False, False, False, False, False, False, False, False, False, False, False, False,
-  False, False, False, False, False]])
-
-output = (3,11)
-coins = np.array([[4, 3], [ 1,  9], [ 2, 11], [ 8,  1],[ 6, 9], [ 9,13], [15,  1], [11,  8], [14, 13]])
-while(True):
-    output = look_for_targets(free_space, output, coins, None)
-    try:
-      if np.where((coins == output).all(axis=1))[0].shape[0] != 0:
-          coins = np.delete(coins, np.where((coins == output).all(axis=1))[0], axis=0)
-          if(coins.shape[0] == 0):
-            print(coins)
-            break
-    except:
-      print("doNothing")
+free_space = (arena == 0) | (arena == 3)
+output = look_for_targets(free_space, player_pos, crate, None)
+print(output)
+# while(True):
+#     output = look_for_targets(free_space, output, coins, None)
+#     try:
+#       if np.where((coins == output).all(axis=1))[0].shape[0] != 0:
+#           coins = np.delete(coins, np.where((coins == output).all(axis=1))[0], axis=0)
+#           if(coins.shape[0] == 0):
+#             print(coins)
+#             break
+#     except:
+#       print("doNothing")

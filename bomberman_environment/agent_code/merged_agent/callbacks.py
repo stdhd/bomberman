@@ -74,7 +74,7 @@ def act(self):
     arena = self.game_state['arena']
     x, y, _, bombs_left, score = self.game_state['self']
     bombs = self.game_state['bombs']
-    self.obs_object.set_state(derive_state_representation(self, self.logger))
+    self.obs_object.set_state(derive_state_representation(self))
     observation = self.obs_object.create_observation(np.array([int(0)]))[0]
     self.old_observation = observation
     
@@ -147,7 +147,7 @@ def reward_update(self):
     # self.logger.info(f'Coins: {coin_locs.any()}')
     bombs = self.game_state['bombs']
     # self.logger.info(f'BOMBSReward: {bombs}')
-    self.obs_object.set_state(derive_state_representation(self,self.logger))
+    self.obs_object.set_state(derive_state_representation(self))
     observation = self.obs_object.create_observation(np.array([0]))[0]
     warnings.simplefilter(action='ignore', category=FutureWarning)
     observation_ind = np.where((self.observation_db == observation).all(axis=1))[0]

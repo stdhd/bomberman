@@ -122,7 +122,7 @@ def act(self):
         # If observation_db has entry the action with the highest value is chosen.
         elif observation_ind.shape[0] != 0:
             print("---")
-            print("KNOWN observation")
+            print("KNOWN observation", self.obs_object.get_file_name_string())
             print(self.observation_db[observation_ind[0]])
             # print(self.observation_db[observation_ind])
             print('LEFT', 'RIGHT', 'UP', 'DOWN', 'WAIT', 'BOMB')
@@ -135,6 +135,7 @@ def act(self):
         else:
             # TODO: regression
             print("unknown observation")
+            print(observation)
             self.last_action_ind = np.random.randint(0,6)
 
     self.next_action = ['LEFT', 'RIGHT', 'UP', 'DOWN', 'WAIT', 'BOMB'][self.last_action_ind]

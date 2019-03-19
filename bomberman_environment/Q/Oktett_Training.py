@@ -35,6 +35,9 @@ def q_train_from_games_jakob(train_data, write_path, obs:ObservationObject, a = 
         QUANTITY = np.zeros([0,6])
         KNOWN = np.zeros([0, obs.obs_length])
 
+    filecount = 0
+    current_trained_batch = []  # keeps track of the files used for training
+
     for file in [f for f in listdir(train_data) if isfile(join(train_data, f))]:
         # go through files
 
@@ -124,16 +127,21 @@ def q_train_from_games_jakob(train_data, write_path, obs:ObservationObject, a = 
 
                 last_index[rewards_players[count]] = (index_current, rotations_current)
 
-        add_to_trained(write_path+"/records.json", file)  # update json table
-
+        filecount += 1
+        current_trained_batch.append(file)
         print("Trained with file", file)
+
+        if filecount % 20 == 0:
+            add_to_trained(write_path+"/records.json", current_trained_batch)  # update json table
+            np.save(write_path + '/observation-' + filename, KNOWN)
+            np.save(write_path + '/q_table-' + filename, QTABLE)
+            np.save(write_path + '/quantity-' + filename, QUANTITY)
+            filecount -= filecount
+            current_trained_batch.clear()
 
         if not KNOWN.shape[0] % 8 == 0:
             raise ValueError("Size of observation database must be product of 8*n")
 
-        np.save(write_path + '/observation-' + filename, KNOWN)
-        np.save(write_path + '/q_table-' + filename, QTABLE)
-        np.save(write_path + '/quantity-' + filename, QUANTITY)
 
     return KNOWN, QTABLE
 

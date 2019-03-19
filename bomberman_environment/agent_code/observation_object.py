@@ -1,7 +1,9 @@
 from state_functions.indices import *
+from state_functions.rewards import get_reward
 from random import shuffle
 import numpy as np
 import settings
+
 
 
 """
@@ -553,7 +555,9 @@ class ObservationObject:
                 self.logger.info(f'YES')
             return self._determine_direction(None, x, y)
         is_on_danger_zone_factor = 0
-        arena = self.arena        
+        arena = self.arena
+        if self.logger != None:
+            self.logger.info(f'ARENA: {arena}')
         danger_zone_coords = []
         down, up, left, right = True, True, True, True
         # for x_bomb, y_bomb in np.vstack((x_bombs, y_bombs)).T:
@@ -630,6 +634,15 @@ class ObservationObject:
 
             events[i] = np.array(settings.events)[np.array(events[i])]
         return events
+
+    def _get_reward(self, indices):
+        """
+        Debugging function to show player rewards
+        :param indices:
+        :return:
+        """
+        rewards = [get_reward(self.state, player_index=player) for player in indices]
+        return rewards
 
 class _Player:
     """

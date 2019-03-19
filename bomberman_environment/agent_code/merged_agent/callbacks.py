@@ -143,8 +143,8 @@ def reward_update(self):
 
     arena = self.game_state['arena']
     x, y, _, _, _ = self.game_state['self']
-    coins = np.array(self.game_state['coins'])
-    # self.logger.info(f'Coins: {coins.any()}')
+    coins = np.array(self.game_state['coin_locs'])
+    # self.logger.info(f'Coins: {coin_locs.any()}')
     bombs = self.game_state['bombs']
     # self.logger.info(f'BOMBSReward: {bombs}')
     self.obs_object.set_state(derive_state_representation(self,self.logger))
@@ -224,11 +224,11 @@ def _getReward(events, old_observation):
 #     state[-1] = self.game_state['step']
 #     arena = self.game_state['arena']
 #     explosions = self.game_state['explosions']
-#     coins = self.game_state['coins']
+#     coin_locs = self.game_state['coin_locs']
 #     players = self.game_state['others']
 #     bombs = self.game_state['bombs']
 #     me = self.game_state['self']
-#     for x, y in coins:
+#     for x, y in coin_locs:
 #         ind = indices.x_y_to_index(x, y, s.cols, s.rows) - 1
 #         state[ind] = 3
 

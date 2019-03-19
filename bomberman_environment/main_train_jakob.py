@@ -15,7 +15,7 @@ def main():
     os.chdir(os.path.dirname(__file__))
     cwd = os.getcwd()
 
-    obs = ObservationObject(1, ['d_closest_coin_dir', 'd_closest_safe_field_dirNEW', 'me_has_bomb'], None)
+    obs = ObservationObject(1, ['d_closest_coin_dir', 'd_closest_safe_field_dir', 'me_has_bomb'], None)
 
     write_path = 'data/qtables/' + obs.get_file_name_string()
 

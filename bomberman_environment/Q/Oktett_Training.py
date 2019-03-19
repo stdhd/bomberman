@@ -165,6 +165,7 @@ def get_transformations(obs, radius, direction_sensitive):
         all_transformed[i][new_rest == 3] = transformations[i, 3]
         all_transformed[i][new_rest == 4] = 4
         all_transformed[i][new_rest == 5] = 5
+        all_transformed[i][new_rest == 6] = 6
 
     transformed_rest = np.zeros([7, new_rest.shape[0]])
     results = np.zeros([8, obs.shape[0]])
@@ -184,7 +185,7 @@ def get_transformations(obs, radius, direction_sensitive):
         results[i] = np.append(candidates[i], transformed_rest[i])
         direction_change[i] = np.append(transformations[i], np.array([4, 5]))
 
-    direction_change[7] = np.array([0,1,2,3,4,5])
+    direction_change[7] = np.array([0,1,2,3,4,5,6])
     results[7] = obs
 
     return results, direction_change

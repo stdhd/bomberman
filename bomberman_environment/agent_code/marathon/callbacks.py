@@ -120,7 +120,7 @@ def derive_state_representation(self):
 
     explosions = self.game_state['explosions']
 
-    coins = self.game_state['coins']
+    coins = self.game_state['coin_locs']
 
     players = self.game_state['others']
 

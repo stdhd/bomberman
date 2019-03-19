@@ -14,7 +14,7 @@ def derive_state_representation(self):
     state[-1] = self.game_state['step']
     arena = self.game_state['arena']
     explosions = self.game_state['explosions']
-    coins = self.game_state['coins']
+    coins = self.game_state['coin_locs']
     players = self.game_state['others']
     bombs = self.game_state['bombs']
     me = self.game_state['self']

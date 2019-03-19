@@ -113,3 +113,10 @@ screenshots/*.webm
 .vscode
 
 /agent_code/../logs
+
+# Learning files
+*q_table-*
+
+# bomberman framework files
+main.py
+settings.py

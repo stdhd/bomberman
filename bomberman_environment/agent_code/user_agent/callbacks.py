@@ -14,7 +14,7 @@ def act(agent):
     bombs = agent.game_state['bombs']
     bomb_xys = [(x,y) for (x,y,t) in bombs]
     others = [(x,y) for (x,y,n,b,s) in agent.game_state['others']]
-    coins = agent.game_state['coins']
+    coins = agent.game_state['coin_locs']
     explosions = agent.game_state['explosions']
     step = agent.game_state['step']
 

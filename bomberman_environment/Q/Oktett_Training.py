@@ -23,7 +23,7 @@ def q_train_from_games_jakob(train_data, write_path, obs:ObservationObject, a = 
     :return:
     """
 
-    debug_mode = True
+    debug_mode = False
     filename = obs.get_file_name_string()
     try:
         QTABLE = np.load(write_path + '/q_table-' + filename + '.npy')

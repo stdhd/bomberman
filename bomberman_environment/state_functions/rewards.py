@@ -26,6 +26,9 @@ def get_reward(state, player_index):
     begin = state.shape[0] - (1 + (4 - player_index) * 21)
     end = state.shape[0] - (1 + (4 - player_index - 1) * 21)
     player = state[begin: end]
+    #
+    # if player[4:][13] > 0:
+    #     print("!!!!")
 
     return np.sum(player[4:] * event_rewards)
 

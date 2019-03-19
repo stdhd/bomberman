@@ -159,9 +159,3 @@ def end_of_episode(self):
     game. self.events will contain all events that occured during your agent's
     final step. You should place your actual learning code in this method.
     """
-    self.total_steps_over_episodes += self.game_state['step']
-    if 13 in self.events or 14 in self.events: self.total_deaths_over_episodes += 1
-    self.number_of_episode +=1
-    if self.number_of_episode % 250 == 0: 
-        self.logger.info(f'Episode number, Total Steps and Deaths: {self.number_of_episode, self.total_steps_over_episodes, self.total_deaths_over_episodes}')
-        self.total_steps_over_episodes, self.total_deaths_over_episodes = 0, 0

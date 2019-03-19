@@ -28,6 +28,7 @@ Available Features:
         d4_is_safe_to_move_b_r
         d4_is_safe_to_move_c_u
         d4_is_safe_to_move_d_d
+        d_closest_enemy_dir
 """
 
 
@@ -80,7 +81,8 @@ class ObservationObject:
         "d4_is_safe_to_move_a_l" : "ismal",
         "d4_is_safe_to_move_b_r": "ismbl",
         "d4_is_safe_to_move_c_u": "ismcu",
-        "d4_is_safe_to_move_d_d": "ismdd"
+        "d4_is_safe_to_move_d_d": "ismdd",
+        "d_closest_enemy_dir": "ced"
 
         }
 
@@ -369,6 +371,7 @@ class ObservationObject:
         # manhattan dist. to coin_locs
         return np.min(player.coin_dists)
 
+
     def d_closest_coin_dir(self):
         """
         Direction to player's nearest coin.
@@ -379,6 +382,22 @@ class ObservationObject:
         free_space = (arena == 0) | (arena == 3)
         x, y = self.player.me_loc[0], self.player.me_loc[1]
         best_step = self._look_for_targets(free_space, (x, y), coins_coords, None)
+        return self._determine_direction(best_step, x, y)
+
+    def d_closest_enemy_dir(self):
+        """
+        Direction to player's nearest enemy.
+        """
+        arena = np.copy(self.arena)
+        x, y = self.player.me_loc[0], self.player.me_loc[1]
+
+        # remove myself from arena
+        arena[x, y] = 0
+
+        enemy_ind = np.where(arena == 5)
+        enemy_coords = np.vstack((enemy_ind[0], enemy_ind[1])).T
+        free_space = (arena == 0) | (arena == 3)
+        best_step = self._look_for_targets(free_space, (x, y), enemy_coords, None)
         return self._determine_direction(best_step, x, y)
 
     def closest_foe_dist(self):

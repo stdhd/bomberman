@@ -21,7 +21,8 @@ def main():
                                 'd4_is_safe_to_move_a_l',
                                 'd4_is_safe_to_move_b_r',
                                 'd4_is_safe_to_move_c_u',
-                                'd4_is_safe_to_move_d_d'], None)
+                                'd4_is_safe_to_move_d_d',
+                                'd_closest_enemy_dir'], None)
 
     write_path = 'data/qtables/' + obs.get_file_name_string()
 

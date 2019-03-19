@@ -330,8 +330,8 @@ class ObservationObject:
         if best_step == (x+1,y): return 1 # move right
         if best_step == (x,y-1): return 2 # move up
         if best_step == (x,y+1): return 3 # move down
-        if best_step == (x,y): return 4 # Something is wrong: This case should not occur
-        if best_step == None: return 5 # No targets exist.
+        if best_step == None: return 4 # No targets exist.
+        if best_step == (x,y): return 5 # Something is wrong: This case should not occur
         return 6 # Something else is wrong: This case should not occur
 
     def me_has_bomb(self):
@@ -535,39 +535,33 @@ class ObservationObject:
         Bomb and enemy on arena: 80, 40, 20, 10
         """
         x, y = self.player.me_loc[0], self.player.me_loc[1]
-        is_on_danger_zone_factor = 0
-        arena = self.arena # Check if it contains all information?
-        # self.logger.info(f'ARENA: {arena}')
-        bombs_ind1 = np.where(arena == 80)
-        bombs_ind2 = np.where(arena == 40)
-        bombs_ind3 = np.where(arena == 20)
-        bombs_ind4 = np.where(arena == 10)
-        bombs_ind5 = np.where(arena == 8)
-        bombs_ind6 = np.where(arena == 4)
-        bombs_ind7 = np.where(arena == 2)
-        x_bombs = np.concatenate((bombs_ind1[0], bombs_ind2[0], bombs_ind3[0], bombs_ind4[0], bombs_ind5[0], bombs_ind6[0], bombs_ind7[0]))
-        y_bombs = np.concatenate((bombs_ind1[1], bombs_ind2[1], bombs_ind3[1], bombs_ind4[1], bombs_ind5[1], bombs_ind6[1], bombs_ind7[1]))
-        # If there are no bombs on the field the direction should indicate this
-        if x_bombs.shape[0] == 0:
+        # If there are no bombs on the field the direction should indicate this by turning off this feature (return 4)
+        if not self.bomb_locs.any(): 
+            self.logger.info(f'YES')
             return self._determine_direction(None, x, y)
+        is_on_danger_zone_factor = 0
+        arena = self.arena        
         danger_zone_coords = []
         down, up, left, right = True, True, True, True
-        for x_bomb, y_bomb in np.vstack((x_bombs, y_bombs)).T:
-            danger_zone_coords.append([x_bomb, y_bomb])
-            for i in range(3):
-                if down and arena[x_bomb, y_bomb + (i + 1)] == -1: down = False
-                if up and arena[x_bomb, y_bomb - (i + 1)] == -1: up = False
-                if left and arena[x_bomb - (i + 1), y_bomb] == -1: left = False
-                if right and arena[x_bomb + (i + 1), y_bomb] == -1: right = False
+        # for x_bomb, y_bomb in np.vstack((x_bombs, y_bombs)).T:
+        for bomb_loc in self.bomb_locs:
+            if bomb_loc != 0:
+                x_bomb, y_bomb = index_to_x_y(bomb_loc)
+                danger_zone_coords.append([x_bomb, y_bomb])
+                for i in range(3):
+                    if down and arena[x_bomb, y_bomb + (i + 1)] == -1: down = False
+                    if up and arena[x_bomb, y_bomb - (i + 1)] == -1: up = False
+                    if left and arena[x_bomb - (i + 1), y_bomb] == -1: left = False
+                    if right and arena[x_bomb + (i + 1), y_bomb] == -1: right = False
 
-                if down: danger_zone_coords.append([x_bomb, y_bomb + (i + 1)]) 
-                if up: danger_zone_coords.append([x_bomb, y_bomb - (i + 1)])
-                if left: danger_zone_coords.append([x_bomb - (i + 1), y_bomb])
-                if right: danger_zone_coords.append([x_bomb + (i + 1), y_bomb])
+                    if down: danger_zone_coords.append([x_bomb, y_bomb + (i + 1)]) 
+                    if up: danger_zone_coords.append([x_bomb, y_bomb - (i + 1)])
+                    if left: danger_zone_coords.append([x_bomb - (i + 1), y_bomb])
+                    if right: danger_zone_coords.append([x_bomb + (i + 1), y_bomb])
         
-        # If agent is on danger zone indicate this by multiplying returned direction with 8
-        if [x,y] in danger_zone_coords:
-            is_on_danger_zone_factor = 7
+        # If agent is on danger zone indicate this by turning off feature (return 4)
+        if [x,y] not in danger_zone_coords:
+            return self._determine_direction(None, x, y)
         danger_zone_coords = np.array(danger_zone_coords)
         free_space = (arena == 0) | (arena == 3)
         free_space_calc = np.copy(free_space)
@@ -582,7 +576,7 @@ class ObservationObject:
         # self.logger.info(f'Self: {x, y}')
         # self.logger.info(f'Best_step: {best_step}')
 
-        return (self._determine_direction(best_step, x, y) + 1) * is_on_danger_zone_factor
+        return self._determine_direction(best_step, x, y)
 
     def _name_player_events(self):
         """

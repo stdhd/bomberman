@@ -56,17 +56,14 @@ def q_train_from_games_jakob(train_data, write_path, obs:ObservationObject, a = 
 
         last_index = [None, None, None, None]
 
-        all_died = np.array([]).astype(int)
+        obs.reset_killed_players()  # renew information about killed players
 
         for ind, step_state in enumerate(game):
 
             obs.set_state(step_state)  # Set this first to initialize members
-            living_players = np.where(obs.player_locs != 0)[0]
-            new_died = obs.died_players
-            just_died = np.array([player for player in new_died if player not in all_died]).astype(int)  # find players that died in this step
+            living_players = obs.living_players
+            just_died = obs.just_died  # find players that died in this step
             rewards_players = np.concatenate((living_players, just_died))
-            all_died = new_died
-            print()
 
             last_actions = np.zeros(4)
 
@@ -81,7 +78,7 @@ def q_train_from_games_jakob(train_data, write_path, obs:ObservationObject, a = 
 
             step_observations = obs.create_observation(living_players)
 
-            terminal_states = np.zeros((new_died.shape[0], obs.obs_length))  # get null observations for died players
+            terminal_states = np.zeros((just_died.shape[0], obs.obs_length))  # get null observations for died players
 
             for count, observation in enumerate(np.concatenate((step_observations, terminal_states))):
 

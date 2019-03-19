@@ -57,9 +57,12 @@ class ObservationObject:
 
         self.arena = None
 
-        self.bomb_locs, self.bomb_timers, self.died_players = None, None, None
+        self.bomb_locs, self.bomb_timers, self.dead_players = None, None, None
 
         self.player = None  # helper variable for creating features (not observation window)
+
+        self.dead_players, self.just_died, self.living_players = np.array([]), np.array([]), None
+
 
         self.name_dict = {
         "me_has_bomb": "mhb",
@@ -84,7 +87,6 @@ class ObservationObject:
 
         }
 
-
     def set_state(self, state):
 
         """
@@ -95,7 +97,50 @@ class ObservationObject:
 
         self.state = state
 
+        _old_died = self.dead_players.copy()
+
         self._initialize_feature_helpers()
+
+        self.just_died = np.array([player for player in self.dead_players if player not in _old_died]).astype(int)
+
+
+    def _initialize_feature_helpers(self):
+        if self.state is None:
+            raise AttributeError("State not set (call set_state)")
+
+        state = self.state
+        board_end = state.shape[0] - (1 + 4 * 21)
+        self.board = state[0: board_end]
+        player_blocks = state[board_end:]
+        self.player_locs = np.array([player_blocks[i * 21] for i in range(4)])  # player locations
+        self.coin_locs = np.where(self.board == 3)[0] + 1  # list of coin indices
+        self.bomb_locs = np.array([player_blocks[i * 21 + 2] for i in range(4)])  # bomb locations
+        self.bomb_timers = np.array([player_blocks[i * 21 + 3] for i in range(4)])  # bomb timers
+        killed_booleans = np.array([player_blocks[i * 21 + 18] for i in range(4)])  # note "got killed" boolean
+        self.dead_players = np.where(killed_booleans >= 1)[0]
+        self.living_players = np.where(self.player_locs != 0)[0]
+        for i in range(4):
+            if (not (i in self.living_players or i in self.dead_players)) or (i in self.living_players and i in self.dead_players):
+                raise RuntimeError("Players should be living XOR dead")
+        # manhattan dist. to coin_locs
+        self.arena = self._make_window(8, 8, 8)
+        self.danger_map = self._get_threat_map()
+        # self.player_distance_matrix = np.zeros((4, 4))
+        # for p1 in np.arange(self.player_distance_matrix.shape[0]):
+        #     for p2 in np.arange(start=p1 + 1, stop=self.player_distance_matrix.shape[1]):
+        #         if self.player_locs[p1] == 0 or self.player_locs[p2] == 0:
+        #             continue  # skip dead players
+        #         self.player_distance_matrix[p1, p2] = np.linalg.norm(np.array([*index_to_x_y(self.player_locs[p1])])
+        #                                                      - np.array([*index_to_x_y(self.player_locs[p2])]), ord=1)
+
+
+
+    def reset_killed_players(self):
+        """
+        Call this when starting a new game to refresh information about "just died" players
+        :return:
+        """
+        self.dead_players, self.just_died = np.array([]), np.array([])
 
     def create_observation(self, AGENTS:np.array):
         """
@@ -203,32 +248,6 @@ class ObservationObject:
         board_x, board_y = index_to_x_y(board_index)
 
         window[board_x - (window_origin_x - window_radius), board_y - (window_origin_y - window_radius)] = val
-
-
-    def _initialize_feature_helpers(self):
-        if self.state is None:
-            raise AttributeError("State not set (call set_state)")
-
-        state = self.state
-        board_end = state.shape[0] - (1 + 4 * 21)
-        self.board = state[0: board_end]
-        player_blocks = state[board_end:]
-        self.player_locs = np.array([player_blocks[i * 21] for i in range(4)])  # player locations
-        self.coin_locs = np.where(self.board == 3)[0] + 1  # list of coin indices
-        self.bomb_locs = np.array([player_blocks[i * 21 + 2] for i in range(4)])  # bomb locations
-        self.bomb_timers = np.array([player_blocks[i * 21 + 3] for i in range(4)])  # bomb timers
-        killed_booleans = np.array([player_blocks[i * 21 + 18] for i in range(4)])  # note "got killed" boolean
-        self.died_players = np.where(killed_booleans >= 1)[0]
-        # manhattan dist. to coin_locs
-        self.arena = self._make_window(8, 8, 8)
-        self.danger_map = self._get_threat_map()
-        # self.player_distance_matrix = np.zeros((4, 4))
-        # for p1 in np.arange(self.player_distance_matrix.shape[0]):
-        #     for p2 in np.arange(start=p1 + 1, stop=self.player_distance_matrix.shape[1]):
-        #         if self.player_locs[p1] == 0 or self.player_locs[p2] == 0:
-        #             continue  # skip dead players
-        #         self.player_distance_matrix[p1, p2] = np.linalg.norm(np.array([*index_to_x_y(self.player_locs[p1])])
-        #                                                      - np.array([*index_to_x_y(self.player_locs[p2])]), ord=1)
 
 
     def _get_features(self, AGENTS):

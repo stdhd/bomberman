@@ -20,7 +20,7 @@ def setup(self):
     self.discount = 0.7
     self.epsilon = -1
     self.train_flag = False
-    self.obs_object = ObservationObject(0, ['d_closest_coin_dir', 'd_closest_safe_field_dirNEW', 'me_has_bomb'], None)
+    self.obs_object = ObservationObject(1, ['d_closest_coin_dir', 'd_closest_safe_field_dirNEW', 'me_has_bomb'], None)
     # Used for plotting
     self.total_steps_over_episodes = 0
     self.total_deaths_over_episodes = 0

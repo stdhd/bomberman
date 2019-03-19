@@ -118,5 +118,5 @@ screenshots/*.webm
 *q_table-*
 
 # bomberman framework files
-main.py
-settings.py
+# main.py
+# settings.py

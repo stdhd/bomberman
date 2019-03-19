@@ -10,8 +10,7 @@ event_rewards[9] = 50          # DESTROYED CRATES
 event_rewards[10] = 0       # COIN FOUND
 event_rewards[11] = 100     # COIN COLLECTED
 event_rewards[12] = 500     # KILLED OPPONENT
-# event_rewards[13] = -2000   # KILLED SELF (implies got killed)
-event_rewards[14] = -2000   # GOT KILLED
+event_rewards[14] = -100   # GOT KILLED
 
 def get_reward(state, player_index):
 

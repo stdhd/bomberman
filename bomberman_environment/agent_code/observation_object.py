@@ -51,7 +51,7 @@ class ObservationObject:
 
         self.arena = None
 
-        self.bomb_locs, self.bomb_timers = None, None
+        self.bomb_locs, self.bomb_timers, self.died_players = None, None, None
 
         self.player = None  # helper variable for creating features (not observation window)
 
@@ -85,7 +85,7 @@ class ObservationObject:
 
         self.state = state
 
-        self.initialize_feature_helpers()
+        self._initialize_feature_helpers()
 
     def create_observation(self, AGENTS:np.array):
         """
@@ -129,13 +129,6 @@ class ObservationObject:
 
         lower_y = center_y - radius_custom
 
-        for player_loc in self.player_locs:
-            if player_loc > 0:
-                try:
-                    self.set_window(window, player_loc, center_x, center_y, radius_custom, 5)
-                except:
-                    continue
-
         for i in np.arange(window_size_custom):
             for j in np.arange(window_size_custom):
                 try:
@@ -144,7 +137,14 @@ class ObservationObject:
                 except ValueError as e:  # wall squares throw exception
                     window[i, j] = -1
 
-        for ind, bomb_loc in enumerate(self.bomb_locs):  # bombs have precedence over explosions
+        for player_loc in self.player_locs:
+            if player_loc > 0:
+                try:
+                    self.set_window(window, player_loc, center_x, center_y, radius_custom, 5)
+                except ValueError:
+                    continue
+
+        for ind, bomb_loc in enumerate(self.bomb_locs):  # bombs have precedence over explosions and players
             if bomb_loc > 0:
                 if self.bomb_timers[ind] <= 1:
                     self.set_window(window, bomb_loc, center_x, center_y, radius_custom, 2)
@@ -195,7 +195,7 @@ class ObservationObject:
         window[board_x - (window_origin_x - window_radius), board_y - (window_origin_y - window_radius)] = val
 
 
-    def initialize_feature_helpers(self):
+    def _initialize_feature_helpers(self):
         if self.state is None:
             raise AttributeError("State not set (call set_state)")
 
@@ -207,6 +207,8 @@ class ObservationObject:
         self.coins = np.arange(self.board.shape[0] + 1)[1:][np.where(self.board == 3)]  # list of coin indices
         self.bomb_locs = np.array([player_blocks[i * 21 + 2] for i in range(4)])  # bomb locations
         self.bomb_timers = np.array([player_blocks[i * 21 + 3] for i in range(4)])  # bomb timers
+        killed_booleans = np.array([player_blocks[i * 21 + 18] for i in range(4)])  # note "got killed" boolean
+        self.died_players = np.where(killed_booleans == 1)[0]
         # manhattan dist. to coins
         self.arena = self._make_window(8, 8, 8)
         self.player_distance_matrix = np.zeros((4, 4))

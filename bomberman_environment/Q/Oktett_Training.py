@@ -55,8 +55,13 @@ def q_train_from_games_jakob(train_data, write_path, obs:ObservationObject, a = 
 
         for ind, step_state in enumerate(game):
 
-            obs.set_state(step_state)
-            living_players = np.arange(4)[np.where(obs.player_locs != 0)]
+            obs.set_state(step_state)  # Set this first to initialize members
+            living_players = np.where(obs.player_locs != 0)[0]
+            died_players = obs.died_players
+            rewards_players = np.concatenate((living_players, died_players))
+
+            if rewards_players.shape[0] != living_players.shape[0] + died_players.shape[0]:
+                raise RuntimeError("Error: Player both alive and dead")
             last_actions = np.zeros(4)
 
             for player in range(4):
@@ -70,11 +75,17 @@ def q_train_from_games_jakob(train_data, write_path, obs:ObservationObject, a = 
 
             step_observations = obs.create_observation(living_players)
 
-            for count, observation in enumerate(step_observations):
+            terminal_states = np.zeros((died_players.shape[0], obs.obs_length))  # get null observations for died players
+
+            for count, observation in enumerate(np.concatenate((step_observations, terminal_states))):
+
+                if (count < living_players.shape[0] and np.array_equal(observation, np.zeros(obs.obs_length)))\
+                        or (count >= living_players.shape[0] and not np.array_equal(observation, np.zeros(obs.obs_length))):
+                    raise RuntimeError("Error: Got observation from living player != zeros")
 
                 findings = np.where((KNOWN == np.array([observation])).all(axis=1))[0]
 
-                if findings.shape[0] > 0:
+                if findings.shape[0] > 0:  # Found observation in database
 
                     candidates, rotations_current = get_transformations(observation, obs.radius,
                                                      obs.get_direction_sensitivity())
@@ -94,23 +105,24 @@ def q_train_from_games_jakob(train_data, write_path, obs:ObservationObject, a = 
                     index_current = np.arange(KNOWN.shape[0] - n_new_indices, KNOWN.shape[0])
 
                 if ind > 0:
-                    for i in range(last_index[living_players[count]][0].shape[0]):
-                        l_ind, l_rot = last_index[living_players[count]][0][i], last_index[living_players[count]][1][i]
+                    for i in range(last_index[rewards_players[count]][0].shape[0]):
+                        l_ind, l_rot = last_index[rewards_players[count]][0][i], last_index[rewards_players[count]][1][i]
                         best_choice_current_state = np.max(QTABLE[int(index_current[0])])
-                        reward = get_reward(step_state, living_players[count])
-                        rotated_action = np.where(l_rot == last_actions[living_players[count]])[0][0]
+                        # max of current state's Q Table values
+                        reward = get_reward(step_state, rewards_players[count])
+                        rotated_action = np.where(l_rot == last_actions[rewards_players[count]])[0][0]
                         QTABLE[int(l_ind), rotated_action] = (1 - a) *  \
                         QTABLE[int(l_ind), rotated_action] +\
                         a * (reward + g * best_choice_current_state)
 
                         QUANTITY[int(l_ind), rotated_action] += 1
 
-                        # if i == 0 and reward != -3 and debug_mode:
-                        #     print("-----")
-                        #     print("DID: " + str(rotated_action))
-                        #     print("Reward: " + str(reward))
+                        if i == 0 and reward != -3 and debug_mode:
+                            print("-----")
+                            print("DID: " + str(rotated_action))
+                            print("Reward: " + str(reward))
 
-                last_index[living_players[count]] = (index_current, rotations_current)
+                last_index[rewards_players[count]] = (index_current, rotations_current)
 
         add_to_trained(write_path+"/records.json", file)  # update json table
 
@@ -127,6 +139,11 @@ def q_train_from_games_jakob(train_data, write_path, obs:ObservationObject, a = 
 
 
 def get_transformations(obs, radius, direction_sensitive):
+    if np.array_equal(obs, np.zeros(obs.shape[0])):
+        # in case of terminal state, return zero vectors
+        candidates = np.zeros([8, obs.shape[0]])
+        direction_change = np.zeros([8, 6])
+        return candidates, direction_change
     new_window = obs[:(radius * 2 + 1) ** 2]
     new_rest = obs[new_window.shape[0]:]
     new_window_reshaped = new_window.reshape([radius * 2 + 1, radius * 2 + 1])

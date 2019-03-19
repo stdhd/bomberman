@@ -1,23 +1,14 @@
-
-from time import time
 from datetime import datetime
-import multiprocessing as mp
-import numpy as np
 import random
-import pygame
 import pickle
-from pygame.locals import *
-from pygame.transform import smoothscale
 
 import datetime
 
-import logging
-
 from agents import *
 from items import *
-from settings import s, e
+from settings import e
 
-from agent_code.merged_agent.indices import *
+from state_functions.indices import *
 
 class BombeRLeWorld(object):
 
@@ -215,7 +206,7 @@ class BombeRLeWorld(object):
             }
 
         self.running = True
-        self.capture_state()
+        self.capture_state()  # get state 0
 
 
     def add_agent(self, agent_dir, name, train=False):

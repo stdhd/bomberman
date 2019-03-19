@@ -3,6 +3,7 @@ import numpy as np
 from settings import s
 
 from agent_code.marathon.kernel_regression import *
+from state_functions.indices import *
 
 
 def setup(self):
@@ -98,6 +99,8 @@ def regression_action(self, observation):
     return np.random.choice(np.flatnonzero(q_approx_values == q_approx_values.max()))
 
 
+
+
 def derive_state_representation(self):
     """
     From provided game_state, extract array state representation. Use this when playing game (not training)
@@ -166,5 +169,4 @@ def derive_state_representation(self):
 
             bomb_ind += 1
 
-
-    return state
+    return state.astype(int)

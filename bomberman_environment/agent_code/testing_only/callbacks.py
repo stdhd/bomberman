@@ -1,7 +1,7 @@
 import numpy as np
 import warnings
-from random import shuffle
-from agent_code.merged_agent import indices
+from state_functions.indices import *
+from state_functions.state_representation import *
 from agent_code.observation_object import ObservationObject
 import os
 
@@ -20,7 +20,7 @@ def setup(self):
     self.discount = 0.7
     self.epsilon = -1
     self.train_flag = False
-    self.obs_object = ObservationObject(1, self.logger, ['d_closest_coin_dir'])
+    self.obs_object = ObservationObject(0, self.logger, ['d_closest_coin_dir', 'd_closest_safe_field_dirNEW', 'me_has_bomb'])
     # Used for plotting
     self.total_steps_over_episodes = 0
     self.total_deaths_over_episodes = 0
@@ -32,6 +32,7 @@ def setup(self):
 
     try:
         self.q_table = np.load(os.path.join('data', 'qtables', filename, 'q_table-' + filename + '.npy'))
+        self.quantities = np.load(os.path.join('data', 'qtables', filename, 'quantity-' + filename + '.npy'))
         self.logger.debug('LOADED Q')
         if self.q_table.shape[1] != 6:
             raise Exception('q_table size does not fit') 
@@ -72,9 +73,9 @@ def act(self):
     x, y, _, bombs_left, score = self.game_state['self']
     bombs = self.game_state['bombs']
     # self.logger.info(f'BOMBS: {bombs}')
-    self.obs_object.set_state(derive_state_representation(self, "ACT"))
+    rep = derive_state_representation(self)
+    self.obs_object.set_state(derive_state_representation(self))
     observation = self.obs_object.create_observation(np.array([int(0)]))[0]
-    print(observation)
     # observation = np.delete(observation, [0])
     self.old_observation = observation
     # self.logger.info(f'self: {[x, y]}')
@@ -126,6 +127,8 @@ def act(self):
             # print(self.observation_db[observation_ind])
             print('LEFT', 'RIGHT', 'UP', 'DOWN', 'WAIT', 'BOMB')
             print(self.q_table[observation_ind[0]])
+            print("Quantities: ")
+            print(self.quantities[observation_ind[0]])
             self.last_action_ind = np.random.choice(np.flatnonzero(self.q_table[observation_ind[0]] == self.q_table[observation_ind[0]].max()))
 
         # If test mode and observation_db has no entry
@@ -135,6 +138,8 @@ def act(self):
             self.last_action_ind = np.random.randint(0,6)
 
     self.next_action = ['LEFT', 'RIGHT', 'UP', 'DOWN', 'WAIT', 'BOMB'][self.last_action_ind]
+   # if self.total_steps_over_episodes == 0:
+    #    self.next_action = 'UP'
     print(self.next_action)
 
 def reward_update(self):
@@ -160,60 +165,3 @@ def end_of_episode(self):
     if self.number_of_episode % 250 == 0: 
         self.logger.info(f'Episode number, Total Steps and Deaths: {self.number_of_episode, self.total_steps_over_episodes, self.total_deaths_over_episodes}')
         self.total_steps_over_episodes, self.total_deaths_over_episodes = 0, 0
-
-
-def derive_state_representation(self, where):
-    """
-    From provided game_state, extract array state representation. Use this when playing game (not training)
-
-    Final state format specification in environment_save_states.py
-    :param self:
-    :return: State representation in specified format
-    """
-    player_block = 4+17
-    state = np.zeros(indices.x_y_to_index(s.cols - 2, s.rows - 2, s.cols, s.rows) + 4 * player_block + 1)
-    state[-1] = self.game_state['step']
-    arena = self.game_state['arena']
-    explosions = self.game_state['explosions']
-    coins = self.game_state['coins']
-    players = self.game_state['others']
-    bombs = self.game_state['bombs']
-    me = self.game_state['self']
-    for x, y in coins:
-        ind = indices.x_y_to_index(x, y, s.cols, s.rows) - 1
-        state[ind] = 3
-
-    for x in range(arena.shape[0] ):
-        if x == 0 or arena.shape[0] - 1:
-            continue
-        for y in range(arena.shape[1]):
-            if y == 0 or arena.shape[1] - 1 or (x + 1) * (y + 1) % 2 == 1:
-                continue
-            ind = indices.x_y_to_index(x, y, s.cols, s.rows) - 1
-            coin = state[ind] == 3
-            if not coin:
-                state[ind] = arena[x, y]  # replace '17' with values from settings.py
-            if explosions[x, y] != 0:
-                state[ind] = -1 * 3**int(coin) * 2**explosions[x, y]
-
-    startplayers = indices.x_y_to_index(15, 15, s.cols, s.rows)  # player blocks start here
-    # self.logger.info(f'PLAYER BEFORE: {players, where}')
-    # Strange behaviour of game_state('others') which returns self (plus others) as others when called from act() except for the first step 
-    # where only others are returned for both methods
-    if me not in players: 
-        players.insert(0, me)
-    player_ind = 0
-    bomb_ind = 0
-    # self.logger.info(f'PLAYER AFTER: {players, where}')
-    #self.logger.info(f'PLAYER: {players}')
-    for player in players:  # keep track of player locations and bombs
-        state[startplayers + player_block * player_ind] = indices.x_y_to_index(player[0], player[1], s.cols, s.rows)
-        if player[3] == 0:
-            player_bomb = bombs[bomb_ind]  # count through bombs and assign a dropped bomb to each player
-            # who is not holding a bomb
-            state[startplayers + player_block*player_ind + 2] = indices.x_y_to_index(player_bomb[0], player_bomb[1],
-                                                                                     s.cols, s.rows)
-            state[startplayers + player_block * player_ind + 3] = player_bomb[2]  # bomb timer
-            bomb_ind += 1
-        player_ind += 1
-    return state

@@ -1,6 +1,7 @@
-from agent_code.merged_agent.indices import *
+from state_functions.indices import *
 from random import shuffle
 import numpy as np
+import settings
 
 
 """
@@ -20,6 +21,7 @@ Available Features:
         remaining_coins,
         closest_coin_old,
         d_closest_safe_field_dir
+        d_closest_safe_field_dirNEW
 """
 
 
@@ -47,6 +49,8 @@ class ObservationObject:
 
         self.state, self.board, self.player_locs, self.coins, self.player_distance_matrix = None, None, None, None, None
 
+        self.arena = None
+
         self.bomb_locs, self.bomb_timers = None, None
 
         self.player = None  # helper variable for creating features (not observation window)
@@ -65,7 +69,9 @@ class ObservationObject:
         "remaining_crates": "rcrates",
         "remaining_coins": "rcoins",
         "d_closest_safe_field_dir": "csfdir",
-        "closest_coin_old": "cco"
+        "closest_coin_old": "cco",
+        "d_closest_safe_field_dirNEW" : "csfdirN"
+
         }
 
 
@@ -81,7 +87,7 @@ class ObservationObject:
 
         self.initialize_feature_helpers()
 
-    def create_observation(self, AGENTS):
+    def create_observation(self, AGENTS:np.array):
         """
         From state, view radius and list of players, return a list of observations.
         :param state: Game state
@@ -123,30 +129,27 @@ class ObservationObject:
 
         lower_y = center_y - radius_custom
 
+        for player_loc in self.player_locs:
+            if player_loc > 0:
+                try:
+                    self.set_window(window, player_loc, center_x, center_y, radius_custom, 5)
+                except:
+                    continue
+
         for i in np.arange(window_size_custom):
             for j in np.arange(window_size_custom):
                 try:
                     window[i, j] = self.board[x_y_to_index(lower_x + i, lower_y + j) - 1]
 
-                except Exception as e:  # wall squares throw exception
+                except ValueError as e:  # wall squares throw exception
                     window[i, j] = -1
 
         for ind, bomb_loc in enumerate(self.bomb_locs):  # bombs have precedence over explosions
             if bomb_loc > 0:
-                self.set_window(window, bomb_loc, center_x, center_y, radius_custom, 2 ** self.bomb_timers[ind])
-
-        for player_loc in self.player_locs:
-            if player_loc > 0:
-                try:
-                    location_value = self.get_window(window, *index_to_x_y(player_loc), radius_custom, center_x, center_y)
-
-                    if location_value > 0:  # if player is on a bomb, multiply bomb timer and player value
-                        self.set_window(window, player_loc, center_x, center_y, radius_custom, location_value * 5)
-
-                    else:  # else set field to player value
-                        self.set_window(window, player_loc, center_x, center_y, radius_custom, 5)
-                except:
-                    continue
+                if self.bomb_timers[ind] <= 1:
+                    self.set_window(window, bomb_loc, center_x, center_y, radius_custom, 2)
+                else:
+                    self.set_window(window, bomb_loc, center_x, center_y, radius_custom, 4)
 
         return window
 
@@ -195,6 +198,7 @@ class ObservationObject:
     def initialize_feature_helpers(self):
         if self.state is None:
             raise AttributeError("State not set (call set_state)")
+
         state = self.state
         board_end = state.shape[0] - (1 + 4 * 21)
         self.board = state[0: board_end]
@@ -204,6 +208,7 @@ class ObservationObject:
         self.bomb_locs = np.array([player_blocks[i * 21 + 2] for i in range(4)])  # bomb locations
         self.bomb_timers = np.array([player_blocks[i * 21 + 3] for i in range(4)])  # bomb timers
         # manhattan dist. to coins
+        self.arena = self._make_window(8, 8, 8)
         self.player_distance_matrix = np.zeros((4, 4))
         for p1 in np.arange(self.player_distance_matrix.shape[0]):
             for p2 in np.arange(start=p1 + 1, stop=self.player_distance_matrix.shape[1]):
@@ -211,6 +216,7 @@ class ObservationObject:
                     continue  # skip dead players
                 self.player_distance_matrix[p1, p2] = np.linalg.norm(np.array([*index_to_x_y(self.player_locs[p1])])
                                                                 - np.array([*index_to_x_y(self.player_locs[p2])]), ord=1)
+
 
     def _get_features(self, AGENTS):
         """
@@ -320,13 +326,13 @@ class ObservationObject:
             current = parent_dict[current]
 
     def _determine_direction(self, best_step, x, y):
-        if best_step == (x-1,y): return 1 # move left
-        if best_step == (x+1,y): return 2 # move right
-        if best_step == (x,y-1): return 3 # move up
-        if best_step == (x,y+1): return 4 # move down
-        if best_step == (x,y): return 5 # Something is wrong: This case should not occur
-        if best_step == None: return 6 # No targets exist.
-        return 7 # Something else is wrong: This case should not occur
+        if best_step == (x-1,y): return 0 # move left
+        if best_step == (x+1,y): return 1 # move right
+        if best_step == (x,y-1): return 2 # move up
+        if best_step == (x,y+1): return 3 # move down
+        if best_step == (x,y): return 4 # Something is wrong: This case should not occur
+        if best_step == None: return 5 # No targets exist.
+        return 6 # Something else is wrong: This case should not occur
 
     def me_has_bomb(self):
         """
@@ -336,7 +342,7 @@ class ObservationObject:
         """
         return self._is_holding_bomb(self.player.player_index)
 
-    def closest_coin_dist(self):
+    def d_closest_coin_dist(self):
         """
         Shortest distance from a certain player to a coin
         :param player_index:
@@ -354,7 +360,7 @@ class ObservationObject:
         """
         Direction to player's nearest coin.
         """
-        arena = self._make_window(8, 8, 8)
+        arena = self.arena
         coins_ind = np.where(arena == 3)
         coins_coords = np.vstack((coins_ind[0], coins_ind[1])).T
         free_space = (arena == 0) | (arena == 3)
@@ -470,6 +476,58 @@ class ObservationObject:
         player = self.player
         return self._get_path_dir(self.player_locs[player.player_index], self.player_locs[player.closest_coin])
 
+    def d_closest_safe_field_dirNEW(self):
+        """
+
+        :return: Direction to take towards nearest field which is not threatened by bomb explosion
+        """
+        x, y = self.player.me_loc[0], self.player.me_loc[1]
+
+        # Is agent already within safe zone?
+        threat_map = self._get_threat_map()
+        bool = threat_map[x,y]
+        if not bool:
+            targets = np.where(threat_map)
+            target_coords = np.vstack((targets[0], targets[1])).T
+            free_space = np.copy(threat_map)
+            free_space[x, y] = True
+            best_step = self._look_for_targets(free_space, (x, y), target_coords, None)
+            if best_step == (x, y):
+                return 4
+            else:
+                temp = self._determine_direction(best_step,x,y)
+                return self._determine_direction(best_step,x,y)
+        return 4 # By default return 4: There is no explosion threatening current field
+
+    def _get_threat_map(self):
+        """
+
+        :return: Boolean map: True for Free/Coin, False for Wall/Threatened/Crate
+        """
+        arena = self.arena
+        arena_bool = (arena == 0) | (arena == 3)
+        for loc in self.bomb_locs:
+            if loc == 0:
+                continue
+            tx,ty = index_to_x_y(loc, 17, 17)
+            for i in range(5):
+                if arena[tx, ty + i] == -1:
+                    break
+                arena_bool[tx, ty + i] = False
+            for i in range(5):
+                if arena[tx, ty - i] == -1:
+                    break
+                arena_bool[tx, ty - i] = False
+            for i in range(5):
+                if arena[tx + i, ty] == -1:
+                    break
+                arena_bool[tx + 1, ty] = False
+            for i in range(5):
+                if arena[tx - i, ty] == -1:
+                    break
+                arena_bool[tx - i, ty] = False
+        return arena_bool
+
     def d_closest_safe_field_dir(self):
         """
         Direction to next safe field.
@@ -477,8 +535,8 @@ class ObservationObject:
         Bomb and enemy on arena: 80, 40, 20, 10
         """
         x, y = self.player.me_loc[0], self.player.me_loc[1]
-        arena = self._make_window(8, 8, 8)
         is_on_danger_zone_factor = 1
+        arena = self.arena # Check if it contains all information?
         # self.logger.info(f'ARENA: {arena}')
         bombs_ind1 = np.where(arena == 80)
         bombs_ind2 = np.where(arena == 40)
@@ -526,16 +584,72 @@ class ObservationObject:
 
         return self._determine_direction(best_step, x, y) * is_on_danger_zone_factor
 
+    def _name_player_events(self):
+        """
+        Debugging function to return events from this state.
+        :return:
+        """
+        events = []
+
+        for i in range(4):
+            events.append([False for i in range(17)])
+            for j, count in enumerate(self.state[self.board.shape[0] + 4 + i * 21: self.board.shape[0] + 4 + i * 21 + 17]):
+                if count != 0:
+                    events[i][j] = True
+
+            events[i] = np.array(settings.events)[np.array(events[i])]
+        return events
 
 class _Player:
     """
     Helper class to store useful attributes for a certain player.
     """
 
-    def __init__(player_self, observation_self, player_index):
-        player_self.player_index = player_index
-        player_self.me_loc = np.array([*index_to_x_y(observation_self.player_locs[int(player_index)])])
-        player_self.coin_dists, player_self.closest_coin = None, None  # distances of all coins, index of closest coin
-        player_self.foes = [foe_loc for ind, foe_loc in enumerate(observation_self.player_locs) if ind != player_index]
-        player_self.foe_dists, player_self.closest_foe = None, None
+    def __init__(self, observation_self, player_index):
+        """
+        Setup basic members (but not distances to foes or coins, use setup methods when creating features)
+        :param observation_self: self member of Obervation Object
+        :param player_index:
+        """
+        self.observation_self = observation_self
+        self.player_index = player_index  # index of player in game state vector (0 to 3)
+        self.me_loc = np.array([*index_to_x_y(observation_self.player_locs[int(player_index)])])
+        self.coin_dists, self.closest_coin = None, None  # distances of all coins, index of closest coin
+        self.foes = np.array([foe_loc for ind, foe_loc in enumerate(observation_self.player_locs) if ind != player_index
+                              and foe_loc != 0])  # count LIVING enemies
+        self.foe_dists, self.closest_foe = None, None
 
+        self._is_setup_coins, self._is_setup_foes = False, False
+
+    def setup_coin_dists(self):
+        """
+        Set a list of coin distances and find closest coin (set to None if no coins)
+        :return:
+        """
+        if self._is_setup_coins:
+            return  # don't calculate values twice
+
+        self.coin_dists = np.array([np.linalg.norm(self.me_loc - np.array([*index_to_x_y(coin)]), ord=1)
+                                      for coin in self.observation_self.coins])  # manhattan dist. to coins
+        self.closest_coin = np.argmin(self.coin_dists) if self.observation_self.coins.shape[0] != 0 else None
+
+        self._is_setup_coins = True
+
+    def setup_foe_dists(self):
+        """
+        Set a list of foe distances and find closest coin (set to None if no coins)
+        :return:
+        """
+
+        if self._is_setup_foes:
+            return  # don't calculate values twice
+        self.foe_dists = np.array([self.observation_self.player_distance_matrix[min(self.player_index, foe_index),
+                                                                 max(foe_index, self.player_index)]
+                                     for foe_index in range(4) if foe_index != self.player_index])
+        # manhattan dist. to foes
+        self.closest_foe = int(np.argmin(self.foe_dists)) if self.foes.shape[0] != 0 else None   # player index of closest foe
+
+        if self.closest_foe is not None:
+            self.closest_foe += 1 if self.closest_foe >= self.player_index else 0  # me not in foe_dists
+
+        self._is_setup_foes = True

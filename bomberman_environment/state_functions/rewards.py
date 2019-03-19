@@ -2,6 +2,16 @@
 from settings import events
 import numpy as np
 
+
+event_rewards = np.zeros(len(events))
+event_rewards[4] = -100     # WAITED
+event_rewards[6] = -80000    # INVALID ACTION
+event_rewards[10] = 0       # COIN FOUND
+event_rewards[11] = 600     # COIN COLLECTED
+event_rewards[12] = 500     # KILLED OPPONENT
+event_rewards[13] = -2000   # KILLED SELF
+event_rewards[14] = -2000   # GOT KILLED
+
 def get_reward(state, player_index):
 
     """
@@ -12,23 +22,15 @@ def get_reward(state, player_index):
     :return: Reward
     """
 
-    rewards = {'INVALID_ACTION': -20,
-            'KILLED_OPPONENT': 500,
-            'KILLED_SELF': -1000,
-            'COIN_COLLECTED': 100,
-            'WAITED': -20}
-
-    begin = state.shape[0]-(1 + (4 - player_index)*21)
-    end = state.shape[0]-(1 + (4 - player_index - 1)*21)
+    begin = state.shape[0] - (1 + (4 - player_index) * 21)
+    end = state.shape[0] - (1 + (4 - player_index - 1) * 21)
     player = state[begin: end]
+    #
+    # if player[4:][13] > 0:
+    #     print("!!!!")
 
-    reward = 0
-    for event_index, multiplicity in enumerate(player[4:]):
-        event = events[event_index]
-        reward += rewards[event]*multiplicity if event in rewards.keys() else 0
-    if reward == 0:
-        reward = -3
-    return reward
+    return -3 + np.sum(player[4:] * event_rewards)
+
 
 
 

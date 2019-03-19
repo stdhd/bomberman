@@ -542,7 +542,9 @@ class ObservationObject:
                 self.logger.info(f'YES')
             return self._determine_direction(None, x, y)
         is_on_danger_zone_factor = 0
-        arena = self.arena        
+        arena = self.arena
+        if self.logger != None:
+            self.logger.info(f'ARENA: {arena}')
         danger_zone_coords = []
         down, up, left, right = True, True, True, True
         # for x_bomb, y_bomb in np.vstack((x_bombs, y_bombs)).T:

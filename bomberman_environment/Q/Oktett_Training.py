@@ -5,7 +5,7 @@ from agent_code.observation_object import ObservationObject
 from state_functions.rewards import *
 from Q.manage_training_data import *
 
-def q_train_from_games_jakob(train_data, write_path, obs:ObservationObject, a = 0.8, g = 0.8):
+def q_train_from_games_jakob(train_data, write_path, obs:ObservationObject, a = 0.8, g = 0.4):
     """
     Trains from all files in a directory using an existing q- and observation-table under write_path.
 
@@ -173,12 +173,25 @@ def get_transformations(obs, radius, direction_sensitive):
         all_transformed[i][new_rest == 3] = transformations[i, 3]
         all_transformed[i][new_rest == 4] = 4
         all_transformed[i][new_rest == 5] = 5
+        all_transformed[i][new_rest == 6] = 6
 
     transformed_rest = np.zeros([7, new_rest.shape[0]])
     results = np.zeros([8, obs.shape[0]])
     for i in range(7):
-        transformed_rest[i] = np.where(direction_sensitive, all_transformed[i], new_rest)
-
+        transformed_rest[i] = np.where(direction_sensitive == 1, all_transformed[i], new_rest)
+        feat2_transformed = np.zeros([4])
+        to_skip = 0
+        for start in range(new_rest.shape[0]):
+            if direction_sensitive[start] == 2 and to_skip < 1:
+                bit = transformed_rest[i,start:start + 4]
+                feat2_transformed[0] = bit[transformations[i,0]]
+                feat2_transformed[1] = bit[transformations[i,1]]
+                feat2_transformed[2] = bit[transformations[i,2]]
+                feat2_transformed[3] = bit[transformations[i,3]]
+                transformed_rest[i,start:start + 4] = feat2_transformed
+                to_skip = 3
+            else:
+                to_skip -= 1
     candidates = np.zeros([7, radius * 2 + 1, radius * 2 + 1])
     candidates[0] = new_window_reshaped.T
     candidates[1] = np.flip(new_window_reshaped, 0)

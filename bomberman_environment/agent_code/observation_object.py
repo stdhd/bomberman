@@ -25,6 +25,10 @@ Available Features:
         closest_coin_old,
         d_closest_safe_field_dir
         d_closest_safe_field_dirNEW
+        d4_is_safe_to_move_a_l
+        d4_is_safe_to_move_b_r
+        d4_is_safe_to_move_c_u
+        d4_is_safe_to_move_d_d
 """
 
 
@@ -74,7 +78,11 @@ class ObservationObject:
         "remaining_coins": "rcoins",
         "d_closest_safe_field_dir": "csfdir",
         "closest_coin_old": "cco",
-        "d_closest_safe_field_dirNEW" : "csfdirN"
+        "d_closest_safe_field_dirNEW" : "csfdirN",
+        "d4_is_safe_to_move_a_l" : "ismal",
+        "d4_is_safe_to_move_b_r": "ismbl",
+        "d4_is_safe_to_move_c_u": "ismcu",
+        "d4_is_safe_to_move_d_d": "ismdd"
 
         }
 
@@ -197,6 +205,7 @@ class ObservationObject:
         self.died_players = np.where(killed_booleans >= 1)[0]
         # manhattan dist. to coin_locs
         self.arena = self._make_window(8, 8, 8)
+        self.danger_map = self._get_threat_map()
         # self.player_distance_matrix = np.zeros((4, 4))
         # for p1 in np.arange(self.player_distance_matrix.shape[0]):
         #     for p2 in np.arange(start=p1 + 1, stop=self.player_distance_matrix.shape[1]):
@@ -463,9 +472,11 @@ class ObservationObject:
         temp = np.array([])
         for f in self.features:
             if f.startswith("d_"):
-                temp = np.append(np.array([True]), temp)
+                temp = np.append(np.array([1]), temp)
+            elif f.startswith("d4_"):
+                temp = np.append(np.array([2]), temp)
             else:
-                temp = np.append(np.array([False]), temp)
+                temp = np.append(np.array([0]), temp)
         return temp
 
     def closest_coin_old(self):
@@ -580,6 +591,30 @@ class ObservationObject:
 
         return self._determine_direction(best_step, x, y)
 
+    def d4_is_safe_to_move_a_l(self):
+        x,y = self.player.me_loc[0], self.player.me_loc[1]
+        if self.danger_map[x - 1, y]:
+            return 1
+        return 0
+
+    def d4_is_safe_to_move_b_r(self):
+        x,y = self.player.me_loc[0], self.player.me_loc[1]
+        if self.danger_map[x + 1, y]:
+            return True
+        return False
+
+    def d4_is_safe_to_move_c_u(self):
+        x,y = self.player.me_loc[0], self.player.me_loc[1]
+        if self.danger_map[x, y - 1]:
+            return True
+        return False
+
+    def d4_is_safe_to_move_d_d(self):
+        x,y = self.player.me_loc[0], self.player.me_loc[1]
+        if self.danger_map[x, y + 1]:
+            return True
+        return False
+
     def _name_player_events(self):
         """
         Debugging function to return events from this state.
@@ -619,6 +654,7 @@ class _Player:
         self.observation_self = observation_self
         self.player_index = player_index  # index of player in game state vector (0 to 3)
         self.me_loc = np.array([*index_to_x_y(observation_self.player_locs[int(player_index)])])
+
         self.coin_dists, self.closest_coin = None, None  # distances of all coin_locs, index of closest coin
         self.foes = np.array([foe_loc for ind, foe_loc in enumerate(observation_self.player_locs) if ind != player_index
                               and foe_loc != 0])  # count LIVING enemies
@@ -634,7 +670,7 @@ class _Player:
         if self._is_setup_coins:
             return  # don't calculate values twice
 
-        self.coin_dists = np.array([np.linalg.norm(self.me_loc - np.array([*index_to_x_y(coin)]), ord=1)
+        self.coin_dists = np.array([np.linalg.norm(self.me_coords - np.array([*index_to_x_y(coin)]), ord=1)
                                       for coin in self.observation_self.coins])  # manhattan dist. to coin_locs
         self.closest_coin = np.argmin(self.coin_dists) if self.observation_self.coins.shape[0] != 0 else None
 

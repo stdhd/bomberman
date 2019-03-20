@@ -16,6 +16,7 @@ def setup(self):
     You can also use the self.logger object at any time to write to the log
     file for debugging (see https://docs.python.org/3.7/library/logging.html).
     """
+    # self.logger.setLevel("DEBUG")
     self.train_flag = False
     self.obs_object = ObservationObject(1, ['d_closest_coin_dir',
                                             'd_closest_safe_field_dir',
@@ -23,7 +24,11 @@ def setup(self):
                                             'd4_is_safe_to_move_a_l',
                                             'd4_is_safe_to_move_b_r',
                                             'd4_is_safe_to_move_c_u',
-                                            'd4_is_safe_to_move_d_d'], None)
+                                            'd4_is_safe_to_move_d_d'
+                                            ], None)
+
+
+    self.logger.debug("Called setup")
     # Used for plotting
     self.total_steps_over_episodes = 0
     self.total_deaths_over_episodes = 0
@@ -34,20 +39,20 @@ def setup(self):
     filename = self.obs_object.get_file_name_string()
 
     try:
-        print(os.path.join('data', 'qtables', filename, 'q_table-' + filename + '.npy'))
+        self.logger.info("Loading Q tables and quantities for: " + filename)
         self.q_table = np.load(os.path.join('data', 'qtables', filename, 'q_table-' + filename + '.npy'))
         self.quantities = np.load(os.path.join('data', 'qtables', filename, 'quantity-' + filename + '.npy'))
-        self.logger.debug('LOADED Q')
+        self.logger.info('LOADED Q')
         if self.q_table.shape[1] != 6:
-            raise Exception('q_table size does not fit') 
+            raise Exception('q_table size does not fit')
     except Exception as e:
-        self.q_table = np.empty([0,6])
+        self.q_table = np.empty([0, 6])
         self.logger.info(f'OVERWRITTEN: {e}')
 
     # Zx10 array with 3x3 observation around agent plus coin_flag
     try:
         self.observation_db = np.load(os.path.join('data', 'qtables', filename, 'observation-' + filename + '.npy'))
-        self.logger.debug('LOADED Obs')
+        self.logger.info('LOADED Obs')
     except:
         self.observation_db = np.empty([0,observation_size])
         if self.observation_db.shape[1] != observation_size:
@@ -81,38 +86,33 @@ def act(self):
     observation_ind = np.where((self.observation_db == observation).all(axis=1))[0]
     # If observation_db has entry the action with the highest value is chosen.
     if observation_ind.shape[0] != 0:
-        # print("---")
-        print("KNOWN observation", self.obs_object.get_file_name_string())
-        print(self.observation_db[observation_ind[0]])
-        print('LEFT', 'RIGHT', 'UP', 'DOWN', 'WAIT', 'BOMB')
-        print(self.q_table[observation_ind[0]])
-        print("Quantities: ")
-        print(self.quantities[observation_ind[0]])
+        self.logger.debug("KNOWN observation: " + str(self.observation_db[observation_ind[0]]))
+        self.logger.debug(str(('LEFT', 'RIGHT', 'UP', 'DOWN', 'WAIT', 'BOMB')))
+        self.logger.debug(self.q_table[observation_ind[0]])
+        self.logger.debug("Quantities: " + str(self.quantities[observation_ind[0]]))
         self.last_action_ind = np.random.choice(
             np.flatnonzero(self.q_table[observation_ind[0]] == self.q_table[observation_ind[0]].max()))
-        # print("#######")
-        # # Deadlock detection:
-        # self.last_visited = np.append(self.last_visited, np.array([x, y]))
-        # # print(" ------" + self.last_visited)
-        # if self.last_visited[-1] == self.last_visited[-3] & self.last_visited[-2] == self.last_visited[-4] \
-        #         & self.last_visited[-1] != self.last_visited[-2]:
-        #     alternatives = np.argsort(self.q_table[observation_ind[0]])
-        #     print("DEADLOCK DETECTED. DO " + str(self.repeated_deadlock) + " BEST ALTERNATIVE NOW")
-        #     self.repeated_deadlock += 1
-        #     self.last_action_ind = alternatives[-np.min(np.array([self.repeated_deadlock, 4]))]
-        # print("+++++")
-        # else:
-        #     self.repeated_deadlock = 1
+        # Deadlock detection:
+        self.last_visited = np.append(self.last_visited, np.array([x, y]))
+        # self.logger.debug(" ------" + self.last_visited)
+        if self.last_visited[-1] == self.last_visited[-3] & self.last_visited[-2] == self.last_visited[-4] \
+                & self.last_visited[-1] != self.last_visited[-2]:
+            alternatives = np.argsort(self.q_table[observation_ind[0]])
+            self.logger.info("DEADLOCK DETECTED. DO " + str(self.repeated_deadlock) + " BEST ALTERNATIVE NOW")
+            self.repeated_deadlock += 1
+            self.last_action_ind = alternatives[-np.min(np.array([self.repeated_deadlock, 4]))]
+        else:
+            self.repeated_deadlock = 1
 
     # If test mode and observation_db has no entry
     else:
         # TODO: regression
-        print("unknown observation")
-        print(observation)
+        self.logger.debug("unknown observation")
+        self.logger.debug(observation)
         self.last_action_ind = np.random.randint(0, 6)
 
     self.next_action = ['LEFT', 'RIGHT', 'UP', 'DOWN', 'WAIT', 'BOMB'][self.last_action_ind]
-    print(self.next_action)
+    self.logger.info("Next action: " + self.next_action)
 
 
 def reward_update(self):

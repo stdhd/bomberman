@@ -12,6 +12,7 @@ Available Features:
         me_has_bomb,
         closest_coin_dist,
         d_closest_coin_dir,
+        d_closest_crate_dir,
         closest_foe_dist,
         d_closest_foe_dir,
         closest_foe_has_bomb,
@@ -43,7 +44,6 @@ class ObservationObject:
         :param radius: Radius in observation window (radius = 1 => 3x3 window)
         :param FEATURE_LIST: list of features by name
         """
-        FEATURE_LIST = sorted(FEATURE_LIST, key=str.lower)
         self.features = FEATURE_LIST
         self.features.sort()
 
@@ -69,6 +69,7 @@ class ObservationObject:
         "me_has_bomb": "mhb",
         "closest_coin_dist": "ccdist",
         "d_closest_coin_dir": "ccdir",
+        "d_closest_crate_dir": "ccrdir",
         "closest_foe_dist": "cfdist",
         "d_closest_foe_dir": "cfdir",
         "closest_foe_has_bomb": "cfhb",
@@ -82,7 +83,7 @@ class ObservationObject:
         "closest_coin_old": "cco",
         "d_closest_safe_field_dirNEW" : "csfdirN",
         "d4_is_safe_to_move_a_l" : "ismal",
-        "d4_is_safe_to_move_b_r": "ismbl",
+        "d4_is_safe_to_move_b_r": "ismbr",
         "d4_is_safe_to_move_c_u": "ismcu",
         "d4_is_safe_to_move_d_d": "ismdd",
         "d_closest_enemy_dir": "ced"
@@ -118,26 +119,14 @@ class ObservationObject:
         self.coin_locs = np.where(self.board == 3)[0] + 1  # list of coin indices
         self.bomb_locs = np.array([player_blocks[i * 21 + 2] for i in range(4)])  # bomb locations
         self.bomb_timers = np.array([player_blocks[i * 21 + 3] for i in range(4)])  # bomb timers
-        killed_booleans = np.array([player_blocks[i * 21 + 18] for i in range(4)])  # note "got killed" boolean
-        self.dead_players = np.where(killed_booleans >= 1)[0]
+        # killed_booleans = np.array([player_blocks[i * 21 + 18] for i in range(4)])  # note "got killed" boolean
+        self.dead_players = np.where(self.player_locs == 0)[0]
         self.living_players = np.where(self.player_locs != 0)[0]
-        for i in range(4):
-            if (not (i in self.living_players or i in self.dead_players)) or (i in self.living_players and i in self.dead_players):
-                raise RuntimeError("Players should be living XOR dead")
-        # manhattan dist. to coin_locs
+        self.events = np.array([player_blocks[i*21 + 4: (i + 1)*21] for i in range(4)])
+        # get (4 x 17) matrix of events for this step
         self.arena = self._make_window(8, 8, 8)
         self.danger_map = self._get_threat_map()
 
-        self.events = np.array([player_blocks[4 + i*17: (i + 1)*21] for i in range(4)])
-        # get (4 x 17) matrix of events for this step
-
-        # self.player_distance_matrix = np.zeros((4, 4))
-        # for p1 in np.arange(self.player_distance_matrix.shape[0]):
-        #     for p2 in np.arange(start=p1 + 1, stop=self.player_distance_matrix.shape[1]):
-        #         if self.player_locs[p1] == 0 or self.player_locs[p2] == 0:
-        #             continue  # skip dead players
-        #         self.player_distance_matrix[p1, p2] = np.linalg.norm(np.array([*index_to_x_y(self.player_locs[p1])])
-        #                                                      - np.array([*index_to_x_y(self.player_locs[p2])]), ord=1)
 
 
 
@@ -156,23 +145,21 @@ class ObservationObject:
         :param AGENTS: List of player indices (0 to 3 inclusive)
         :return: Array of observations
         """
-
         radius, board, player_locs, bomb_locs, bomb_timers, window_size = self.radius, self.board, self.player_locs, \
                                                              self.bomb_locs, self.bomb_timers, self.window_size
-
         observations = np.zeros((AGENTS.shape[0], self.obs_length))
-
         features = self._get_features(AGENTS)  # find features for all agents
-
         for count, player_index in enumerate(AGENTS):  # construct the window for all agents
-
             player_x, player_y = index_to_x_y(self.player_locs[int(player_index)])
-
             window = self._make_window(radius, player_x, player_y)
-
             observations[count] = np.concatenate((window.flatten(), features[count]))  # concatenate window and features
-
         return observations
+
+    def get_feature_index(self, feature_name):
+        try:
+            return self.features.index(feature_name) + 2 * self.radius + 1
+        except Exception as e:
+            return None
 
     def _make_window(self, radius_custom, center_x, center_y):
         """
@@ -182,12 +169,9 @@ class ObservationObject:
         :param center_y:
         :return:
         """
-
         window_size_custom = 2*radius_custom + 1
         window = np.zeros((window_size_custom, window_size_custom))
-
         lower_x = center_x - radius_custom
-
         lower_y = center_y - radius_custom
 
         for i in np.arange(window_size_custom):
@@ -222,12 +206,9 @@ class ObservationObject:
         :param radius: Radius of window
         :return: True iff in window
         """
-
         obj_x, obj_y = index_to_x_y(obj_index)
-
         if abs(obj_x - origin_x) > radius or abs(obj_y - origin_y) > radius:
             return False
-
         return True
 
     def get_window(self, window, board_x, board_y, window_radius, window_origin_x, window_origin_y):
@@ -241,20 +222,15 @@ class ObservationObject:
         :param window_origin_y:
         :return:
         """
-
         if not self.is_in_window(x_y_to_index(board_x, board_y), window_origin_x, window_origin_y, window_radius):
             raise ValueError("Board coordinates not in window. ")
-
         return window[board_x - (window_origin_x - window_radius), board_y - (window_origin_y - window_radius)]
 
     def set_window(self, window, board_index, window_origin_x, window_origin_y, window_radius, val):
         if not self.is_in_window(board_index, window_origin_x, window_origin_y, window_radius):
             return
-
         board_x, board_y = index_to_x_y(board_index)
-
         window[board_x - (window_origin_x - window_radius), board_y - (window_origin_y - window_radius)] = val
-
 
     def _get_features(self, AGENTS):
         """
@@ -369,7 +345,7 @@ class ObservationObject:
         if best_step == (x,y-1): return 2 # move up
         if best_step == (x,y+1): return 3 # move down
         if best_step == None: return 4 # No targets exist.
-        if best_step == (x,y): return 5 # Something is wrong: This case should not occur
+        if best_step == (x,y): return 5 # Target can not be reached. Only occurs if current position is right before the obstacle.
         return 6 # Something else is wrong: This case should not occur
 
     def me_has_bomb(self):
@@ -398,12 +374,11 @@ class ObservationObject:
     def d_closest_coin_dir(self):
         """
         Direction to player's nearest coin.
+        :return: 0 (left), 1 (right), 2 (up), 3 (down), 4 (no crate), 5 (one field before not reachable coin), 6 (something went wrong)
         """
-        # Case: choose coin with largest distance to an enemy
-        arena = self.arena
-        coins_ind = np.where(arena == 3)
+        coins_ind = np.where(self.arena == 3)
         coins_coords = np.vstack((coins_ind[0], coins_ind[1])).T
-        free_space = (arena == 0) | (arena == 3)
+        free_space = (self.arena == 0) | (self.arena == 3)
         x, y = self.player.me_loc[0], self.player.me_loc[1]
         best_step = self._look_for_targets(free_space, (x, y), coins_coords, None)
 
@@ -423,6 +398,18 @@ class ObservationObject:
         enemy_coords = np.vstack((enemy_ind[0], enemy_ind[1])).T
         free_space = (arena == 0) | (arena == 3)
         best_step = self._look_for_targets(free_space, (x, y), enemy_coords, None)
+        return self._determine_direction(best_step, x, y)
+
+    def d_closest_crate_dir(self):
+        """
+        Direction to player's nearest crate. 
+        :return: 0 (left), 1 (right), 2 (up), 3 (down), 4 (no crate), 5 (one field before crate), 6 (something went wrong)
+        """
+        crate_ind = np.where(self.arena == 1)
+        crate_coords = np.vstack((crate_ind[0], crate_ind[1])).T
+        free_space = (self.arena == 0) | (self.arena == 3)
+        x, y = self.player.me_loc[0], self.player.me_loc[1]
+        best_step = self._look_for_targets(free_space, (x, y), crate_coords, None)
         return self._determine_direction(best_step, x, y)
 
     def closest_foe_dist(self):
@@ -517,14 +504,14 @@ class ObservationObject:
         Boolean array indicating, if features are direction sensitive
         :return:
         """
-        temp = np.array([])
+        temp = []
         for f in self.features:
             if f.startswith("d_"):
-                temp = np.append(np.array([1]), temp)
+                temp.append(1)
             elif f.startswith("d4_"):
-                temp = np.append(np.array([2]), temp)
+                temp.append(2)
             else:
-                temp = np.append(np.array([0]), temp)
+                temp.append(0)
         return temp
 
     def closest_coin_old(self):
@@ -559,7 +546,6 @@ class ObservationObject:
 
     def _get_threat_map(self):
         """
-
         :return: Boolean map: True for Free/Coin, False for Wall/Threatened/Crate
         """
         arena = self.arena
@@ -567,7 +553,7 @@ class ObservationObject:
         for loc in self.bomb_locs:
             if loc == 0:
                 continue
-            tx,ty = index_to_x_y(loc, 17, 17)
+            tx,ty = index_to_x_y(loc)
             for i in range(4):
                 if arena[tx, ty + i] == -1:
                     break
@@ -595,13 +581,11 @@ class ObservationObject:
         x, y = self.player.me_loc[0], self.player.me_loc[1]
         # If there are no bombs on the field the direction should indicate this by turning off this feature (return 4)
         if not self.bomb_locs.any(): 
-            if self.logger != None:
-                self.logger.info(f'YES')
             return self._determine_direction(None, x, y)
         is_on_danger_zone_factor = 0
         arena = self.arena
-        if self.logger != None:
-            self.logger.info(f'ARENA: {arena}')
+        # if self.logger != None:
+        #     self.logger.info(f'ARENA: {arena}')
         danger_zone_coords = []
         down, up, left, right = True, True, True, True
         # for x_bomb, y_bomb in np.vstack((x_bombs, y_bombs)).T:

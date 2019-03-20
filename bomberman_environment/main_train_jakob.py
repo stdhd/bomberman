@@ -21,15 +21,16 @@ def main():
                                 'd4_is_safe_to_move_a_l',
                                 'd4_is_safe_to_move_b_r',
                                 'd4_is_safe_to_move_c_u',
-                                'd4_is_safe_to_move_d_d'], None)
+                                'd4_is_safe_to_move_d_d',
+                                'd_closest_enemy_dir'], None)
 
     write_path = 'data/qtables/' + obs.get_file_name_string()
 
     if not os.path.exists(write_path):
         os.makedirs(write_path)
 
-    KNOWN, Q = q_train_from_games_jakob(cwd + "/" + 'data/games/one_player_crates_esa_0_2/', write_path,
-                                        obs, a=0.5)
+    KNOWN, Q = q_train_from_games_jakob(cwd + "/" + 'data/games/four_players_esa_0_2_cratedens_0_75/', write_path,
+                                        obs, a=0.5, g=0.5)
 
 
 if __name__ == '__main__':

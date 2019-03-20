@@ -13,7 +13,7 @@ def main():
     :return:
     """
 
-    directory = 'data/games/special_game'
+    directory = 'data/games/Jakob'
 
     for file in [f for f in listdir(directory) if isfile(join(directory, f))]:
         # go through files
@@ -21,7 +21,7 @@ def main():
             continue
         game = np.load(directory+"/"+file)
 
-        obs = ObservationObject(0, None, [])
+        obs = ObservationObject(0, [], None)
 
         for step in game:
             obs.set_state(step)

@@ -82,26 +82,26 @@ def act(self):
     observation_ind = np.where((self.observation_db == observation).all(axis=1))[0]
     # If observation_db has entry the action with the highest value is chosen.
     if observation_ind.shape[0] != 0:
-        print("---")
+        # print("---")
         print("KNOWN observation", self.obs_object.get_file_name_string())
-        print(self.observation_db[observation_ind[0]])
-        # print(self.observation_db[observation_ind])
-        print('LEFT', 'RIGHT', 'UP', 'DOWN', 'WAIT', 'BOMB')
-        print(self.q_table[observation_ind[0]])
-        print("Quantities: ")
-        print(self.quantities[observation_ind[0]])
+        # print(self.observation_db[observation_ind[0]])
+        # print('LEFT', 'RIGHT', 'UP', 'DOWN', 'WAIT', 'BOMB')
+        # print(self.q_table[observation_ind[0]])
+        # print("Quantities: ")
+        # print(self.quantities[observation_ind[0]])
         self.last_action_ind = np.random.choice(
             np.flatnonzero(self.q_table[observation_ind[0]] == self.q_table[observation_ind[0]].max()))
-
+        print("#######")
         # Deadlock detection:
         self.last_visited = np.append(self.last_visited, np.array([x, y]))
+        # print(" ------" + self.last_visited)
         if self.last_visited[-1] == self.last_visited[-3] & self.last_visited[-2] == self.last_visited[-4] \
                 & self.last_visited[-1] != self.last_visited[-2]:
             alternatives = np.argsort(self.q_table[observation_ind[0]])
             print("DEADLOCK DETECTED. DO " + str(self.repeated_deadlock) + " BEST ALTERNATIVE NOW")
             self.repeated_deadlock += 1
             self.last_action_ind = alternatives[-np.min(np.array([self.repeated_deadlock, 4]))]
-
+        print("+++++")
         else:
             self.repeated_deadlock = 1
 

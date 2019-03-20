@@ -4,13 +4,13 @@ import numpy as np
 
 
 event_rewards = np.zeros(len(events))
-event_rewards[4] = -50     # WAITED
+event_rewards[4] = 0       # WAITED
 event_rewards[6] = -10000    # INVALID ACTION
 event_rewards[9] = 50          # DESTROYED CRATES
 event_rewards[10] = 0       # COIN FOUND
 event_rewards[11] = 100     # COIN COLLECTED
 event_rewards[12] = 500     # KILLED OPPONENT
-event_rewards[14] = -100   # GOT KILLED
+event_rewards[14] = -400   # GOT KILLED
 
 def get_reward(state, player_index):
 

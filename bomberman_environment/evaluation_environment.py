@@ -30,7 +30,7 @@ class EvaluationEnvironment:
         """
 
         for i in range(self.ntrials):
-            main_evaluate_agents.main(self.agent_names, [], self.save_directory) # run games and save them to output directory
+            main_evaluate_agents.main(self.agent_names, [""], self.save_directory) # run games and save them to output directory
 
     def analyze_games(self, destroy_data:bool=False):
         """
@@ -46,7 +46,11 @@ class EvaluationEnvironment:
 
         for file in files:
             eventcount = np.zeros((len(self.agent_names), 17)).astype(int)
-            game = np.load(file)
+            try:
+                game = np.load(self.save_directory + "/" + file)
+            except OSError:
+                print("Skipping " + file + ". Is it a .npy file?")
+                continue
 
             obs = ObservationObject(1, [], None)
 
@@ -68,8 +72,9 @@ class EvaluationEnvironment:
 
         event_count_by_game, game_durations = np.array(event_count_by_game), np.array(game_durations)
         json_path = self.save_directory+"/"+'game_analysis.json'
+
         json_write = open(json_path, 'w')
-        json.dump((event_count_by_game, game_durations), json_write)
+        json.dump((event_count_by_game.tolist(), game_durations.tolist()), json_write)
 
         print("Wrote game info to", json_path)
 

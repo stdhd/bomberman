@@ -18,15 +18,15 @@ def setup(self):
     """
     # self.logger.setLevel("DEBUG")
     self.train_flag = False
-    self.obs_object = ObservationObject(3, ['d_closest_coin_dir',
+    self.obs_object = ObservationObject(1, ['d_closest_coin_dir',
                                             'd_closest_safe_field_dir',
                                             'me_has_bomb',
                                             'd4_is_safe_to_move_a_l',
                                             'd4_is_safe_to_move_b_r',
                                             'd4_is_safe_to_move_c_u',
-                                            'd4_is_safe_to_move_d_d'
+                                            'd4_is_safe_to_move_d_d',
+                                            'd_closest_crate_dir'
                                             ], None)
-
 
     self.logger.debug("Called setup")
     # Used for plotting
@@ -100,7 +100,7 @@ def act(self):
             alternatives = np.argsort(self.q_table[observation_ind[0]])
             self.logger.info("DEADLOCK DETECTED. DO " + str(self.repeated_deadlock) + " BEST ALTERNATIVE NOW")
             self.repeated_deadlock += 1
-            # self.last_action_ind = alternatives[-np.min(np.array([self.repeated_deadlock, 4]))] FIXME disable deadlock
+            self.last_action_ind = alternatives[-np.min(np.array([self.repeated_deadlock, 4]))]
         else:
             self.repeated_deadlock = 1
 

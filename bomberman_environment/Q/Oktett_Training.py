@@ -6,7 +6,7 @@ from state_functions.rewards import *
 from Q.manage_training_data import *
 
 def q_train_from_games_jakob(train_data, write_path, obs:ObservationObject, a = 0.8, g = 0.4, stop_after_n_files=100,
-                             save_every_n_files:int=20):
+                             save_every_n_files:int=5):
     """
     Trains from all files in a directory using an existing q- and observation-table under write_path.
 

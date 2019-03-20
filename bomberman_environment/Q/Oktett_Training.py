@@ -40,7 +40,6 @@ def q_train_from_games_jakob(train_data, write_path, obs:ObservationObject, a = 
 
     for file in [f for f in listdir(train_data) if isfile(join(train_data, f))]:
         # go through files
-
         try:
             if is_trained(write_path+"/records.json", file):
                 print("Skipping known training datum", file, "in folder", train_data)
@@ -133,14 +132,14 @@ def q_train_from_games_jakob(train_data, write_path, obs:ObservationObject, a = 
 
         filecount += 1
         current_trained_batch.append(file)
-        print("Trained with file", file)
 
-        if filecount % 20 == 0:
+        if filecount % 5 == 0:
             add_to_trained(write_path+"/records.json", current_trained_batch)  # update json table
             np.save(write_path + '/observation-' + filename, KNOWN)
             np.save(write_path + '/q_table-' + filename, QTABLE)
             np.save(write_path + '/quantity-' + filename, QUANTITY)
-            filecount -= filecount
+            #filecount -= filecount
+            filecount = 0
             current_trained_batch.clear()
 
         if not KNOWN.shape[0] % 8 == 0:

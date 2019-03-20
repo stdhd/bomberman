@@ -52,6 +52,8 @@ def add_to_trained(records_file, train_data_files):
 
     f.close()
 
+    print("Trained with files", train_data_files)
+
 
 class Table:
     """

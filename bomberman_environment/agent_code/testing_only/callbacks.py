@@ -23,8 +23,7 @@ def setup(self):
                                             'd4_is_safe_to_move_a_l',
                                             'd4_is_safe_to_move_b_r',
                                             'd4_is_safe_to_move_c_u',
-                                            'd4_is_safe_to_move_d_d',
-                                            'd_closest_enemy_dir'], None)
+                                            'd4_is_safe_to_move_d_d'], None)
     # Used for plotting
     self.total_steps_over_episodes = 0
     self.total_deaths_over_episodes = 0
@@ -84,26 +83,26 @@ def act(self):
     if observation_ind.shape[0] != 0:
         # print("---")
         print("KNOWN observation", self.obs_object.get_file_name_string())
-        # print(self.observation_db[observation_ind[0]])
-        # print('LEFT', 'RIGHT', 'UP', 'DOWN', 'WAIT', 'BOMB')
-        # print(self.q_table[observation_ind[0]])
-        # print("Quantities: ")
-        # print(self.quantities[observation_ind[0]])
+        print(self.observation_db[observation_ind[0]])
+        print('LEFT', 'RIGHT', 'UP', 'DOWN', 'WAIT', 'BOMB')
+        print(self.q_table[observation_ind[0]])
+        print("Quantities: ")
+        print(self.quantities[observation_ind[0]])
         self.last_action_ind = np.random.choice(
             np.flatnonzero(self.q_table[observation_ind[0]] == self.q_table[observation_ind[0]].max()))
-        print("#######")
-        # Deadlock detection:
-        self.last_visited = np.append(self.last_visited, np.array([x, y]))
-        # print(" ------" + self.last_visited)
-        if self.last_visited[-1] == self.last_visited[-3] & self.last_visited[-2] == self.last_visited[-4] \
-                & self.last_visited[-1] != self.last_visited[-2]:
-            alternatives = np.argsort(self.q_table[observation_ind[0]])
-            print("DEADLOCK DETECTED. DO " + str(self.repeated_deadlock) + " BEST ALTERNATIVE NOW")
-            self.repeated_deadlock += 1
-            self.last_action_ind = alternatives[-np.min(np.array([self.repeated_deadlock, 4]))]
-        print("+++++")
-        else:
-            self.repeated_deadlock = 1
+        # print("#######")
+        # # Deadlock detection:
+        # self.last_visited = np.append(self.last_visited, np.array([x, y]))
+        # # print(" ------" + self.last_visited)
+        # if self.last_visited[-1] == self.last_visited[-3] & self.last_visited[-2] == self.last_visited[-4] \
+        #         & self.last_visited[-1] != self.last_visited[-2]:
+        #     alternatives = np.argsort(self.q_table[observation_ind[0]])
+        #     print("DEADLOCK DETECTED. DO " + str(self.repeated_deadlock) + " BEST ALTERNATIVE NOW")
+        #     self.repeated_deadlock += 1
+        #     self.last_action_ind = alternatives[-np.min(np.array([self.repeated_deadlock, 4]))]
+        # print("+++++")
+        # else:
+        #     self.repeated_deadlock = 1
 
     # If test mode and observation_db has no entry
     else:

@@ -12,16 +12,14 @@ class EvaluationEnvironment:
     Provides a collection of methods to run trial games and analyze the results.
     """
 
-    def __init__(self, agent_names:list, save_directory:str, ntrials:int=150):
+    def __init__(self, agent_names:list, save_directory:str):
         """
         Initialize environment attributes.
         :param agent_names: Agent code folder names FIXME (only len == 1 for now)
         :param save_directory: Directory name (created if it doesn't exist)
-        :param ntrials: Number of trials to play
         """
         self.agent_names = agent_names
         self.save_directory = save_directory if save_directory[-1] not in ["/", "\\"] else save_directory[:-1]
-        self.ntrials = ntrials
 
     def run_trials(self):
         """
@@ -29,8 +27,7 @@ class EvaluationEnvironment:
         :return:
         """
 
-        for i in range(self.ntrials):
-            main_evaluate_agents.main(self.agent_names, [""], self.save_directory) # run games and save them to output directory
+        main_evaluate_agents.main(self.agent_names, [""], self.save_directory) # run games and save them to output directory
 
     def analyze_games(self, destroy_data:bool=False):
         """

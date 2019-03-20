@@ -9,6 +9,7 @@ from pygame.locals import *
 import numpy as np
 import multiprocessing as mp
 import threading
+import os
 
 from environment_updated import BombeRLeWorld, ReplayWorld
 from settings import s
@@ -33,12 +34,32 @@ def game_logic(world, user_inputs):
                     raise
 
 
-def main():
+def main(agent_init = [
+
+            ('epsilon_simple_agent', False),
+            #('simple_agent', False),
+            #('simple_agent', False),
+            #('simple_agent', False)
+
+
+            #('random_agent', False),
+            #('random_agent', False),
+            #('random_agent', False),
+            #('random_agent', False)
+
+        ], save_path ='data/games/one_player_crates_epsilon_simple/'):
     """
-    Run a game using environment_save_states.py. Save the resultant episodes in a file.
-    :param filename: Filepath to save directory for episodes
+    Run a game using environment_updated.py. Save the resultant episodes in a file.
+    :param agent_init: Initializer list for bomberman environment
+    :param save_path: Save directory for episodes
     :return:
     """
+
+    if save_path[-1] not in ("/", "\\"):
+        save_path += "/"
+    if not os.path.exists(save_path):
+        os.makedirs(save_path)
+
     pygame.init()
 
     # Emulate Windows process spawning behaviour under Unix (for testing)
@@ -47,21 +68,8 @@ def main():
     # Initialize environment and agents
 
     # for saving games
-    save_path = 'data/games/one_player_crates_epsilon_simple/'
-    world = BombeRLeWorld([
-    
-            ('epsilon_simple_agent', False),
-            #('simple_agent', False),
-            #('simple_agent', False),
-            #('simple_agent', False)
-            
 
-            #('random_agent', False),
-            #('random_agent', False),
-            #('random_agent', False),
-            #('random_agent', False)
-
-        ], None,save_path)
+    world = BombeRLeWorld(agent_init, None,save_path)
     # world = ReplayWorld('Replay 2019-01-30 16:57:42')
     user_inputs = []
 

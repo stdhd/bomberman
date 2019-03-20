@@ -30,7 +30,7 @@ def main():
         os.makedirs(write_path)
 
     KNOWN, Q = q_train_from_games_jakob(cwd + "/" + 'data/games/four_players_esa_0_2_cratedens_0_75/', write_path,
-                                        obs, a=0.5, g=0.5, stop_after_n_files=200)
+                                        obs, a=0.5, g=0.5, stop_after_n_files=200, save_every_n_files=4)
 
 
 if __name__ == '__main__':

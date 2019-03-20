@@ -44,7 +44,6 @@ class ObservationObject:
         :param radius: Radius in observation window (radius = 1 => 3x3 window)
         :param FEATURE_LIST: list of features by name
         """
-        FEATURE_LIST = sorted(FEATURE_LIST, key=str.lower)
         self.features = FEATURE_LIST
         self.features.sort()
 

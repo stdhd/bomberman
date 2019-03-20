@@ -15,13 +15,15 @@ def main():
     os.chdir(os.path.dirname(__file__))
     cwd = os.getcwd()
 
-    obs = ObservationObject(3, ['d_closest_coin_dir',
+    obs = ObservationObject(1, ['d_closest_coin_dir',
                                 'd_closest_safe_field_dir',
+                                'd_closest_crate_dir',
                                 'me_has_bomb',
                                 'd4_is_safe_to_move_a_l',
                                 'd4_is_safe_to_move_b_r',
                                 'd4_is_safe_to_move_c_u',
-                                'd4_is_safe_to_move_d_d'
+                                'd4_is_safe_to_move_d_d',
+                                'dead_end_detect',
                                 ], None)
 
     write_path = 'data/qtables/' + obs.get_file_name_string()
@@ -30,7 +32,7 @@ def main():
         os.makedirs(write_path)
 
     KNOWN, Q = q_train_from_games_jakob(cwd + "/" + 'data/games/four_players_esa_0_2_cratedens_0_75/', write_path,
-                                        obs, a=0.5, g=0.5, stop_after_n_files=200, save_every_n_files=4)
+                                        obs, a=0.5, g=0.5, save_every_n_files=10)
 
 
 if __name__ == '__main__':

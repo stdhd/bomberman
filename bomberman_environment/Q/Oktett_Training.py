@@ -151,6 +151,7 @@ def q_train_from_games_jakob(train_data, write_path, obs:ObservationObject, a = 
 
 
 def get_transformations(obs, radius, direction_sensitive):
+    direction_sensitive = np.array(direction_sensitive)
     if np.array_equal(obs, np.zeros(obs.shape[0])):
         # in case of terminal state, return zero vectors
         candidates = np.zeros([8, obs.shape[0]])

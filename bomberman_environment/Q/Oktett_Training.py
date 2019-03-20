@@ -171,10 +171,10 @@ def get_transformations(obs, radius, direction_sensitive):
     all_transformed = np.zeros([7, new_rest.shape[0]])
     direction_change = np.zeros([8, 6])
     for i in range(7):
-        all_transformed[i][new_rest == 0] = transformations[i, 0]
-        all_transformed[i][new_rest == 1] = transformations[i, 1]
-        all_transformed[i][new_rest == 2] = transformations[i, 2]
-        all_transformed[i][new_rest == 3] = transformations[i, 3]
+        all_transformed[i][new_rest == 0] = np.where(transformations[i] == 0)[0][0]
+        all_transformed[i][new_rest == 1] = np.where(transformations[i] == 1)[0][0]
+        all_transformed[i][new_rest == 2] = np.where(transformations[i] == 2)[0][0]
+        all_transformed[i][new_rest == 3] = np.where(transformations[i] == 3)[0][0]
         all_transformed[i][new_rest == 4] = 4
         all_transformed[i][new_rest == 5] = 5
         all_transformed[i][new_rest == 6] = 6

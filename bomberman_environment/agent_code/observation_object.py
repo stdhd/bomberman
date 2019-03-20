@@ -120,17 +120,14 @@ class ObservationObject:
         self.coin_locs = np.where(self.board == 3)[0] + 1  # list of coin indices
         self.bomb_locs = np.array([player_blocks[i * 21 + 2] for i in range(4)])  # bomb locations
         self.bomb_timers = np.array([player_blocks[i * 21 + 3] for i in range(4)])  # bomb timers
-        killed_booleans = np.array([player_blocks[i * 21 + 18] for i in range(4)])  # note "got killed" boolean
-        self.dead_players = np.where(killed_booleans >= 1)[0]
+        # killed_booleans = np.array([player_blocks[i * 21 + 18] for i in range(4)])  # note "got killed" boolean
+        self.dead_players = np.where(self.player_locs == 0)[0]
         self.living_players = np.where(self.player_locs != 0)[0]
-        for i in range(4):
-            if (not (i in self.living_players or i in self.dead_players)) or (i in self.living_players and i in self.dead_players):
-                raise RuntimeError("Players should be living XOR dead")
         # manhattan dist. to coin_locs
         self.arena = self._make_window(8, 8, 8)
         self.danger_map = self._get_threat_map()
 
-        self.events = np.array([player_blocks[4 + i*17: (i + 1)*21] for i in range(4)])
+        self.events = np.array([player_blocks[i*21 + 4: (i + 1)*21] for i in range(4)])
         # get (4 x 17) matrix of events for this step
 
         # self.player_distance_matrix = np.zeros((4, 4))

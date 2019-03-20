@@ -4,16 +4,15 @@
 2. 
 
 
-In order to test the efficacy of various machine learning approaches for our task, it is convenient to have a database of played games to use as a basis for training. 
+a) In order to test the efficacy of various machine learning approaches for our task, it is convenient to have a database of played games to use as a basis for training. 
 
 
-The alternative to this approach - playing games and training models "live", without saving them to the disk somehow - has the disadvantage that all games played are "lost" and cannot be reused, and that one cannot compare the performance of different models to each other on the same data. The author presumes it is also slower to train in this way, rather than doing all training operations on a single array in memory. 
+The alternative to this approach - playing games and training models "live", without saving them to the disk somehow - has the disadvantage that all games played are "lost" and cannot be reused, and that one cannot compare the performance of different models to each other on the same data. Training this way also avoids the file access conflicts that might emerge when accessing Q Tables or databases in parallel, from separate processes. 
+
+For these reasons, the team chose to develop a vectorized representation of the game state which contains all information for a single game step. This implied a crucial design measure: Construction of observations would need to be based on the state vector representation, so that training from state vectors and live execution of the agent are based on the same framework. This was not without its difficulties, as explained below. 
 
 
-For these reasons, the team chose to develop a vectorized representation of the game state which contains all information for a single game step. A successful state representation is space-efficient and contains all game-characterizing events. In order to save space, we assumed that games would always have 4 players, and that players could deploy at most one bomb. Player have either a bomb in their inventory or a bomb on the playing field. Other game design features, such as the size of the board or the number of events that can occur, do not affect the representability of the game state. 
-
-
-In the following discussion, a standard board format of a 17 x 17 grid is assumed. The state representation takes the form of a numpy integer array and contains 3 separate parts:
+b) A successful state representation is space-efficient and contains all game-characterizing events. To simplify the development of the format, we assumed that certain game parameters would remain immutable: For instance, that games would always have 4 players, that players could keep at most one bomb in inventory, and that wall squares would be distributed in characteristic checkers-board fashion. Other game design features, such as the size of the board or the number of events that can occur, do not affect the representability of the game state. In the following discussion, a standard board format of a 17 x 17 grid is assumed. The state representation takes the form of a numpy integer array and contains 3 separate parts:
 
 
 **Insert graphic showing vector format**
@@ -27,7 +26,7 @@ The first is the board state, which consists of 176 potentially navigable fields
 To represent the board state, each navigable field is uniquely associated with an index in range(1, 177). Indices count through all x values in one y column of the board matrix, skipping all wall fields, before advancing to the next y column. Index 1 is associated with board coordinates (1, 1), Index 2 with board coordinates (2, 1), and so on. 
 
 
-Because the game provides location information on basis of x, y coordinates, it was necessary to write functions to translate between the two coordinate representations. Initially, we had implemented these functions to arithmetically translate between index and x, y coordinates when called, but run profiling revealed that these function calls were taking up the bulk of training time. We then rewrote the functions to provide indices as a table lookup
+Because the game provides location information on basis of x, y coordinates, it was necessary to write functions to translate between the two coordinate representations. Initially, we had implemented these functions to arithmetically translate between index and x, y coordinates when called, but run profiling revealed that these function calls were taking up the bulk of training time. We then rewrote the functions to provide indices by accessing an imported numpy array, which significantly improved performance at runtime.
 
 
 **Insert player block representation here**
@@ -37,42 +36,65 @@ The next segment consists of four "player blocks". These contain: Information ab
 Dead players and bombs in inventory (not on board) are noted with the board index "0". Bombs in inventory have timers "0". 
 
 
-As of (18.03.2019), the game provides information about 17 distinct events. For each player, a block of length 17 keeps track of the occurence of each game event for this player in the current game step. Events are noted in the order they occur in settings.py; certain events, such as "CRATE_DESTROYED", can occur multiple times for one player in one game step, and are noted according to their multiplicity in the current game step. Events that do not occur are noted as "0".
+As of **(18.03.2019)**, the game provides information about 17 distinct events. For each player, a block of length 17 keeps track of the occurence of each game event for this player in the current game step. Events are noted in the order they occur in settings.py and are noted according to their multiplicity in the current game step. Events that do not occur are noted as "0".
 
 
-Our initial approach was to note each event as a boolean, but this had the crucial disadvantage that, during training, one could not give multiple rewards for an event that occured multiple times, sich as when one player kills multiple enemies in a single step. 
+Our initial approach was to note each event as a boolean, but this had the crucial disadvantage that, during training, one could not give multiple rewards for an event that occured multiple times, such as when one player destroys multiple crates in a single step. 
 
 
-Lastly, the current step number is noted as a single integer in the last position of the state vector. In total, the state vector contains 176 + 4*21 + 1 = 261 integers to define the game state. 
+Finally, the current step number is noted as a single integer in the last position of the state vector. In total, the state vector contains 176 + 4*21 + 1 = 261 integers to define the game state. 
 
 
+c) In order to generate bulk data for efficient training later on, it proved helpful to manage game state saving from the game's environment file. The original game files were adapted in a few ways to allow for effective data generation. 
+
+1) State saving from environment.py
+
+To implement automated state capturing, a new function capture_state() is called at the end of do_step(), which constructs the state vector for the newly completed step and appends it to a running list of steps for the current game. capture_state() loops through all players, bombs, coins, and explosions and saves them to the state representation vector, as well as noting the presence of crates from the arena. 
+
+Additionally, handling of "invalid actions" was augmented to note both the fact that an action was invalid, *as well as* the action the agent intended to take. This way, it was possible to apply a negative reward to the specific observation & action combination which triggered the event "invalid action". Before, only the fact that an invalid action was performed was noted. 
+
+At the end of the game (when end_round() is called), the list of saved states is converted to a numpy integer array and saved to the disk using a timestamped filename defined during intialization of the environment. The "round number" is appended to the filename, allowing a script to run an arbitrary number of games and save each as a distinct file (denoting a separate game) with common timestamp. 
+
+2) State creation in callbacks.py
+
+The main drawback of the above approach for data generation is that at execution time, agents do not have access to the environment, so there is no immediate generate a state representation as used in training. 
+
+To circumvent this, the team was forced to make the design choice of implementing a second, equivalent state saving function "derive_state_representation()" that is accessible to agent code at runtime, which constructs the state vector from the attributes available in the dictionary game_state. It proved to be a challenge, during development, to verify that both functions behave in equivalent ways. 
+
+Complicating this process is the fact that it is not possible to derive which bomb belongs to which player from the information in game_state. While this can be compensated for by simply assigning dropped bombs to players on the basis of which players are not holding a bomb in inventory, self-destruction leads to a major loss in score during play-time, meaning that the inability to discriminate own bombs from enemy bombs in-game can be potentially costly. 
+
+In this function, the state vector is constructed in the same way from the lists of game objects available to the player, except that, as explained, bombs are written to player blocks only to satisfy the condition that every player either is holding a bomb in inventory or (exclusive or) has deployed a bomb to the field. This would be relevant for a feature which, for example, indicates whether the closest enemy is holding a bomb. 
+
+Additionally, the player calling the state derivation function is always indexed as player 0 in the game state (player block 0), which is used later on to create this player's observation **(see Observation Object)**. 
 
 
-Implementation of state saving
+d) Data generation
 
 
-In order to generate bulk data for efficient training later on, it proved helpful to manage game state saving from the game's environment file. To implement this, a function capture_state() was called at the end of do_step(), and the resultant array appended to a new member save_list of type "list". 
+i) Data production 
+
+In order to practice reinforcement learning effectively, it is necessary to have access to a wealth of high-quality data. The classical difficulty with pure reinforcement learning, however, is that as the number of features and their combinations increases, the amount of training data needed to adequately converge on correct Q values for most observations grows astronomical. 
+
+Fortunately, there are tricks available in the particular case of Bomberman to increase the amount of useful data deriveable from a single game. 
+
+The first is immediately apparent in consideration of our state-saving approach: Rather than using a single agent to train, one can use the behavior of every player in the game to learn Q values. A single game, therefore, delivers up to four episodes, namely one for each participating player. 
+
+The second way is to exploit the symmetrical nature of Bomberman: A mirrored or rotated game state produces another valid game state. In total, one can find eight such transformations. 
+
+Combining both approaches, a 100-step game gives us up to 3200 distinct observations to train with. 
 
 
-capture_state loops through all players, bombs, coins, and explosions and saves them to the vector, as well as noting the presence of crates in the map. 
+ii) Data quality
+
+In our particular case, we had two useful tools at our disposal: The provided "simple agent" and "random agent" agent types. When generating training data, one needs to learn both very good moves, as well as very bad moves. Because simple agents play the game at a human level, using games played between them seemed like a perfect opportunity to observe high-quality moves without learning them painstakingly through trial-and-error. 
+
+At the same time, relying only on simple agents to learn moves leaves one vulnerable to ignorance of the value of moves simple agents are not designed to make - both missed opportunities as well as obvious blunders. Q Learning can only work if all choices in the Q Table are accurately updated to reflect their value. Otherwise, what might happen is that values remain set to their intialized value (0, in our case), which may be far higher than their actual value (e.g. a self-destruction a simple agent would avoid). **See also: eploration/exploitation**. 
+
+To reconcile these difficulties (i.e. to master the exploration/exploitation tradeoff), we created a new agent type which executes the move of the simple agent most of the time, and a random action the rest of the time. This "epsilon simple agent" was then used to generate bulk data for training. Initial results were promising: Agents easily solved the crate/coin tasks and engaged in aggressive behaviors when encountering an enemy. 
+
+It is worth noting that a multiplayer game of this type is in principle non-deterministic. It is not possible to always predict what an enemy will do. Therefore, any single player policy used to train the Q Table introduces a bias into training - one learns to expect enemies to play according to the strengths and weaknesses of the policy that created the training data. The team was not familiar enough with the literature on game theory to derive a training strategy guaranteed to asymptotically converge to the "optimal" policy under the condition that enemy policies are unknown. The assumption in choosing the simple agent as a model, however, was that it would, at least in the beginning, be "good enough" to train a reasonably smart and capable agent. 
 
 
-At the end of the environment function end_round, all states are condensed to a numpy array and saved to the disk using a timestamped filename defined during intialization of the environment, as well as the "round number" (defined in settings.py, allowing a script to run an arbitrary number of games and save each as a distinct file with common timestamp). 
-
-
-Doing it this way, rather than outsourcing game state saving to the agents themselves, reduced game state saving to a single, centralized process and avoided problems resultant from managing living vs. dead players, etc. 
-
-
-The main drawback of this approach, as far as training goes, is that at agent execution time, agents do not have access to the environment (not to mention that the tournament uses an unmodified version of the environment which does not implement our version of state saving). 
-
-
-To circumvent this, the team was forced to make the unelegant but necessary design choice of implementing a second, equivalent state saving function "derive_state_representation" that is accessible to agent code at runtime, which constructs the state vector from the attributes available in the dictionary game_state. It proved to be a challenge, during development, to verify that both functions behave in equivalent ways. 
-
-
-Complicating this process is the fact that it is not possible to derive which bomb belongs to which player from the information in game_state. However, as we shall see in **Observations chapter**, it is for our purposes unimportant which player a bomb belongs to, as all bombs are equally lethal and what matters during combat is which player can potentially deploy a bomb. 
-
-
-Here, the state vector is constructed in the same way, except that bombs are assigned to players more or less randomly, on the basis of whether they currently hold a bomb in inventory or not. In addition, the player calling the state derivation function is always indexed as player 0 in the game state, which is used later on to create this player's observation. 
 
 
 

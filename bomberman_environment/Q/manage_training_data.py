@@ -55,6 +55,32 @@ def add_to_trained(records_file, train_data_files):
     print("Trained with files", train_data_files)
 
 
+def catalogue_progress(progress_file, steps_added, qtable_length):
+    """
+    Upon training with a certain number of steps, note how long the Q Table is.
+
+    Important: Calling function should set steps_added to 0 after calling catalogue_progress
+
+    I.e. Trained with 1000 new steps and Q table is 12800 lines long -> call with arguments 1000, 12800
+    :param progress_file: Filepath to log file
+    :param steps_added: Number of new steps trained with
+    :param qtable_length: Current length of Q Table
+    :return:
+    """
+    try:
+        print("Writing progress to file.")
+        with open(progress_file, 'r') as file:
+            step_count_array, qtable_lengths_array = json.load(file)
+        step_count_array.append(steps_added)
+        qtable_lengths_array.append(qtable_length)
+        with open(progress_file, 'w') as file:
+            json.dump((step_count_array, qtable_lengths_array), file)
+    except:
+        print("Progress logs empty, initializing with new lists.")
+        with open(progress_file, 'w') as file:
+            json.dump(([steps_added], [qtable_length]), file)
+
+
 class Table:
     """
     Provide functions to access, maintain, and grow Q table (basically a dynamic list, but as a numpy array)

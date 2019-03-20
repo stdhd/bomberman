@@ -80,12 +80,11 @@ class ObservationObject:
         "closest_coin_old": "cco",
         "d_closest_safe_field_dirNEW" : "csfdirN",
         "d4_is_safe_to_move_a_l" : "ismal",
-        "d4_is_safe_to_move_b_r": "ismbl",
+        "d4_is_safe_to_move_b_r": "ismbr",
         "d4_is_safe_to_move_c_u": "ismcu",
         "d4_is_safe_to_move_d_d": "ismdd"
 
         }
-
 
     def set_state(self, state):
 
@@ -116,6 +115,12 @@ class ObservationObject:
             window = self._make_window(radius, player_x, player_y)
             observations[count] = np.concatenate((window.flatten(), features[count]))  # concatenate window and features
         return observations
+
+    def get_feature_index(self, feature_name):
+        try:
+            return self.features.index(feature_name) + 2 * self.radius + 1
+        except Exception as e:
+            return None
 
     def _make_window(self, radius_custom, center_x, center_y):
         """
@@ -205,7 +210,9 @@ class ObservationObject:
         self.died_players = np.where(killed_booleans >= 1)[0]
         # manhattan dist. to coin_locs
         self.arena = self._make_window(8, 8, 8)
+        # if self.logger: self.logger.info(f'ARENA INIT: {self.arena}')
         self.danger_map = self._get_threat_map()
+        # if self.logger: self.logger.info(f'DANGER INIT: {self.danger_map}')
         # self.player_distance_matrix = np.zeros((4, 4))
         # for p1 in np.arange(self.player_distance_matrix.shape[0]):
         #     for p2 in np.arange(start=p1 + 1, stop=self.player_distance_matrix.shape[1]):
@@ -511,7 +518,6 @@ class ObservationObject:
 
     def _get_threat_map(self):
         """
-
         :return: Boolean map: True for Free/Coin, False for Wall/Threatened/Crate
         """
         arena = self.arena
@@ -519,7 +525,7 @@ class ObservationObject:
         for loc in self.bomb_locs:
             if loc == 0:
                 continue
-            tx,ty = index_to_x_y(loc, 17, 17)
+            tx,ty = index_to_x_y(loc)
             for i in range(4):
                 if arena[tx, ty + i] == -1:
                     break
@@ -547,13 +553,11 @@ class ObservationObject:
         x, y = self.player.me_loc[0], self.player.me_loc[1]
         # If there are no bombs on the field the direction should indicate this by turning off this feature (return 4)
         if not self.bomb_locs.any(): 
-            if self.logger != None:
-                self.logger.info(f'YES')
             return self._determine_direction(None, x, y)
         is_on_danger_zone_factor = 0
         arena = self.arena
-        if self.logger != None:
-            self.logger.info(f'ARENA: {arena}')
+        # if self.logger != None:
+        #     self.logger.info(f'ARENA: {arena}')
         danger_zone_coords = []
         down, up, left, right = True, True, True, True
         # for x_bomb, y_bomb in np.vstack((x_bombs, y_bombs)).T:

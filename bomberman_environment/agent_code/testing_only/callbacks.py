@@ -86,12 +86,10 @@ def act(self):
     observation_ind = np.where((self.observation_db == observation).all(axis=1))[0]
     # If observation_db has entry the action with the highest value is chosen.
     if observation_ind.shape[0] != 0:
-        self.logger.debug("KNOWN observation: " + self.obs_object.get_file_name_string())
-        self.logger.debug(self.observation_db[observation_ind[0]])
+        self.logger.debug("KNOWN observation: " + str(self.observation_db[observation_ind[0]]))
         self.logger.debug(str(('LEFT', 'RIGHT', 'UP', 'DOWN', 'WAIT', 'BOMB')))
         self.logger.debug(self.q_table[observation_ind[0]])
-        self.logger.debug("Quantities: ")
-        self.logger.debug(self.quantities[observation_ind[0]])
+        self.logger.debug("Quantities: " + str(self.quantities[observation_ind[0]]))
         self.last_action_ind = np.random.choice(
             np.flatnonzero(self.q_table[observation_ind[0]] == self.q_table[observation_ind[0]].max()))
         # Deadlock detection:

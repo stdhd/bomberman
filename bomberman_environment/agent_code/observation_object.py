@@ -546,14 +546,14 @@ class ObservationObject:
         Boolean array indicating, if features are direction sensitive
         :return:
         """
-        temp = np.array([])
+        temp = []
         for f in self.features:
             if f.startswith("d_"):
-                temp = np.append(np.array([1]), temp)
+                temp.append(1)
             elif f.startswith("d4_"):
-                temp = np.append(np.array([2]), temp)
+                temp.append(2)
             else:
-                temp = np.append(np.array([0]), temp)
+                temp.append(0)
         return temp
 
     def closest_coin_old(self):

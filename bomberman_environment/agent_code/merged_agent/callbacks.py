@@ -107,17 +107,22 @@ def act(self):
 
         observations, self.last_action_rotations = get_transformations(observation, self.obs_object.radius,
                                                         self.obs_object.get_direction_sensitivity())
+        self.logger.info(f'DIRECTION SENS: {self.obs_object.get_direction_sensitivity()}')
         self.last_q_ind = []
         self.logger.info(f'OBSERVATIONS: {observations, self.last_action_rotations}')
         self.logger.info(f'CURRENT OBS: {observation}')
         # Choose random action and if current observation is unknown add it and its rotations to observation_db
         if self.epsilon > np.random.uniform(0,1):
             self.last_action_ind = np.random.randint(0,6)
+            self.logger.info(f'RANDOM ACTION: {observation_ind.shape[0]}')
             if observation_ind.shape[0] == 0:
                 for obs in observations: 
                     self.observation_db = np.append(self.observation_db, np.array([obs]), axis = 0)
                     self.q_table = np.append(self.q_table, np.zeros([1, self.q_table.shape[1]]), axis = 0)
                     self.last_q_ind.append(self.q_table.shape[0] - 1)
+            else:
+                for obs in observations: 
+                    self.last_q_ind.append(np.where((self.observation_db == obs).all(axis=1))[0][0])
         else:
             # If observation is unknown it and its rotations have to be added to observation_db and a random action is chosen.
             if observation_ind.shape[0] == 0:
@@ -131,8 +136,9 @@ def act(self):
             elif observation_ind.shape[0] != 0:
                 # self.logger.info(f'Q-TABLE: {self.q_table[observation_ind[0]]}')
                 self.last_action_ind = np.random.choice(np.flatnonzero(self.q_table[observation_ind[0]] == self.q_table[observation_ind[0]].max()))
-                for ind, obs in enumerate(observations): 
-                    self.last_q_ind.append(np.where((self.observation_db == observation).all(axis=1))[0][ind])
+                for obs in observations: 
+                    self.logger.info(f'NP HWERE: {np.where((self.observation_db == obs).all(axis=1))}')
+                    self.last_q_ind.append(np.where((self.observation_db == obs).all(axis=1))[0][0])
 
     self.next_action = ['UP', 'DOWN', 'LEFT', 'RIGHT', 'BOMB', 'WAIT'][self.last_action_ind]
 
@@ -162,7 +168,8 @@ def reward_update(self):
 
     # self.logger.info(f'REWARD: {reward}')
     for ind, rotation in enumerate(self.last_action_rotations):
-        self.logger.info(f'QIND: {self.last_q_ind, self.last_q_ind[ind]}')
+        self.logger.info(f'QIND: {self.last_q_ind, ind}')
+        self.logger.info(f'QIND indexed : {self.last_q_ind[ind]}')
         self.logger.info(f'ACTIONIND: {self.last_action_rotations, self.last_action_ind, rotation[self.last_action_ind]}')
         self.q_table[self.last_q_ind[ind], int(rotation[self.last_action_ind])] = (1-self.learning_rate) * self.q_table[self.last_q_ind[ind], int(rotation[self.last_action_ind])] \
                                                                 + self.learning_rate * (reward + self.discount * current_best_value)

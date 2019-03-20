@@ -1,5 +1,6 @@
 
 import json
+import numpy as np
 
 from evaluation_environment import EvaluationEnvironment
 
@@ -7,11 +8,12 @@ from evaluation_environment import EvaluationEnvironment
 def main():
     env = EvaluationEnvironment(["testing_only"], "data/games/evaluations", 1)
     env.run_trials()
-    json_path = env.analyze_games()[-1]
+    _, _, events_path, durations_path = env.analyze_games()
 
-    with open(json_path, 'r') as f:
-        events, durations = json.load(f)
-
+    events = np.load(events_path)
+    durations = np.load(durations_path)
     print()
 
-main()
+
+if __name__ == '__main__':
+    main()

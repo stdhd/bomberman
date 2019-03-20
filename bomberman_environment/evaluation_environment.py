@@ -45,6 +45,8 @@ class EvaluationEnvironment:
         game_durations = []
 
         for file in files:
+            if file in ("events.npy", "durations.npy"):
+                continue
             eventcount = np.zeros((len(self.agent_names), 17)).astype(int)
             try:
                 game = np.load(self.save_directory + "/" + file)
@@ -70,19 +72,20 @@ class EvaluationEnvironment:
             game_durations.append(step_num)
             event_count_by_game.append(eventcount)
 
-        event_count_by_game, game_durations = np.array(event_count_by_game), np.array(game_durations)
-        json_path = self.save_directory+"/"+'game_analysis.json'
+        event_count_by_game, game_durations = np.array([ec[0] for ec in event_count_by_game]), np.array(game_durations)
+        events_path = self.save_directory + "/" + "events.npy"
+        durations_path = self.save_directory + "/" + "durations.npy"
 
-        json_write = open(json_path, 'w')
-        json.dump((event_count_by_game.tolist(), game_durations.tolist()), json_write)
+        np.save(events_path, event_count_by_game)
+        np.save(durations_path, game_durations)
 
-        print("Wrote game info to", json_path)
+        print("Wrote game info to", events_path, "and", durations_path)
 
         if destroy_data:  # remove files from disk
             print("Removing game data")
             for file in files:
                 remove(self.save_directory+"/"+file)
 
-        return event_count_by_game, game_durations, json_path
+        return event_count_by_game, game_durations, events_path, durations_path
 
 

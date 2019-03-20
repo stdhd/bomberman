@@ -1,7 +1,7 @@
 
 
 
-
+2. 
 
 
 In order to test the efficacy of various machine learning approaches for our task, it is convenient to have a database of played games to use as a basis for training. 
@@ -74,16 +74,6 @@ Complicating this process is the fact that it is not possible to derive which bo
 
 Here, the state vector is constructed in the same way, except that bombs are assigned to players more or less randomly, on the basis of whether they currently hold a bomb in inventory or not. In addition, the player calling the state derivation function is always indexed as player 0 in the game state, which is used later on to create this player's observation. 
 
-
-
-Observations
-
-
-In theory, Bomberman is a perfect information game, and it should be possible to practice reinforcement learning on the complete game state. 
-
-However, in practice, the dimensionality of this problem is far too large to be tractable with our approach. 
-
-In response, the team decided to work on methods to reduce the number of features available to our agent during training and execution time, in order to be able to make confident decisions on a small set of expressive features. 
 
 
 

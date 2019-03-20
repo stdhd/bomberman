@@ -59,7 +59,7 @@ def setup(self):
             raise Exception('observation_db size does not fit')
 
     self.repeated_deadlock = 1
-    self.last_visited = np.array([2, 0])
+    self.last_visited = np.array([[-1, -1]])
 
 def act(self):
     """Called each game step to determine the agent's next action.
@@ -95,13 +95,15 @@ def act(self):
         self.logger.debug("Quantities: " + str(self.quantities[observation_ind[0]]))
         self.last_action_ind = np.random.choice(
             np.flatnonzero(self.q_table[observation_ind[0]] == self.q_table[observation_ind[0]].max()))
+
         # Deadlock detection:
-        self.last_visited = np.append(self.last_visited, np.array([x, y]))
-        # self.logger.debug(" ------" + self.last_visited)
-        if self.last_visited[-1] == self.last_visited[-3] & self.last_visited[-2] == self.last_visited[-4] \
-                & self.last_visited[-1] != self.last_visited[-2]:
+        self.last_visited = np.append(self.last_visited, np.array([[x, y]]),axis=0)
+
+        if (self.last_visited[-1] == self.last_visited[-3]).all() and (self.last_visited[-2] == self.last_visited[-4]).all() \
+                and (self.last_visited[-1] != self.last_visited[-2]).all():
             alternatives = np.argsort(self.q_table[observation_ind[0]])
             self.logger.info("DEADLOCK DETECTED. DO " + str(self.repeated_deadlock) + " BEST ALTERNATIVE NOW")
+            print("DEADLOCK DETECTED. DO " + str(self.repeated_deadlock) + " BEST ALTERNATIVE NOW")
             self.repeated_deadlock += 1
             self.last_action_ind = alternatives[-np.min(np.array([self.repeated_deadlock, 4]))]
         else:

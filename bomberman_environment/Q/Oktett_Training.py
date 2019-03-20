@@ -37,6 +37,7 @@ def q_train_from_games_jakob(train_data, write_path, obs:ObservationObject, a = 
 
     filecount = 0
     current_trained_batch = []  # keeps track of the files used for training
+    steps_count = 0  # number of steps seen since launching training
 
     for file in [f for f in listdir(train_data) if isfile(join(train_data, f))]:
         # go through files
@@ -131,16 +132,19 @@ def q_train_from_games_jakob(train_data, write_path, obs:ObservationObject, a = 
 
                 last_index[rewards_players[count]] = (index_current, rotations_current)
 
+            steps_count += 1
+
         filecount += 1
         current_trained_batch.append(file)
         print("Trained with file", file)
 
         if filecount % 20 == 0:
             add_to_trained(write_path+"/records.json", current_trained_batch)  # update json table
+            catalogue_progress(write_path+"/progress.json", steps_count, QTABLE.shape[0])
             np.save(write_path + '/observation-' + filename, KNOWN)
             np.save(write_path + '/q_table-' + filename, QTABLE)
             np.save(write_path + '/quantity-' + filename, QUANTITY)
-            filecount -= filecount
+            filecount, steps_count = 0, 0
             current_trained_batch.clear()
 
         if not KNOWN.shape[0] % 8 == 0:

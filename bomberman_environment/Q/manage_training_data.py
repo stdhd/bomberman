@@ -52,6 +52,8 @@ def add_to_trained(records_file, train_data_files):
 
     f.close()
 
+    print("Trained with files", train_data_files)
+
 
 def catalogue_progress(progress_file, steps_added, qtable_length):
     """

@@ -1,8 +1,9 @@
 import numpy as np
 import warnings
 from random import shuffle
-from state_functions import indices
+from state_functions.indices import *
 from state_functions.state_representation import *
+from Q.Oktett_Training import *
 from agent_code.observation_object import ObservationObject
 import os
 
@@ -21,14 +22,15 @@ def setup(self):
     self.discount = 0.7
     self.epsilon = 0.15
     self.train_flag = True
-    self.obs_object = ObservationObject(1, ["d_closest_coin_dir", "d_closest_safe_field_dir"], self.logger)
+    self.obs_radius = 0
+    self.obs_object = ObservationObject(self.obs_radius, ["d_closest_coin_dir", "d_closest_crate_dir", "d_closest_safe_field_dir", "d4_is_safe_to_move_a_l",
+                                        "d4_is_safe_to_move_b_r", "d4_is_safe_to_move_c_u", "d4_is_safe_to_move_d_d", "me_has_bomb"], self.logger)
     # Used for plotting
     self.total_steps_over_episodes = 0
     self.total_deaths_over_episodes = 0
     self.number_of_episode = 0
 
     observation_size = self.obs_object.get_observation_size()
-    self.logger.info(f'observation_size: {observation_size}')
     filename = self.obs_object.get_file_name_string()
 
     
@@ -76,56 +78,61 @@ def act(self):
     bombs = self.game_state['bombs']
     self.obs_object.set_state(derive_state_representation(self))
     observation = self.obs_object.create_observation(np.array([int(0)]))[0]
-    self.old_observation = observation
     
-    self.logger.info(f'BOMBS: {bombs}')
-    self.logger.info(f'self: {[x, y]}')
-    self.logger.info(f'Observation: {observation}')
+    # self.logger.info(f'BOMBS: {bombs}')
+    # self.logger.info(f'self: {[x, y]}')
+    # self.logger.info(f'Observation: {observation}')
     
-
-    # Search for state in observation_db
-    # If/else needed because np.where can only be done if self.observation_db is not empty
-    if self.observation_db.shape[0] != 0:
+# ------------------------ Testing agent ------------------------
+    if not self.train_flag:
         warnings.simplefilter(action='ignore', category=FutureWarning)
         observation_ind = np.where((self.observation_db == observation).all(axis=1))[0]
-        self.last_q_ind = observation_ind
-    else:
-        observation_ind = np.array([])
-
-    # If Zufällig und training
-        # random action
-        # update q_table and observation_db
-        # IF observation_db hat keinen Eintrag
-            # append q_table and observation_db
-    # If Nicht zufällig
-        # If observation_db has no entry and training
-            # random action
-            # q_table and observation_db
-        # ElIf observation_db has entry
-            # argmax action
-        # Else
-            # random action
-
-    if self.epsilon > np.random.uniform(0,1) and self.train_flag:
-        self.last_action_ind = np.random.randint(0,6)
-        if observation_ind.shape[0] == 0:
-            self.observation_db = np.append(self.observation_db, np.array([observation]), axis = 0)
-            self.q_table = np.append(self.q_table, np.zeros([1, self.q_table.shape[1]]), axis = 0)
-            self.last_q_ind = self.q_table.shape[0] - 1
-    else:
-        # If training mode is on and observation_db has no entry it has to be appended and a random action is chosen.
-        if observation_ind.shape[0] == 0 and self.train_flag:
-            self.last_action_ind = np.random.randint(0,6)
-            self.observation_db = np.append(self.observation_db, np.array([observation]), axis = 0)
-            self.q_table = np.append(self.q_table, np.zeros([1, self.q_table.shape[1]]), axis = 0)
-            self.last_q_ind = self.q_table.shape[0] - 1
-        # If observation_db has entry the action with the highest value is chosen.
-        elif observation_ind.shape[0] != 0:
+        if observation_ind.shape[0] != 0:
             self.last_action_ind = np.random.choice(np.flatnonzero(self.q_table[observation_ind[0]] == self.q_table[observation_ind[0]].max()))
-        # If test mode and observation_db has no entry
         else:
             # TODO: regression
             self.last_action_ind = np.random.randint(0,6)
+# ------------------------ Training agent ------------------------
+    else:
+        # Search for state in observation_db
+        # If/else needed because np.where can only be done if self.observation_db is not empty
+        if self.observation_db.shape[0] != 0:
+            warnings.simplefilter(action='ignore', category=FutureWarning)
+            observation_ind = np.where((self.observation_db == observation).all(axis=1))[0]
+        else:
+            observation_ind = np.array([])
+
+        # For updating only the original observation is needed as its rotations have the same reward.
+        self.last_observation = observation
+
+        observations, self.last_action_rotations = get_transformations(observation, self.obs_object.radius,
+                                                        self.obs_object.get_direction_sensitivity())
+        self.last_q_ind = []
+        self.logger.info(f'OBSERVATIONS: {observations, self.last_action_rotations}')
+        self.logger.info(f'CURRENT OBS: {observation}')
+        # Choose random action and if current observation is unknown add it and its rotations to observation_db
+        if self.epsilon > np.random.uniform(0,1):
+            self.last_action_ind = np.random.randint(0,6)
+            if observation_ind.shape[0] == 0:
+                for obs in observations: 
+                    self.observation_db = np.append(self.observation_db, np.array([obs]), axis = 0)
+                    self.q_table = np.append(self.q_table, np.zeros([1, self.q_table.shape[1]]), axis = 0)
+                    self.last_q_ind.append(self.q_table.shape[0] - 1)
+        else:
+            # If observation is unknown it and its rotations have to be added to observation_db and a random action is chosen.
+            if observation_ind.shape[0] == 0:
+                self.last_action_ind = np.random.randint(0,6)
+                if observation_ind.shape[0] == 0:
+                    for obs in observations: 
+                        self.observation_db = np.append(self.observation_db, np.array([obs]), axis = 0)
+                        self.q_table = np.append(self.q_table, np.zeros([1, self.q_table.shape[1]]), axis = 0)
+                        self.last_q_ind.append(self.q_table.shape[0] - 1)
+            # If observation is known the action with the highest value is chosen and observations indices are searched for rewarding
+            elif observation_ind.shape[0] != 0:
+                # self.logger.info(f'Q-TABLE: {self.q_table[observation_ind[0]]}')
+                self.last_action_ind = np.random.choice(np.flatnonzero(self.q_table[observation_ind[0]] == self.q_table[observation_ind[0]].max()))
+                for ind, obs in enumerate(observations): 
+                    self.last_q_ind.append(np.where((self.observation_db == observation).all(axis=1))[0][ind])
 
     self.next_action = ['UP', 'DOWN', 'LEFT', 'RIGHT', 'BOMB', 'WAIT'][self.last_action_ind]
 
@@ -140,13 +147,7 @@ def reward_update(self):
     """
     # self.logger.debug(f'Encountered {len(self.events)} game event(s)')
     # self.logger.info(f'Events: {self.events}')
-
-    arena = self.game_state['arena']
-    x, y, _, _, _ = self.game_state['self']
-    coins = np.array(self.game_state['coin_locs'])
-    # self.logger.info(f'Coins: {coin_locs.any()}')
-    bombs = self.game_state['bombs']
-    # self.logger.info(f'BOMBSReward: {bombs}')
+    # Find new observation index to get its best action value for updating 
     self.obs_object.set_state(derive_state_representation(self))
     observation = self.obs_object.create_observation(np.array([0]))[0]
     warnings.simplefilter(action='ignore', category=FutureWarning)
@@ -155,9 +156,17 @@ def reward_update(self):
         current_best_value = 0
     else:
         current_best_value = self.q_table[observation_ind].max()
-    reward = _getReward(self.events, self.old_observation)
-    self.q_table[self.last_q_ind, self.last_action_ind] = (1-self.learning_rate) * self.q_table[self.last_q_ind, self.last_action_ind] \
+    
+    # Get reward only for the originial observation. The reward for its rotations is the same
+    reward = _getReward(self.obs_object, self.events, self.last_observation, self.logger)
+
+    # self.logger.info(f'REWARD: {reward}')
+    for ind, rotation in enumerate(self.last_action_rotations):
+        self.logger.info(f'QIND: {self.last_q_ind, self.last_q_ind[ind]}')
+        self.logger.info(f'ACTIONIND: {self.last_action_rotations, self.last_action_ind, rotation[self.last_action_ind]}')
+        self.q_table[self.last_q_ind[ind], int(rotation[self.last_action_ind])] = (1-self.learning_rate) * self.q_table[self.last_q_ind[ind], int(rotation[self.last_action_ind])] \
                                                                 + self.learning_rate * (reward + self.discount * current_best_value)
+    # self.logger.info(f'Q-TABLE UPDATED: {self.q_table[self.last_q_ind]}')
 
 def end_of_episode(self):
     """Called at the end of each game to hand out final rewards and do training.
@@ -173,38 +182,78 @@ def end_of_episode(self):
     np.save(os.path.join('agent_code', 'merged_agent', 'q_table-' + filename), self.q_table)
     self.total_steps_over_episodes += self.game_state['step']
     if 13 in self.events or 14 in self.events: self.total_deaths_over_episodes += 1
-    self.number_of_episode +=1
+    self.number_of_episode += 1
     if self.number_of_episode % 50 == 0: 
         self.logger.info(f'Episode number, Total Steps and Deaths: {self.number_of_episode, self.total_steps_over_episodes, self.total_deaths_over_episodes}')
         self.total_steps_over_episodes, self.total_deaths_over_episodes = 0, 0
 
-def _getReward(events, old_observation):
+def _getReward(obs_object, events, old_observation, logger):
     reward = 0
-    ccdir_feature_ind = 9
-    csfdir_feature_ind = 10
-    # Left, right, up, down (0-3) check for coin flag (old_observation[9])
-    if 0 in events:
-        if old_observation[csfdir_feature_ind] == 8: reward += 250 # Reward when agent chooses direction safe field
+    ccdir_feature_ind = obs_object.get_feature_index("d_closest_coin_dir")
+    ccrdir_feature_ind = obs_object.get_feature_index("d_closest_crate_dir")
+    csfdir_feature_ind = obs_object.get_feature_index("d_closest_safe_field_dir")
+    ismal_feature_ind = obs_object.get_feature_index("d4_is_safe_to_move_a_l")
+    ismbr_feature_ind = obs_object.get_feature_index("d4_is_safe_to_move_b_r")
+    ismcu_feature_ind = obs_object.get_feature_index("d4_is_safe_to_move_c_u")
+    ismdd_feature_ind = obs_object.get_feature_index("d4_is_safe_to_move_d_d")
+    logger.info(f'ISMAL: {ismal_feature_ind}')
+    logger.info(f'CCDIR: {ccdir_feature_ind}')
+    if 0 in events: # Left
+        if csfdir_feature_ind != None and old_observation[csfdir_feature_ind] == 0: reward += 500 # Reward when agent chooses direction safe field
+        if ismal_feature_ind != None and csfdir_feature_ind != None \
+            and old_observation[ismal_feature_ind] == 0 and old_observation[csfdir_feature_ind] > 3: reward -= 300 # Punish when agent chooses direction to danger zone, explosion or invalid action
+        if ccrdir_feature_ind != None and ismal_feature_ind != None \
+            and old_observation[ccrdir_feature_ind] == 0 and old_observation[ismal_feature_ind] == 1: reward += 400 # Reward if following closest crate feature
+        if ccdir_feature_ind != None and ismal_feature_ind != None \
+            and old_observation[ccdir_feature_ind] == 0 and old_observation[ismal_feature_ind] == 1: reward += 300 # Reward if following closest coin feature
         reward -= 50
-    elif 1 in events:
-        if old_observation[csfdir_feature_ind] == 16: reward += 250
+    elif 1 in events: # Right
+        if csfdir_feature_ind != None and old_observation[csfdir_feature_ind] == 1: reward += 500
+        if ismbr_feature_ind != None and csfdir_feature_ind != None \
+            and old_observation[ismbr_feature_ind] == 0 and old_observation[csfdir_feature_ind] > 3: reward -= 300
+        if ccrdir_feature_ind != None and ismbr_feature_ind != None \
+            and old_observation[ccrdir_feature_ind] == 1 and old_observation[ismbr_feature_ind] == 1: reward += 400
+        if ccdir_feature_ind != None and ismbr_feature_ind != None \
+            and old_observation[ccdir_feature_ind] == 1 and old_observation[ismbr_feature_ind] == 1: reward += 300
         reward -= 50
-    elif 2 in events:
-        if old_observation[csfdir_feature_ind] == 24: reward += 250
+    elif 2 in events: # Up
+        if csfdir_feature_ind != None and old_observation[csfdir_feature_ind] == 2: reward += 500
+        if ismcu_feature_ind != None and csfdir_feature_ind != None \
+            and old_observation[ismcu_feature_ind] == 0 and old_observation[csfdir_feature_ind] > 3: reward -= 300
+        if ccrdir_feature_ind != None and ismcu_feature_ind != None \
+            and old_observation[ccrdir_feature_ind] == 2 and old_observation[ismcu_feature_ind] == 1: reward += 400
+        if ccdir_feature_ind != None and ismcu_feature_ind != None \
+            and old_observation[ccdir_feature_ind] == 2 and old_observation[ismcu_feature_ind] == 1: reward += 300
         reward -= 50
-    elif 3 in events:
-        if old_observation[csfdir_feature_ind] == 32: reward += 250
+    elif 3 in events: # Down
+        if csfdir_feature_ind != None and old_observation[csfdir_feature_ind] == 3: reward += 500
+        if ismdd_feature_ind != None and csfdir_feature_ind != None \
+            and old_observation[ismdd_feature_ind] == 0 and old_observation[csfdir_feature_ind] > 3: reward -= 300
+        if ccrdir_feature_ind != None and ismdd_feature_ind != None \
+            and old_observation[ccrdir_feature_ind] == 3 and old_observation[ismdd_feature_ind] == 1: reward += 400
+        if ccdir_feature_ind != None and ismdd_feature_ind != None \
+            and old_observation[ccdir_feature_ind] == 3 and old_observation[ismdd_feature_ind] == 1: reward += 300
         reward -= 50
-    if 4 in events: reward -= 500 # Waited
+    if 4 in events: # Wait
+        if ismal_feature_ind != None and ismbr_feature_ind != None and ismcu_feature_ind != None and ismdd_feature_ind != None and csfdir_feature_ind != None\
+            and old_observation[ismal_feature_ind] == 0 and old_observation[ismbr_feature_ind] == 0 \
+            and old_observation[ismcu_feature_ind] == 0 and old_observation[ismdd_feature_ind] == 0 \
+            and old_observation[csfdir_feature_ind] > 3:
+            reward += 500
+        else:
+            reward -= 500
     if 5 in events: reward -= 0 # Interrupted 
-    if 6 in events: reward -= 500 # Invalid action
-    if 7 in events: reward -= 0 # Bomb dropped
+    if 6 in events: reward -= 1000 # Invalid action
+    if 7 in events: # Bomb dropped
+        if ccrdir_feature_ind != None and old_observation[ccrdir_feature_ind] == 5: reward += 600 # Reward when agent sets bomb before crate
+        if ccrdir_feature_ind != None and old_observation[ccrdir_feature_ind] == 4: reward -= 300
+        reward -= 100
     if 8 in events: reward += 0 # Bomb exploded
     if 9 in events: reward += 0 # Crate destroyed
     if 10 in events: reward += 0 # Coin found
     if 11 in events: reward += 500 # Coin collected
     if 12 in events: reward += 500 # Killed opponent
-    if 13 in events: reward -= 10000 # Killed self
+    if 13 in events: reward -= 1000 # Killed self
     if 14 in events: reward -= 0 # Got killed either by himself or by enemy
     if 15 in events: reward -= 0 # Opponent eliminated
     if 16 in events: reward -= 0 # Survived round

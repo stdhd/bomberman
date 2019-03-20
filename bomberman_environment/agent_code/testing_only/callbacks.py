@@ -86,7 +86,10 @@ def act(self):
     observation_ind = np.where((self.observation_db == observation).all(axis=1))[0]
     # If observation_db has entry the action with the highest value is chosen.
     if observation_ind.shape[0] != 0:
-        self.logger.debug("KNOWN observation: " + str(self.observation_db[observation_ind[0]]))
+        self.logger.debug("KNOWN observation: ")
+        self.logger.debug("\n"+str(self.observation_db[observation_ind[0]][:self.obs_object.window_size**2].reshape(
+            (self.obs_object.window_size, self.obs_object.window_size)).T))
+        self.logger.debug("Features: " + str(self.observation_db[observation_ind[0]][self.obs_object.window_size**2:]))
         self.logger.debug(str(('LEFT', 'RIGHT', 'UP', 'DOWN', 'WAIT', 'BOMB')))
         self.logger.debug(self.q_table[observation_ind[0]])
         self.logger.debug("Quantities: " + str(self.quantities[observation_ind[0]]))

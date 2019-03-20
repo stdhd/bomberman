@@ -12,7 +12,9 @@ def q_train_from_games_jakob(train_data, write_path, obs:ObservationObject, a = 
 
     If tables do not exist, creates them.
 
-    Creates json files indexing known training files under write_path.
+    Creates or updates json files indexing known training files under write_path.
+
+    Notes training progress (steps seen and current size of Q Table) in json file.
     
     Uses preconfigured ObservationObject to train. 
 
@@ -44,7 +46,9 @@ def q_train_from_games_jakob(train_data, write_path, obs:ObservationObject, a = 
     current_trained_batch = []  # keeps track of the files used for training
     steps_count = 0  # number of steps seen since launching training
 
-    for file in [f for f in listdir(train_data) if isfile(join(train_data, f))]:
+    files = [f for f in listdir(train_data) if isfile(join(train_data, f))]
+
+    for file in files:
         # go through files
         try:
             if is_trained(write_path+"/records.json", file):
@@ -107,7 +111,8 @@ def q_train_from_games_jakob(train_data, write_path, obs:ObservationObject, a = 
                 else:
                     new_obs, rotations_current = get_transformations(observation, obs.radius, obs.get_direction_sensitivity())
                     n_new_indices = new_obs.shape[0]
-                    KNOWN = np.concatenate(np.array([KNOWN, new_obs]))
+                    # KNOWN = np.concatenate(np.array([KNOWN, new_obs])) FIXME Changed to append
+                    KNOWN = np.append(KNOWN, new_obs, axis=0)
                     QTABLE = np.append(QTABLE, np.zeros([n_new_indices, QTABLE.shape[1]]), axis=0)
                     QUANTITY = np.append(QUANTITY, np.zeros([n_new_indices, QTABLE.shape[1]]), axis=0)
                     index_current = np.arange(KNOWN.shape[0] - n_new_indices, KNOWN.shape[0])
@@ -136,26 +141,40 @@ def q_train_from_games_jakob(train_data, write_path, obs:ObservationObject, a = 
 
                 last_index[rewards_players[count]] = (index_current, rotations_current)
 
+            steps_count += 1
+
+        if not KNOWN.shape[0] % 8 == 0:
+            raise ValueError("Size of observation database must be product of 8*n")
+
         filecount += 1
         current_trained_batch.append(file)
         print("Trained with file", file)
 
+        save_all = False
+        stop = False
+
         if filecount % save_every_n_files == 0:
-            add_to_trained(write_path+"/records.json", current_trained_batch)  # update json table
-            catalogue_progress(write_path+"/progress.json", steps_count, QTABLE.shape[0])
+            save_all = True
+        if stop_after_n_files is not None and filecount == stop_after_n_files:
+            print("Stopping after", stop_after_n_files)
+            save_all = True
+            stop = True
+        if filecount == len(files):
+            print("Finished: Reached end of folder after", filecount, "files.")
+            save_all = True
+            stop = True
+
+        if save_all:
+            add_to_trained(write_path+"/records.json", current_trained_batch)  # update json records file
+            catalogue_progress(write_path+"/progress.json", steps_count, QTABLE.shape[0])  # update json progress file
             np.save(write_path + '/observation-' + filename, KNOWN)
             np.save(write_path + '/q_table-' + filename, QTABLE)
             np.save(write_path + '/quantity-' + filename, QUANTITY)
             filecount, steps_count = 0, 0
             current_trained_batch.clear()
 
-        if stop_after_n_files is not None and filecount == stop_after_n_files:
-            print("Stopping after", stop_after_n_files)
+        if stop:
             break
-
-        if not KNOWN.shape[0] % 8 == 0:
-            raise ValueError("Size of observation database must be product of 8*n")
-
 
     return KNOWN, QTABLE
 

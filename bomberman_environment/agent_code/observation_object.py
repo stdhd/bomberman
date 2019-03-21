@@ -665,10 +665,28 @@ class ObservationObject:
 
         if int(arena[x, y]) not in [2, 4]:  # activate only when standing on a bomb
             return 0
+        
+        blocking = (4, 5, -1, 1)  # objects that block movement (no small bomb timer because it disappears shortly)
+        
+        navigable_blast_coords = [(x,y)]
 
-        nearby = [(x_, y_) for x_ in range(x - 4, x + 5) for y_ in range(y - 4, y + 5) if
-                  (x_ == x) or (y_ == y )]
-        nearby_dead_ends = [pos for pos in nearby if self._is_lethal_dead_end(*pos, x, y )]
+        for i in range(1, 3+1):
+            if arena[x+i,y] in blocking: break
+            navigable_blast_coords.append((x+i,y))
+        for i in range(1, 3+1):
+            if arena[x-i,y] in blocking: break
+            navigable_blast_coords.append((x-i,y))
+        for i in range(1, 3+1):
+            if arena[x,y+i] in blocking: break
+            navigable_blast_coords.append((x,y+i))
+        for i in range(1, 3+1):
+            if arena[x,y-i] in blocking: break
+            navigable_blast_coords.append((x,y-i))
+
+        #
+        # nearby = [(x_, y_) for x_ in range(x - 4, x + 5) for y_ in range(y - 4, y + 5) if
+        #           (x_ == x) or (y_ == y )] Problem with this is that it also looks at potentially inaccessible fields
+        nearby_dead_ends = [pos for pos in navigable_blast_coords if self._is_lethal_dead_end(*pos, x, y )]
         # counts dead ends within killing radius from this point
 
         return int(len(nearby_dead_ends) > 0)

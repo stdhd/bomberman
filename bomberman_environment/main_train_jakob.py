@@ -31,8 +31,9 @@ def main():
     if not os.path.exists(write_path):
         os.makedirs(write_path)
 
-    KNOWN, Q = q_train_from_games_jakob(cwd + "/" + 'data/games/four_players_esa_0_2_cratedens_0_75/', write_path,
-                                        obs, a=0.5, g=0.5, save_every_n_files=10)
+    KNOWN, Q = q_train_from_games_jakob(cwd + "/" + 'data/games/SELFPLAYr1_ismal_ismbr_ismcu_ismdd_ccdir_ccrdir_csfdir_ded_mhb/ITERATION_1',
+                                        write_path,
+                                        obs, a=0.5, g=0.5, save_every_n_files=5)
 
 
 if __name__ == '__main__':

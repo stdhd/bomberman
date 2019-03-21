@@ -8,7 +8,7 @@ from settings import s
 from settings_agent_evaluation import s as sae_s
 
 
-def main(data_path=None, train_iterations = 10, train_batch_size = 10): # ='data/games/four_players_esa_0_2_cratedens_0_75/'):
+def main(data_path=None, train_iterations = 10, train_batch_size = 5): # ='data/games/four_players_esa_0_2_cratedens_0_75/'):
     """
     Train an agent from the ground up and evaluate their performance every few games.
     Saves all files in a subdirectory of the agent's folder.
@@ -33,7 +33,7 @@ def main(data_path=None, train_iterations = 10, train_batch_size = 10): # ='data
                                 ], None)
     if data_path is None:
         create_data = True
-        data_path = "data/games/SELFPLAY"+obs.get_file_name_string()
+        data_path_ = "data/games/SELFPLAY"+obs.get_file_name_string()
 
     else:
         create_data = False
@@ -46,7 +46,7 @@ def main(data_path=None, train_iterations = 10, train_batch_size = 10): # ='data
 
         if create_data:
 
-            data_path = data_path+iteration_str
+            data_path = data_path_+iteration_str
 
             training_setup = [
             ('testing_only', False),
@@ -73,9 +73,9 @@ def main(data_path=None, train_iterations = 10, train_batch_size = 10): # ='data
 
         print("Running", sae_s.n_rounds, "trials vs. simple agents")
 
-        env.run_trials()
+        #env.run_trials()
 
-        env.analyze_games()
+        #env.analyze_games()
 
 
 if __name__ == '__main__':

@@ -1,6 +1,7 @@
 
 import numpy as np
 import json
+import os
 
 
 def is_trained(records_file, train_data_file):
@@ -25,6 +26,8 @@ def is_trained(records_file, train_data_file):
         return False
     except:
         print("json file", records_file, "empty, initializing with empty list.")
+        if not os.path.exists(os.path.dirname(records_file)):
+                os.makedirs(os.path.dirname(records_file))
         file = open(records_file, 'w')
         json.dump([], file)
         file.close()
@@ -68,11 +71,11 @@ def catalogue_progress(progress_file, steps_added, qtable_length):
     :return:
     """
     try:
-        print("Writing progress to file.")
         with open(progress_file, 'r') as file:
             step_count_array, qtable_lengths_array = json.load(file)
         step_count_array.append(steps_added)
         qtable_lengths_array.append(qtable_length)
+        print("Writing progress to", progress_file)
         with open(progress_file, 'w') as file:
             json.dump((step_count_array, qtable_lengths_array), file)
     except:

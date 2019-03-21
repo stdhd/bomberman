@@ -19,14 +19,15 @@ def setup(self):
     # self.logger.setLevel("DEBUG")
     self.train_flag = False
     self.obs_object = ObservationObject(1, ['d_closest_coin_dir',
-                                            'd_closest_safe_field_dir',
-                                            'me_has_bomb',
-                                            'd4_is_safe_to_move_a_l',
-                                            'd4_is_safe_to_move_b_r',
-                                            'd4_is_safe_to_move_c_u',
-                                            'd4_is_safe_to_move_d_d',
-                                            'd_closest_crate_dir'
-                                            ], None)
+                                'd_closest_safe_field_dir',
+                                'd_closest_crate_dir',
+                                'me_has_bomb',
+                                'd4_is_safe_to_move_a_l',
+                                'd4_is_safe_to_move_b_r',
+                                'd4_is_safe_to_move_c_u',
+                                'd4_is_safe_to_move_d_d',
+                                'dead_end_detect',
+                                ], None)
 
     self.logger.debug("Called setup")
     # Used for plotting

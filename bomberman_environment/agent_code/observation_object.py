@@ -650,7 +650,12 @@ class ObservationObject:
 
     def dead_end_detect(self):
         """
-        True if and only if a "dead end" (Sackgasse) situation is present. Agent should learn to follow the direction
+        True if a "dead end" (Sackgasse) situation is present (you are standing on a bomb and could entrap yourself
+        by walking in a certain direction).
+
+        True if by laying a bomb now, you would entrap yourself. #FIXME implement this
+
+        Agent should learn to follow the direction
         to safe space in this case.
         :return:
         """

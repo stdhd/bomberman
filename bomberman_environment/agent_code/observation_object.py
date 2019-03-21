@@ -127,8 +127,11 @@ class ObservationObject:
         # get (4 x 17) matrix of events for this step
         self.arena = self._make_window(8, 8, 8)
         self.danger_map = self._get_threat_map()
-
-
+        if self.logger: 
+            # danger_ind = np.where(self.danger_map == True)
+            # danger_coords = np.vstack((danger_ind[0], danger_ind[1])).T
+            self.logger.info(f'DANGER MAP: {1*self.danger_map}')
+            self.logger.info(f'ARENA: {self.arena}')
 
 
     def reset_killed_players(self):
@@ -581,11 +584,11 @@ class ObservationObject:
         """
         x, y = self.player.me_loc[0], self.player.me_loc[1]
         # If there are no bombs on the field the direction should indicate this by turning off this feature (return 4)
-        if not self.bomb_locs.any(): 
+        # if self.logger: self.logger.info(f'CHECK BOMBS: {self.bomb_locs, self.bomb_locs.any()}')
+        if (not self.bomb_locs.any()): 
+            # if self.logger: self.logger.info(f'NO BOMBS')
             return self._determine_direction(None, x, y)
         arena = self.arena
-        # if self.logger != None:
-        #     self.logger.info(f'ARENA: {arena}')
         danger_zone_coords = []
         # for x_bomb, y_bomb in np.vstack((x_bombs, y_bombs)).T:
         for bomb_loc in self.bomb_locs:
@@ -606,17 +609,22 @@ class ObservationObject:
         
         # If agent is on danger zone indicate this by turning off feature (return 4)
         if [x,y] not in danger_zone_coords:
+            # if self.logger: self.logger.info(f'NOT ON DANGER ZONE')
             return self._determine_direction(None, x, y)
         danger_zone_coords = np.array(danger_zone_coords)
         free_space = (arena == 0) | (arena == 3)
         free_space_calc = np.copy(free_space)
+        # self.logger.info(f'free_space_calc: {free_space_calc}')
+        # self.logger.info(f'Danger Zone Coords: {danger_zone_coords}')
         if danger_zone_coords.shape[0] != 0:
             free_space_calc[danger_zone_coords[:,0], danger_zone_coords[:, 1]] = False
+        # self.logger.info(f'free_space_calc AFTER: {free_space_calc}')
         free_space_ind = np.where(free_space_calc == True)
         free_space_coords = np.vstack((free_space_ind[0], free_space_ind[1])).T
         best_step = self._look_for_targets(free_space, (x, y), free_space_coords, None)
         # self.logger.info(f'XY_BOMBS: {np.vstack((x_bombs, y_bombs)).T}')
-        # self.logger.info(f'Danger Zone Coords: {danger_zone_coords}')
+        # self.logger.info(f'Free Space Coords: {free_space_coords}')
+        
         # self.logger.info(f'Self: {x, y}')
         # self.logger.info(f'Best_step: {best_step}')
 

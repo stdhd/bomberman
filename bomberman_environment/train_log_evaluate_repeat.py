@@ -65,7 +65,7 @@ def main(data_path=None): # ='data/games/four_players_esa_0_2_cratedens_0_75/'):
             print("Training from", train_batch_size, "games in", data_path)
 
         q_train_from_games_jakob(data_path, write_path,
-                                        obs, a=0.5, g=0.5, stop_after_n_files=train_batch_size)
+                                        obs, a=0.5, g=0.5, stop_after_n_files=train_batch_size, save_every_n_files=5)
 
         iter_output = write_path + iteration_str
 

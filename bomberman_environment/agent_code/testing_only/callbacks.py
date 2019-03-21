@@ -60,7 +60,7 @@ def setup(self):
             raise Exception('observation_db size does not fit')
 
     self.repeated_deadlock = 1
-    self.last_visited = np.array([[-1, -1]])
+    self.last_visited = np.array([[-1, -1], [-1, -1], [-1, -1], [-1, -1]])
 
 def act(self):
     """Called each game step to determine the agent's next action.

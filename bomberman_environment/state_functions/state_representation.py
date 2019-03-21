@@ -39,7 +39,7 @@ def derive_state_representation(self):
     bomb_ind = 0
     for player_ind, player in enumerate(players):  # keep track of player locations and bombs
         state[startplayers + player_block * player_ind] = x_y_to_index(player[0], player[1], s.cols, s.rows)
-        if player[3] == 0:
+        if player[3] == 0: # if player has no bombs
             player_bomb = bombs[bomb_ind]  # count through bombs and assign a dropped bomb to each player
             # who is not holding a bomb
             state[startplayers + player_block * player_ind + 2] = x_y_to_index(player_bomb[0], player_bomb[1],

@@ -587,9 +587,9 @@ class ObservationObject:
         # if self.logger != None:
         #     self.logger.info(f'ARENA: {arena}')
         danger_zone_coords = []
-        down, up, left, right = True, True, True, True
         # for x_bomb, y_bomb in np.vstack((x_bombs, y_bombs)).T:
         for bomb_loc in self.bomb_locs:
+            down, up, left, right = True, True, True, True
             if bomb_loc != 0:
                 x_bomb, y_bomb = index_to_x_y(bomb_loc)
                 danger_zone_coords.append([x_bomb, y_bomb])
@@ -614,7 +614,6 @@ class ObservationObject:
             free_space_calc[danger_zone_coords[:,0], danger_zone_coords[:, 1]] = False
         free_space_ind = np.where(free_space_calc == True)
         free_space_coords = np.vstack((free_space_ind[0], free_space_ind[1])).T
-
         best_step = self._look_for_targets(free_space, (x, y), free_space_coords, None)
         # self.logger.info(f'XY_BOMBS: {np.vstack((x_bombs, y_bombs)).T}')
         # self.logger.info(f'Danger Zone Coords: {danger_zone_coords}')

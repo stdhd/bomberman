@@ -20,7 +20,7 @@ def setup(self):
     """
     self.learning_rate = 0.4
     self.discount = 0.7
-    self.epsilon = 0.15
+    self.epsilon = 0.2
     self.train_flag = True
     self.obs_radius = 0
     self.obs_object = ObservationObject(self.obs_radius, ["d_closest_coin_dir", "d_closest_crate_dir", "d_closest_safe_field_dir", "d4_is_safe_to_move_a_l",
@@ -80,8 +80,8 @@ def act(self):
     observation = self.obs_object.create_observation(np.array([int(0)]))[0]
     
     # self.logger.info(f'BOMBS: {bombs}')
-    # self.logger.info(f'self: {[x, y]}')
-    # self.logger.info(f'Observation: {observation}')
+    self.logger.info(f'self: {[x, y]}')
+    self.logger.info(f'Observation: {observation}')
     
 # ------------------------ Testing agent ------------------------
     if not self.train_flag:
@@ -99,6 +99,7 @@ def act(self):
         if self.observation_db.shape[0] != 0:
             warnings.simplefilter(action='ignore', category=FutureWarning)
             observation_ind = np.where((self.observation_db == observation).all(axis=1))[0]
+            # self.logger.info(f'OBSERVATIONS_IND: {observation_ind}')
         else:
             observation_ind = np.array([])
 
@@ -107,19 +108,23 @@ def act(self):
 
         observations, self.last_action_rotations = get_transformations(observation, self.obs_object.radius,
                                                         self.obs_object.get_direction_sensitivity())
-        self.logger.info(f'DIRECTION SENS: {self.obs_object.get_direction_sensitivity()}')
+        # self.logger.info(f'DIRECTION SENS: {self.obs_object.get_direction_sensitivity()}')
         self.last_q_ind = []
-        self.logger.info(f'OBSERVATIONS: {observations, self.last_action_rotations}')
-        self.logger.info(f'CURRENT OBS: {observation}')
+        # self.logger.info(f'OBSERVATIONS: {observations}')
         # Choose random action and if current observation is unknown add it and its rotations to observation_db
         if self.epsilon > np.random.uniform(0,1):
             self.last_action_ind = np.random.randint(0,6)
-            self.logger.info(f'RANDOM ACTION: {observation_ind.shape[0]}')
+            # self.logger.info(f'RANDOM ACTION: {observation_ind.shape[0]}')
             if observation_ind.shape[0] == 0:
+                # observations = np.unique(observations, axis=0)
                 for obs in observations: 
-                    self.observation_db = np.append(self.observation_db, np.array([obs]), axis = 0)
-                    self.q_table = np.append(self.q_table, np.zeros([1, self.q_table.shape[1]]), axis = 0)
-                    self.last_q_ind.append(self.q_table.shape[0] - 1)
+                    obs_ind = np.where((self.observation_db == obs).all(axis=1))[0]
+                    if obs_ind.shape[0] == 0: # test for uniqueness
+                        self.observation_db = np.append(self.observation_db, np.array([obs]), axis = 0)
+                        self.q_table = np.append(self.q_table, np.zeros([1, self.q_table.shape[1]]), axis = 0)
+                        self.last_q_ind.append(self.q_table.shape[0] - 1)
+                    else:
+                        self.last_q_ind.append(obs_ind[0])
             else:
                 for obs in observations: 
                     self.last_q_ind.append(np.where((self.observation_db == obs).all(axis=1))[0][0])
@@ -127,19 +132,24 @@ def act(self):
             # If observation is unknown it and its rotations have to be added to observation_db and a random action is chosen.
             if observation_ind.shape[0] == 0:
                 self.last_action_ind = np.random.randint(0,6)
-                if observation_ind.shape[0] == 0:
-                    for obs in observations: 
+                # observations, indices = np.unique(observations, axis=0, return_index=True)
+                for obs in observations: 
+                    obs_ind = np.where((self.observation_db == obs).all(axis=1))[0]
+                    # self.logger.info(f'OBS_IND NOT RANDOM: {obs_ind}')
+                    if obs_ind.shape[0] == 0: # test for uniqueness
                         self.observation_db = np.append(self.observation_db, np.array([obs]), axis = 0)
                         self.q_table = np.append(self.q_table, np.zeros([1, self.q_table.shape[1]]), axis = 0)
                         self.last_q_ind.append(self.q_table.shape[0] - 1)
+                    else:
+                        self.last_q_ind.append(obs_ind[0])
             # If observation is known the action with the highest value is chosen and observations indices are searched for rewarding
             elif observation_ind.shape[0] != 0:
                 # self.logger.info(f'Q-TABLE: {self.q_table[observation_ind[0]]}')
                 self.last_action_ind = np.random.choice(np.flatnonzero(self.q_table[observation_ind[0]] == self.q_table[observation_ind[0]].max()))
                 for obs in observations: 
-                    self.logger.info(f'NP HWERE: {np.where((self.observation_db == obs).all(axis=1))}')
+                    # self.logger.info(f'NP WHERE: {np.where((self.observation_db == obs).all(axis=1))}')
                     self.last_q_ind.append(np.where((self.observation_db == obs).all(axis=1))[0][0])
-
+    # self.logger.info(f'self.last_q_ind: {self.last_q_ind}')
     self.next_action = ['UP', 'DOWN', 'LEFT', 'RIGHT', 'BOMB', 'WAIT'][self.last_action_ind]
 
 def reward_update(self):
@@ -165,15 +175,17 @@ def reward_update(self):
     
     # Get reward only for the originial observation. The reward for its rotations is the same
     reward = _getReward(self.obs_object, self.events, self.last_observation, self.logger)
-
     # self.logger.info(f'REWARD: {reward}')
     for ind, rotation in enumerate(self.last_action_rotations):
-        self.logger.info(f'QIND: {self.last_q_ind, ind}')
-        self.logger.info(f'QIND indexed : {self.last_q_ind[ind]}')
-        self.logger.info(f'ACTIONIND: {self.last_action_rotations, self.last_action_ind, rotation[self.last_action_ind]}')
-        self.q_table[self.last_q_ind[ind], int(rotation[self.last_action_ind])] = (1-self.learning_rate) * self.q_table[self.last_q_ind[ind], int(rotation[self.last_action_ind])] \
+        # self.logger.info(f'last_action_rotations: {self.last_action_rotations}')
+        # self.logger.info(f'last_action_ind : {self.last_action_ind}')
+        # self.logger.info(f'rotation : {rotation}')
+        # self.logger.info(f'Q_ind: {self.last_q_ind}')
+        self.logger.info(f'Q-TABLE BEFORE: {self.q_table[self.last_q_ind[ind]]}')
+        # self.logger.info(f'INDEXING: {int(np.where(rotation == self.last_action_ind)[0][0])}')
+        self.q_table[self.last_q_ind[ind], int(np.where(rotation == self.last_action_ind)[0][0])] = (1-self.learning_rate) * self.q_table[self.last_q_ind[ind], int(np.where(rotation == self.last_action_ind)[0][0])] \
                                                                 + self.learning_rate * (reward + self.discount * current_best_value)
-    # self.logger.info(f'Q-TABLE UPDATED: {self.q_table[self.last_q_ind]}')
+        self.logger.info(f'Q-TABLE UPDATED: {self.q_table[self.last_q_ind[ind]]}')
 
 def end_of_episode(self):
     """Called at the end of each game to hand out final rewards and do training.
@@ -206,7 +218,7 @@ def _getReward(obs_object, events, old_observation, logger):
     logger.info(f'ISMAL: {ismal_feature_ind}')
     logger.info(f'CCDIR: {ccdir_feature_ind}')
     if 0 in events: # Left
-        if csfdir_feature_ind != None and old_observation[csfdir_feature_ind] == 0: reward += 500 # Reward when agent chooses direction safe field
+        if csfdir_feature_ind != None and old_observation[csfdir_feature_ind] == 0: reward += 800 # Reward when agent chooses direction safe field
         if ismal_feature_ind != None and csfdir_feature_ind != None \
             and old_observation[ismal_feature_ind] == 0 and old_observation[csfdir_feature_ind] > 3: reward -= 300 # Punish when agent chooses direction to danger zone, explosion or invalid action
         if ccrdir_feature_ind != None and ismal_feature_ind != None \
@@ -215,7 +227,7 @@ def _getReward(obs_object, events, old_observation, logger):
             and old_observation[ccdir_feature_ind] == 0 and old_observation[ismal_feature_ind] == 1: reward += 300 # Reward if following closest coin feature
         reward -= 50
     elif 1 in events: # Right
-        if csfdir_feature_ind != None and old_observation[csfdir_feature_ind] == 1: reward += 500
+        if csfdir_feature_ind != None and old_observation[csfdir_feature_ind] == 1: reward += 800
         if ismbr_feature_ind != None and csfdir_feature_ind != None \
             and old_observation[ismbr_feature_ind] == 0 and old_observation[csfdir_feature_ind] > 3: reward -= 300
         if ccrdir_feature_ind != None and ismbr_feature_ind != None \
@@ -224,7 +236,7 @@ def _getReward(obs_object, events, old_observation, logger):
             and old_observation[ccdir_feature_ind] == 1 and old_observation[ismbr_feature_ind] == 1: reward += 300
         reward -= 50
     elif 2 in events: # Up
-        if csfdir_feature_ind != None and old_observation[csfdir_feature_ind] == 2: reward += 500
+        if csfdir_feature_ind != None and old_observation[csfdir_feature_ind] == 2: reward += 800
         if ismcu_feature_ind != None and csfdir_feature_ind != None \
             and old_observation[ismcu_feature_ind] == 0 and old_observation[csfdir_feature_ind] > 3: reward -= 300
         if ccrdir_feature_ind != None and ismcu_feature_ind != None \
@@ -233,7 +245,7 @@ def _getReward(obs_object, events, old_observation, logger):
             and old_observation[ccdir_feature_ind] == 2 and old_observation[ismcu_feature_ind] == 1: reward += 300
         reward -= 50
     elif 3 in events: # Down
-        if csfdir_feature_ind != None and old_observation[csfdir_feature_ind] == 3: reward += 500
+        if csfdir_feature_ind != None and old_observation[csfdir_feature_ind] == 3: reward += 800
         if ismdd_feature_ind != None and csfdir_feature_ind != None \
             and old_observation[ismdd_feature_ind] == 0 and old_observation[csfdir_feature_ind] > 3: reward -= 300
         if ccrdir_feature_ind != None and ismdd_feature_ind != None \

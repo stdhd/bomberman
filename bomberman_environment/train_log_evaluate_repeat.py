@@ -8,7 +8,7 @@ from settings import s
 from settings_agent_evaluation import s as sae_s
 
 
-def main(data_path=None): # ='data/games/four_players_esa_0_2_cratedens_0_75/'):
+def main(data_path=None, train_iterations = 10, train_batch_size = 5): # ='data/games/four_players_esa_0_2_cratedens_0_75/'):
     """
     Train an agent from the ground up and evaluate their performance every few games.
     Saves all files in a subdirectory of the agent's folder.
@@ -16,6 +16,8 @@ def main(data_path=None): # ='data/games/four_players_esa_0_2_cratedens_0_75/'):
     Supports training + evaluation from pre-existing data (e.g. simple agents), but also training through self-play.
     :param data_path: If not None, take training data from here (should contain multiples of 100 games) -> Else perform
     self-play to learn
+    :param train_iterations: How many training cycles to go through
+    :param train_batch_size: How many files to train from in one cycle
     :return:
     """
 
@@ -31,22 +33,20 @@ def main(data_path=None): # ='data/games/four_players_esa_0_2_cratedens_0_75/'):
                                 ], None)
     if data_path is None:
         create_data = True
-        data_path = "data/games/SELFPLAY"+obs.get_file_name_string()
+        data_path_ = "data/games/SELFPLAY"+obs.get_file_name_string()
 
     else:
         create_data = False
 
     write_path = 'data/qtables/' + obs.get_file_name_string() + "/evaluategames"
 
-    train_iterations = 6
-
-    train_batch_size = 100  # how many files to train with before testing
-
     for i in range(train_iterations):
 
-        iteration_str = "/ITERATION_1_"+str(i+1)
+        iteration_str = "/ITERATION_"+str(i+1)
 
         if create_data:
+
+            data_path = data_path_+iteration_str
 
             training_setup = [
             ('testing_only', False),
@@ -57,14 +57,14 @@ def main(data_path=None): # ='data/games/four_players_esa_0_2_cratedens_0_75/'):
 
             print("Creating", s.n_rounds, "training episodes by playing agent against itself")
 
-            main_save_states.main(training_setup, data_path+iteration_str)  # Important: Set settings.py nrounds to train batch size
+            main_save_states.main(training_setup, data_path)  # Important: Set settings.py nrounds to train batch size
 
         if create_data:
             print("Training from", train_batch_size, "newly played games.")
         else:
             print("Training from", train_batch_size, "games in", data_path)
 
-        q_train_from_games_jakob(data_path, write_path,
+        q_train_from_games_jakob(data_path, "data/qtables/"+obs.get_file_name_string(),
                                         obs, a=0.5, g=0.5, stop_after_n_files=train_batch_size, save_every_n_files=5)
 
         iter_output = write_path + iteration_str
@@ -73,9 +73,9 @@ def main(data_path=None): # ='data/games/four_players_esa_0_2_cratedens_0_75/'):
 
         print("Running", sae_s.n_rounds, "trials vs. simple agents")
 
-        env.run_trials()
+        #env.run_trials()
 
-        env.analyze_games()
+        #env.analyze_games()
 
 
 if __name__ == '__main__':

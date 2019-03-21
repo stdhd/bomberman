@@ -73,6 +73,7 @@ class ObservationObject:
         "closest_foe_dist": "cfdist",
         "d_closest_foe_dir": "cfdir",
         "closest_foe_has_bomb": "cfhb",
+        "dead_end_detect": "ded",
         "nearest_foe_to_closest_coin": "nftcc",
         "dist_to_center": "dtc",
         "smallest_enemy_dist": "smd",
@@ -177,7 +178,7 @@ class ObservationObject:
         for i in np.arange(window_size_custom):
             for j in np.arange(window_size_custom):
                 try:
-                    window[i, j] = self.board[x_y_to_index(lower_x + i, lower_y + j) - 1]
+                    window[i, j] = self.board[x_y_to_index(lower_x + i, lower_y + j) - 1] # note coins, crates, and free
 
                 except ValueError as e:  # wall squares throw exception
                     window[i, j] = -1
@@ -645,6 +646,73 @@ class ObservationObject:
         if self.danger_map[x, y + 1]:
             return True
         return False
+
+    def dead_end_detect(self):
+        """
+        True if a "dead end" (Sackgasse) situation is present (you are standing on a bomb and could entrap yourself
+        by walking in a certain direction).
+
+        True if by laying a bomb now, you would entrap yourself. #FIXME implement this
+
+        Agent should learn to follow the direction
+        to safe space in this case.
+        :return:
+        """
+
+        arena = self.arena
+        x, y = self.player.me_loc[0], self.player.me_loc[1]
+
+        if int(arena[x, y]) not in [2, 4]:  # activate only when standing on a bomb
+            return 0
+        
+        blocking = (4, 5, -1, 1)  # objects that block movement (no small bomb timer because it disappears shortly)
+        
+        navigable_blast_coords = [(x,y)]
+
+        for i in range(1, 3+1):
+            if arena[x+i,y] in blocking: break
+            navigable_blast_coords.append((x+i,y))
+        for i in range(1, 3+1):
+            if arena[x-i,y] in blocking: break
+            navigable_blast_coords.append((x-i,y))
+        for i in range(1, 3+1):
+            if arena[x,y+i] in blocking: break
+            navigable_blast_coords.append((x,y+i))
+        for i in range(1, 3+1):
+            if arena[x,y-i] in blocking: break
+            navigable_blast_coords.append((x,y-i))
+
+        #
+        # nearby = [(x_, y_) for x_ in range(x - 4, x + 5) for y_ in range(y - 4, y + 5) if
+        #           (x_ == x) or (y_ == y )] Problem with this is that it also looks at potentially inaccessible fields
+        nearby_dead_ends = [pos for pos in navigable_blast_coords if self._is_lethal_dead_end(*pos, x, y )]
+        # counts dead ends within killing radius from this point
+
+        return int(len(nearby_dead_ends) > 0)
+
+    def _is_lethal_dead_end(self, x, y, bomb_x, bomb_y):
+        """
+        Internal use only, not a feature.
+        :return: True if exactly one field surrounding this space is free.
+        """
+        if x > 15 or x < 1 or y > 15 or y < 1:
+            return False  # grid borders are not dead ends
+        arena = self.arena
+        free = (0, 3)  # walkable fields in arena
+        bomb = (bomb_x, bomb_y)
+        neighbors = ((x + 1, y), (x - 1, y), (x, y + 1), (x, y - 1))
+        if bomb in neighbors:
+            # check the case that player is completely trapped next to bomb (Sackgassentiefe 1)
+            for n_x, n_y in neighbors:
+                # if n_x > 16 or n_x < 0 or n_y > 16 or n_y < 0:
+                #     continue
+                if arena[n_x, n_y] in free:
+                    return False
+            return True
+
+        # check if dead end is deeper
+        return len([True for f in free if [arena[x + 1, y], arena[x - 1, y], arena[x, y + 1], arena[x, y - 1]].count(f) == 1 ]) == 1
+        
 
     def _name_player_events(self):
         """

@@ -583,7 +583,6 @@ class ObservationObject:
         # If there are no bombs on the field the direction should indicate this by turning off this feature (return 4)
         if not self.bomb_locs.any(): 
             return self._determine_direction(None, x, y)
-        is_on_danger_zone_factor = 0
         arena = self.arena
         # if self.logger != None:
         #     self.logger.info(f'ARENA: {arena}')

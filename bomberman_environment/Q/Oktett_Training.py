@@ -195,6 +195,7 @@ def get_transformations(obs, radius, direction_sensitive):
     # Array positions are the values to replace: position 0 = normal left is replaced by the value in the array on
     # the 0. position
 
+    # Read like 2 (up) --> 0 (down)
     transformations = np.array(
         [[2, 3, 0, 1], [1, 0, 2, 3], [0, 1, 3, 2], [3, 2, 0, 1], [2, 3, 1, 0], [1, 0, 3, 2], [3, 2, 1, 0]])
 

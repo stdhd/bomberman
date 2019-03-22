@@ -127,8 +127,11 @@ class ObservationObject:
         # get (4 x 17) matrix of events for this step
         self.arena = self._make_window(8, 8, 8)
         self.danger_map = self._get_threat_map()
-
-
+        if self.logger: 
+            # danger_ind = np.where(self.danger_map == True)
+            # danger_coords = np.vstack((danger_ind[0], danger_ind[1])).T
+            self.logger.info(f'DANGER MAP: {1*self.danger_map}')
+            self.logger.info(f'ARENA: {self.arena}')
 
 
     def reset_killed_players(self):
@@ -549,28 +552,28 @@ class ObservationObject:
         """
         :return: Boolean map: True for Free/Coin, False for Wall/Threatened/Crate
         """
-        arena = self.arena
-        arena_bool = (arena == 0) | (arena == 3)
+        arena_bool = (self.arena == 0) | (self.arena == 3)
         for loc in self.bomb_locs:
             if loc == 0:
                 continue
             tx,ty = index_to_x_y(loc)
-            for i in range(4):
-                if arena[tx, ty + i] == -1:
+            arena_bool[tx, ty] = False
+            for i in range(3):
+                if self.arena[tx, ty + (i + 1)] == -1:
                     break
-                arena_bool[tx, ty + i] = False
-            for i in range(4):
-                if arena[tx, ty - i] == -1:
+                arena_bool[tx, ty + (i + 1)] = False
+            for i in range(3):
+                if self.arena[tx, ty - (i + 1)] == -1:
                     break
-                arena_bool[tx, ty - i] = False
-            for i in range(4):
-                if arena[tx + i, ty] == -1:
+                arena_bool[tx, ty - (i + 1)] = False
+            for i in range(3):
+                if self.arena[tx + (i + 1), ty] == -1:
                     break
-                arena_bool[tx + 1, ty] = False
-            for i in range(4):
-                if arena[tx - i, ty] == -1:
+                arena_bool[tx + (i + 1), ty] = False
+            for i in range(3):
+                if self.arena[tx - (i + 1), ty] == -1:
                     break
-                arena_bool[tx - i, ty] = False
+                arena_bool[tx - (i + 1), ty] = False
         return arena_bool
 
     def d_closest_safe_field_dir(self):
@@ -581,42 +584,21 @@ class ObservationObject:
         """
         x, y = self.player.me_loc[0], self.player.me_loc[1]
         # If there are no bombs on the field the direction should indicate this by turning off this feature (return 4)
-        if not self.bomb_locs.any(): 
+        # if self.logger: self.logger.info(f'CHECK BOMBS: {self.bomb_locs, self.bomb_locs.any()}')
+        if (not self.bomb_locs.any()): 
+            # if self.logger: self.logger.info(f'NO BOMBS')
             return self._determine_direction(None, x, y)
         arena = self.arena
-        # if self.logger != None:
-        #     self.logger.info(f'ARENA: {arena}')
-        danger_zone_coords = []
-        # for x_bomb, y_bomb in np.vstack((x_bombs, y_bombs)).T:
-        for bomb_loc in self.bomb_locs:
-            down, up, left, right = True, True, True, True
-            if bomb_loc != 0:
-                x_bomb, y_bomb = index_to_x_y(bomb_loc)
-                danger_zone_coords.append([x_bomb, y_bomb])
-                for i in range(3):
-                    if down and arena[x_bomb, y_bomb + (i + 1)] == -1: down = False
-                    if up and arena[x_bomb, y_bomb - (i + 1)] == -1: up = False
-                    if left and arena[x_bomb - (i + 1), y_bomb] == -1: left = False
-                    if right and arena[x_bomb + (i + 1), y_bomb] == -1: right = False
-
-                    if down: danger_zone_coords.append([x_bomb, y_bomb + (i + 1)]) 
-                    if up: danger_zone_coords.append([x_bomb, y_bomb - (i + 1)])
-                    if left: danger_zone_coords.append([x_bomb - (i + 1), y_bomb])
-                    if right: danger_zone_coords.append([x_bomb + (i + 1), y_bomb])
-        
-        # If agent is on danger zone indicate this by turning off feature (return 4)
-        if [x,y] not in danger_zone_coords:
+        # If agent is not on danger zone indicate this by turning off feature (return 4)
+        if self.danger_map[x, y]:
+            # if self.logger: self.logger.info(f'NOT ON DANGER ZONE')
             return self._determine_direction(None, x, y)
-        danger_zone_coords = np.array(danger_zone_coords)
         free_space = (arena == 0) | (arena == 3)
-        free_space_calc = np.copy(free_space)
-        if danger_zone_coords.shape[0] != 0:
-            free_space_calc[danger_zone_coords[:,0], danger_zone_coords[:, 1]] = False
-        free_space_ind = np.where(free_space_calc == True)
+        free_space_ind = np.where(self.danger_map == True)
         free_space_coords = np.vstack((free_space_ind[0], free_space_ind[1])).T
         best_step = self._look_for_targets(free_space, (x, y), free_space_coords, None)
         # self.logger.info(f'XY_BOMBS: {np.vstack((x_bombs, y_bombs)).T}')
-        # self.logger.info(f'Danger Zone Coords: {danger_zone_coords}')
+        # self.logger.info(f'Free Space Coords: {free_space_coords}')
         # self.logger.info(f'Self: {x, y}')
         # self.logger.info(f'Best_step: {best_step}')
 

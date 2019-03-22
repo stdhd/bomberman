@@ -1,6 +1,9 @@
 from os import listdir, remove
 from os.path import isfile, join
 import numpy as np
+from datetime import datetime
+import datetime
+from time import time
 import json
 
 import main_evaluate_agents
@@ -21,18 +24,25 @@ class EvaluationEnvironment:
         self.agent_names = agent_names
         self.save_directory = save_directory if save_directory[-1] not in ["/", "\\"] else save_directory[:-1]
 
-    def run_trials(self):
+    def run_trials(self, add_folder:bool = False):
         """
         Run a number of test runs and save them to a directory
+        :param add_folder If true, create a subdirectory in save_directory before saving games there.
         :return:
         """
 
-        main_evaluate_agents.main(self.agent_names, [""], self.save_directory) # run games and save them to output directory
+        save_dir = self.save_directory[:]
+        if add_folder:
+            save_dir += "/"+ datetime.datetime.fromtimestamp(time()).strftime('%Y-%m-%d %H-%M-%S')
+            self.save_directory = save_dir
 
-    def analyze_games(self, destroy_data:bool=False):
+        main_evaluate_agents.main(self.agent_names, [""], save_dir) # run games and save them to output directory
+
+    def analyze_games(self, destroy_data:bool=False, print_q_length=None):
         """
         Analyze all games in a directory and save a new .json summary file there.
-        :param destroy_data: If yes, delete games after analysis
+        :param destroy_data: If True, delete games after analysis
+        :param print_q_length: If not None, print the current length of the Q Table in this folder.
         :return:
         """
         files = [f for f in listdir(self.save_directory) if isfile(join(self.save_directory, f))]
@@ -72,11 +82,17 @@ class EvaluationEnvironment:
         event_count_by_game, game_durations = np.array([ec[0] for ec in event_count_by_game]), np.array(game_durations)
         events_path = self.save_directory + "/" + "events.npy"
         durations_path = self.save_directory + "/" + "durations.npy"
+        qlength_path = self.save_directory + "/" + "qlength.json"
 
         np.save(events_path, event_count_by_game)
         np.save(durations_path, game_durations)
 
+        if print_q_length is not None:
+            with open(qlength_path, "w") as f:
+                json.dump(self.return_q_length(print_q_length), f)
+
         print("Wrote game info to", events_path, "and", durations_path)
+
 
         if destroy_data:  # remove files from disk
             print("Removing game data")
@@ -86,3 +102,15 @@ class EvaluationEnvironment:
         return event_count_by_game, game_durations, events_path, durations_path
 
 
+    def return_q_length(self, filepath):
+
+        files = [f for f in listdir(self.save_directory) if isfile(join(self.save_directory, f))]
+
+        for file in files:
+            if file[:2] == "q_":
+
+                qt = np.load(filepath+ "/" + file)
+
+                return qt.shape[0]
+
+        raise RuntimeError("Q Table not found")

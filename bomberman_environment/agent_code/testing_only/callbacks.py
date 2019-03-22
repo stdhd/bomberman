@@ -4,6 +4,7 @@ from state_functions.indices import *
 from state_functions.state_representation import *
 from agent_code.observation_object import ObservationObject
 import os
+import pickle
 
 from settings import s
 
@@ -28,6 +29,13 @@ def setup(self):
                                 'd4_is_safe_to_move_d_d',
                                 'dead_end_detect',
                                 ], None)
+
+    self.clf = None
+
+    # with open("data/qtables/"+self.obs_object.get_file_name_string()+"/dt.p", "rb") as f:
+    #     self.clf = pickle.load(f)  # FIXME load regression model
+
+    self.FORCE_REGRESSION = False  # FIXME
 
     self.logger.debug("Called setup")
     # Used for plotting
@@ -86,7 +94,7 @@ def act(self):
     self.old_observation = observation
     observation_ind = np.where((self.observation_db == observation).all(axis=1))[0]
     # If observation_db has entry the action with the highest value is chosen.
-    if observation_ind.shape[0] != 0:
+    if not self.FORCE_REGRESSION and observation_ind.shape[0] != 0:
         self.logger.debug("KNOWN observation: ")
         self.logger.debug("\n"+str(self.observation_db[observation_ind[0]][:self.obs_object.window_size**2].reshape(
             (self.obs_object.window_size, self.obs_object.window_size)).T))
@@ -113,9 +121,26 @@ def act(self):
     # If test mode and observation_db has no entry
     else:
         # TODO: regression
-        self.logger.debug("unknown observation")
-        self.logger.debug(observation)
-        self.last_action_ind = np.random.randint(0, 6)
+        self.logger.debug("\n"+str(observation[:self.obs_object.window_size**2].reshape(
+            (self.obs_object.window_size, self.obs_object.window_size)).T))
+        self.logger.debug("Features: " + str(observation[self.obs_object.window_size**2:]))
+        self.logger.debug(str(('LEFT', 'RIGHT', 'UP', 'DOWN', 'WAIT', 'BOMB')))
+        self.last_action_ind = 4
+        best_action_score = -10000
+        print("--------")
+        # for i in range(6):
+        #     try_obs = np.append(np.copy(observation), i)
+        #     try_obs = try_obs[np.newaxis, :]
+        #     value = self.clf.predict(try_obs)
+        #
+        #     print("Action score for", i, value)
+        #
+        #     if value >= best_action_score:
+        #         best_action_score = value
+        #         self.last_action_ind = i
+        try_obs = np.copy(observation)[np.newaxis, :]
+        self.last_action_ind = self.clf.predict(try_obs)[0]
+        print("Chose action", self.last_action_ind)
 
     self.next_action = ['LEFT', 'RIGHT', 'UP', 'DOWN', 'WAIT', 'BOMB'][self.last_action_ind]
     self.logger.info("Next action: " + self.next_action)

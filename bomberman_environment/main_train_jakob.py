@@ -33,7 +33,7 @@ def main():
 
     KNOWN, Q = q_train_from_games_jakob(cwd + "/" + 'data/games/SELFPLAYr1_ismal_ismbr_ismcu_ismdd_ccdir_ccrdir_csfdir_ded_mhb/ITERATION_1',
                                         write_path,
-                                        obs, a=0.5, g=0.5, save_every_n_files=5)
+                                        obs, a=0.3, g=0.8, save_every_n_files=5)
 
 
 if __name__ == '__main__':

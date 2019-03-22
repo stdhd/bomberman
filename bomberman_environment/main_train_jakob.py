@@ -32,7 +32,7 @@ def main():
 
     KNOWN, Q = q_train_from_games_jakob(cwd + "/" + 'data/games/four_players_esa_0_2_cratedens_0_75',
                                         write_path,
-                                        obs, a=0.5, g=0.5, save_every_n_files=5)
+                                        obs, a=0.3, g=0.8, save_every_n_files=5)
 
 
 if __name__ == '__main__':

@@ -8,7 +8,7 @@ from settings import s
 from settings_agent_evaluation import s as sae_s
 
 
-def main(data_path=None, train_iterations = 10, train_batch_size = 5): # ='data/games/four_players_esa_0_2_cratedens_0_75/'):
+def main(data_path=None, train_iterations = 10, train_batch_size = 10): # ='data/games/four_players_esa_0_2_cratedens_0_75/'):
     """
     Train an agent from the ground up and evaluate their performance every few games.
     Saves all files in a subdirectory of the agent's folder.
@@ -33,12 +33,13 @@ def main(data_path=None, train_iterations = 10, train_batch_size = 5): # ='data/
                                 ], None)
     if data_path is None:
         create_data = True
-        data_path_ = "data/games/SELFPLAY"+obs.get_file_name_string()
+        _data_path = "data/games/SELFPLAY"+obs.get_file_name_string()
 
     else:
         create_data = False
+        _data_path = None
 
-    write_path = 'data/qtables/' + obs.get_file_name_string() + "/evaluategames"
+    evaluation_data_path = 'data/qtables/' + obs.get_file_name_string() + "/evaluategames"  # where to put the evaluation games
 
     for i in range(train_iterations):
 
@@ -46,7 +47,7 @@ def main(data_path=None, train_iterations = 10, train_batch_size = 5): # ='data/
 
         if create_data:
 
-            data_path = data_path_+iteration_str
+            data_path = _data_path+iteration_str
 
             training_setup = [
             ('testing_only', False),
@@ -57,25 +58,29 @@ def main(data_path=None, train_iterations = 10, train_batch_size = 5): # ='data/
 
             print("Creating", s.n_rounds, "training episodes by playing agent against itself")
 
-            main_save_states.main(training_setup, data_path)  # Important: Set settings.py nrounds to train batch size
+            main_save_states.main(training_setup, data_path)  # Important: Set settings.py n_rounds to train batch size
 
         if create_data:
-            print("Training from", train_batch_size, "newly played games.")
+            print("Training from", train_batch_size, "newly played games in", data_path)
         else:
-            print("Training from", train_batch_size, "games in", data_path)
+            print("Training from", train_batch_size, "pre-computed games in", data_path)
 
         q_train_from_games_jakob(data_path, "data/qtables/"+obs.get_file_name_string(),
-                                        obs, a=0.5, g=0.5, stop_after_n_files=train_batch_size, save_every_n_files=5)
+                                        obs, a=0.5, g=0.5, stop_after_n_files=train_batch_size, save_every_n_files=2)
 
-        iter_output = write_path + iteration_str
+        if i % 2 == 0:
+            q_table_loc = "data/qtables/"+obs.get_file_name_string()
 
-        env = EvaluationEnvironment(["testing_only"], iter_output)
+            iter_output = evaluation_data_path + iteration_str
 
-        print("Running", sae_s.n_rounds, "trials vs. simple agents")
+            env = EvaluationEnvironment(["testing_only"], iter_output)
 
-        #env.run_trials()
+            print("Running", sae_s.n_rounds, "trials vs. simple agents")
 
-        #env.analyze_games()
+            env.run_trials()
+
+            env.analyze_games(destroy_data=False, print_q_length=q_table_loc)  # save an analysis in iter_output,
+            #  including q Table length
 
 
 if __name__ == '__main__':

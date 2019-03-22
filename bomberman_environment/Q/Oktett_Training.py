@@ -5,21 +5,21 @@ from agent_code.observation_object import ObservationObject
 from state_functions.rewards import *
 from Q.manage_training_data import *
 
-def q_train_from_games_jakob(train_data, write_path, obs:ObservationObject, a = 0.8, g = 0.4, stop_after_n_files=None,
-                             save_every_n_files:int=20):
+def q_train_from_games_jakob(train_data, tables_logs_output_path, obs:ObservationObject, a = 0.8, g = 0.4, stop_after_n_files=None,
+                             save_every_n_files:int=5):
     """
-    Trains from all files in a directory using an existing q- and observation-table under write_path.
+    Trains from all files in a directory using an existing q- and observation-table under tables_logs_output_path.
 
     If tables do not exist, creates them.
 
-    Creates or updates json files indexing known training files under write_path.
+    Creates or updates json files indexing known training files under tables_logs_output_path.
 
     Notes training progress (steps seen and current size of Q Table) in json file.
     
     Uses preconfigured ObservationObject to train. 
 
     :param train_data: Directory containing training episodes
-    :param write_path: Directory to which to output Q-learning results and json files.
+    :param tables_logs_output_path: Directory to which to output Q-learning results and json files.
     :param obs Observation Object containing training settings (view radius etc.)
     :param a alpha (learning rate)
     :param g gamma (discount)
@@ -33,9 +33,9 @@ def q_train_from_games_jakob(train_data, write_path, obs:ObservationObject, a = 
         raise ValueError("Saves and stops should be multiples of each other")
     filename = obs.get_file_name_string()
     try:
-        QTABLE = np.load(write_path + '/q_table-' + filename + '.npy')
-        KNOWN = np.load(write_path + '/observation-' + filename + '.npy')
-        QUANTITY = np.load(write_path + '/quantity-' + filename + '.npy')
+        QTABLE = np.load(tables_logs_output_path + '/q_table-' + filename + '.npy')
+        KNOWN = np.load(tables_logs_output_path + '/observation-' + filename + '.npy')
+        QUANTITY = np.load(tables_logs_output_path + '/quantity-' + filename + '.npy')
     except:
         print("Error loading learned q table. using empty table instead.")
         QTABLE = np.zeros([0,6])
@@ -51,7 +51,7 @@ def q_train_from_games_jakob(train_data, write_path, obs:ObservationObject, a = 
     for file in files:
         # go through files
         try:
-            if is_trained(write_path+"/records.json", file):
+            if is_trained(tables_logs_output_path + "/records.json", file):
                 print("Skipping known training datum", file, "in folder", train_data)
                 continue
         except IOError:
@@ -93,7 +93,8 @@ def q_train_from_games_jakob(train_data, write_path, obs:ObservationObject, a = 
 
                 if (count < living_players.shape[0] and np.array_equal(observation, np.zeros(obs.obs_length)))\
                         or (count >= living_players.shape[0] and not np.array_equal(observation, np.zeros(obs.obs_length))):
-                    raise RuntimeError("Error: Got observation from living player != zeros")
+                    raise RuntimeError("Error: Got zero observation from living player or nonzero observation from "
+                                       "dead player")
 
                 findings = np.where((KNOWN == np.array([observation])).all(axis=1))[0]
 
@@ -134,11 +135,6 @@ def q_train_from_games_jakob(train_data, write_path, obs:ObservationObject, a = 
 
                         QUANTITY[int(l_ind), rotated_action] += 1
 
-                        # if i == 0 and reward != -3 and debug_mode:
-                        #     print("-----")
-                        #     print("DID: " + str(rotated_action))
-                        #     print("Reward: " + str(reward))
-
                 last_index[rewards_players[count]] = (index_current, rotations_current)
 
             steps_count += 1
@@ -165,11 +161,13 @@ def q_train_from_games_jakob(train_data, write_path, obs:ObservationObject, a = 
             stop = True
 
         if save_all:
-            add_to_trained(write_path+"/records.json", current_trained_batch)  # update json records file
-            catalogue_progress(write_path+"/progress.json", steps_count, QTABLE.shape[0])  # update json progress file
-            np.save(write_path + '/observation-' + filename, KNOWN)
-            np.save(write_path + '/q_table-' + filename, QTABLE)
-            np.save(write_path + '/quantity-' + filename, QUANTITY)
+            add_to_trained(tables_logs_output_path + "/records.json", current_trained_batch)  # update json records file
+            catalogue_progress(tables_logs_output_path + "/progress.json", steps_count, QTABLE.shape[0])  # update json progress file
+
+            np.save(tables_logs_output_path + '/observation-' + filename, KNOWN)
+            np.save(tables_logs_output_path + '/q_table-' + filename, QTABLE)
+            np.save(tables_logs_output_path + '/quantity-' + filename, QUANTITY)
+
             filecount, steps_count = 0, 0
             current_trained_batch.clear()
 
@@ -244,3 +242,19 @@ def get_transformations(obs, radius, direction_sensitive):
     results[7] = obs
 
     return results, direction_change
+
+def get_transformed_events(original_events):
+    original_events = np.array(original_events)
+    # Read like 2 (up) --> 0 (down)
+    # Diagonal (upper left to down right), vertical, horizontal, rotation right, rotation left, horizontal & vertical, Diagonal (down left to upper right)
+    transformations = np.array(
+        [[2, 3, 0, 1], [1, 0, 2, 3], [0, 1, 3, 2], [3, 2, 0, 1], [2, 3, 1, 0], [1, 0, 3, 2], [3, 2, 1, 0]])
+    transformed_events = np.empty([0, original_events.shape[0]])
+    for ind, trans in enumerate(transformations):
+        transformed_events = np.append(transformed_events, original_events[np.newaxis, :], axis=0)
+        transformed_events[ind][original_events == 0] = np.where(trans == 0)[0][0]
+        transformed_events[ind][original_events == 1] = np.where(trans == 1)[0][0]
+        transformed_events[ind][original_events == 2] = np.where(trans == 2)[0][0]
+        transformed_events[ind][original_events == 3] = np.where(trans == 3)[0][0]
+    transformed_events = np.append(transformed_events, original_events[np.newaxis, :], axis=0)
+    return transformed_events

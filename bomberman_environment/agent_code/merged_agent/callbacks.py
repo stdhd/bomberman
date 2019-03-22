@@ -18,13 +18,20 @@ def setup(self):
     You can also use the self.logger object at any time to write to the log
     file for debugging (see https://docs.python.org/3.7/library/logging.html).
     """
-    self.learning_rate = 0.4
+    self.learning_rate = 0.3
     self.discount = 0.7
-    self.epsilon = 0
+    self.epsilon = 0.05
     self.train_flag = True
     self.obs_radius = 0
-    self.obs_object = ObservationObject(self.obs_radius, ["d_closest_coin_dir", "d_closest_crate_dir", "d_closest_safe_field_dir", "d4_is_safe_to_move_a_l",
-                                        "d4_is_safe_to_move_b_r", "d4_is_safe_to_move_c_u", "d4_is_safe_to_move_d_d", "me_has_bomb"], self.logger)
+    self.obs_object = ObservationObject(self.obs_radius, ["d_closest_coin_dir", 
+                                                        "d_closest_crate_dir", 
+                                                        "d_closest_safe_field_dir", 
+                                                        "d4_is_safe_to_move_a_l",
+                                                        "d4_is_safe_to_move_b_r", 
+                                                        "d4_is_safe_to_move_c_u", 
+                                                        "d4_is_safe_to_move_d_d", 
+                                                        "me_has_bomb", 
+                                                        "dead_end_detect"], self.logger)
     # Used for plotting
     self.total_steps_over_episodes = 0
     self.total_deaths_over_episodes = 0
@@ -106,9 +113,9 @@ def act(self):
                                                         self.obs_object.get_direction_sensitivity())
         self.last_observations = observations
         self.last_q_ind = []
-        self.logger.info(f'BOMBS: {bombs}')
-        self.logger.info(f'self: {[x, y]}')
-        self.logger.info(f'Observation: {observation}')
+        # self.logger.info(f'BOMBS: {bombs}')
+        # self.logger.info(f'self: {[x, y]}')
+        # self.logger.info(f'Observation: {observation}')
         # self.logger.info(f'OBSERVATIONS: {observations}')
 
         # Choose random action and if current observation is unknown add it and its rotations to observation_db

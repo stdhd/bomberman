@@ -15,7 +15,7 @@ def main():
 
     obs = ObservationObject(1, ['d_closest_coin_dir',
                                 'd_closest_safe_field_dir',
-                                'd_closest_crate_dir',
+                                'd_best_bomb_dropping_dir',
                                 'me_has_bomb',
                                 'd4_is_safe_to_move_a_l',
                                 'd4_is_safe_to_move_b_r',

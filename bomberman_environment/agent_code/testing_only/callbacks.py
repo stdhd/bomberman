@@ -22,6 +22,7 @@ def setup(self):
     self.obs_object = ObservationObject(1, ['d_closest_coin_dir',
                                 'd_closest_safe_field_dir',
                                 'me_has_bomb',
+                                'dead_end_detect',
                                 'd4_is_safe_to_move_a_l',
                                 'd4_is_safe_to_move_b_r',
                                 'd4_is_safe_to_move_c_u',

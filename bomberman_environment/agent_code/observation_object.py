@@ -312,12 +312,64 @@ class ObservationObject:
         parent_dict = {start: start}
         dist_so_far = {start: 0}
         best = start
-        best_dist = np.sum(np.abs(np.subtract(targets, start) * targets_weights), axis=1).min()
+        best_dist = (np.sum(np.abs(np.subtract(targets, start)), axis=1) / targets_weights).min()
 
         while len(frontier) > 0:
             current = frontier.pop(0)
             # Find distance from current position to all targets, track closest
-            d = np.sum(np.abs(np.subtract(targets, current)), axis=1).min() # fixme:  * targets_weights
+            d = (np.sum(np.abs(np.subtract(targets, current)), axis=1) / targets_weights).min() # fixme:  * targets_weights
+            if d + dist_so_far[current] <= best_dist:
+                best = current
+                best_dist = d + dist_so_far[current]
+            if d == 0:
+                # Found path to a target's exact position, mission accomplished!
+                best = current
+                break
+            # Add unexplored free neighboring tiles to the queue in a random order
+            x, y = current
+            neighbors = [(x,y) for (x,y) in [(x+1,y), (x-1,y), (x,y+1), (x,y-1)] if free_space[x,y]]
+            shuffle(neighbors)
+            for neighbor in neighbors:
+                if neighbor not in parent_dict:
+                    frontier.append(neighbor)
+                    parent_dict[neighbor] = current
+                    dist_so_far[neighbor] = dist_so_far[current] + 1
+        if logger: logger.debug(f'Suitable target found at {best}')
+
+        if len(frontier) == 0:
+            return None
+
+        # Determine the first step towards the best found target tile
+        current = best
+        while True:
+            if parent_dict[current] == start: return current
+            current = parent_dict[current]
+
+    def _look_for_targets_coins(self, free_space, start, targets, logger):
+        """Find direction of closest target that can be reached via free tiles.
+
+        Performs a breadth-first search of the reachable free tiles until a target is encountered.
+        If no target can be reached, the path that takes the agent closest to any target is chosen.
+
+        Args:
+            free_space: Boolean numpy array. True for free tiles and False for obstacles.
+            start: the coordinate from which to begin the search.
+            targets: list or array holding the coordinates of all target tiles.
+            logger: optional logger object for debugging.
+        Returns:
+            coordinate of first step towards closest target or towards tile closest to any target.
+        """
+        if len(targets) == 0: return None
+        frontier = [start]
+        parent_dict = {start: start}
+        dist_so_far = {start: 0}
+        best = start
+        best_dist = np.sum(np.abs(np.subtract(targets, start)), axis=1).min()
+
+        while len(frontier) > 0:
+            current = frontier.pop(0)
+            # Find distance from current position to all targets, track closest
+            d = np.sum(np.abs(np.subtract(targets, current)), axis=1).min()
             if d + dist_so_far[current] <= best_dist:
                 best = current
                 best_dist = d + dist_so_far[current]
@@ -337,11 +389,15 @@ class ObservationObject:
         if logger: logger.debug(f'Suitable target found at {best}')
         # Determine the first step towards the best found target tile
         current = best
+
+        if len(frontier) == 0:
+            return None
+
         while True:
             if parent_dict[current] == start: return current
             current = parent_dict[current]
 
-    
+
     def _look_for_targets(self, free_space, start, targets, logger):
         """Find direction of closest target that can be reached via free tiles.
 
@@ -386,9 +442,11 @@ class ObservationObject:
         if logger: logger.debug(f'Suitable target found at {best}')
         # Determine the first step towards the best found target tile
         current = best
+
         while True:
             if parent_dict[current] == start: return current
             current = parent_dict[current]
+
 
     def _determine_direction(self, best_step, x, y):
         if best_step == (x-1,y): return 0 # move left
@@ -398,6 +456,7 @@ class ObservationObject:
         if best_step == None: return 4 # No targets exist.
         if best_step == (x,y): return 5 # Target can not be reached. Only occurs if current position is right before the obstacle.
         return 6 # Something else is wrong: This case should not occur
+
 
     def me_has_bomb(self):
         """
@@ -431,7 +490,7 @@ class ObservationObject:
         coins_coords = np.vstack((coins_ind[0], coins_ind[1])).T
         free_space = (self.arena == 0) | (self.arena == 3)
         x, y = self.player.me_loc[0], self.player.me_loc[1]
-        best_step = self._look_for_targets(free_space, (x, y), coins_coords, None)
+        best_step = self._look_for_targets_coins(free_space, (x, y), coins_coords, None)
 
         return self._determine_direction(best_step, x, y)
 
@@ -725,15 +784,15 @@ class ObservationObject:
         :return: tuple(coordinates of the targets as [n,2] array, integer map of the arena's dimensions)
         """
         copied_arena = np.copy(self.arena)  # Copy as we will modify it
+        # result = np.full(copied_arena.shape, 1.0)
         result = np.zeros(copied_arena.shape)
         crate_ind = np.where(copied_arena == 1)
         crate_coords = np.vstack((crate_ind[0], crate_ind[1])).T
         x, y = self.player.me_loc[0], self.player.me_loc[1]
-        CRATE_WEIGHT = -0.2
-        ENEMY_WEIGHT = -1
+        # CRATE_WEIGHT = 0.8
+        # ENEMY_WEIGHT = 0.4
 
         for c in crate_coords:
-            temp = 0
             cx, cy = c[0], c[1]
             down, up, left, right = True, True, True, True
             for i in range(3):
@@ -742,38 +801,25 @@ class ObservationObject:
                 if left and copied_arena[cx - (i + 1), cy] == -1: left = False
                 if right and copied_arena[cx + (i + 1), cy] == -1: right = False
 
-                if down: result[cx, cy + (i + 1)] += CRATE_WEIGHT
-                if up: result[cx, cy - (i + 1)] += CRATE_WEIGHT
-                if left: result[cx - (i + 1), cy] += CRATE_WEIGHT
-                if right: result[cx + (i + 1), cy] += CRATE_WEIGHT
+                if down: result[cx, cy + (i + 1)] += 1
+                if up: result[cx, cy - (i + 1)] += 1
+                if left: result[cx - (i + 1), cy] += 1
+                if right: result[cx + (i + 1), cy] += 1
 
             # As the break is removed, killing foes will contribute to fields' values as well
-            # TODO: After test, remove the 'break'
-            for c in self.player.foes:
-                break
-
-                cx, cy = index_to_x_y(c)
-                down, up, left, right = True, True, True, True
-                for i in range(3):
-                    if down and copied_arena[cx, cy + (i + 1)] == -1: down = False
-                    if up and copied_arena[cx, cy - (i + 1)] == -1: up = False
-                    if left and copied_arena[cx - (i + 1), cy] == -1: left = False
-                    if right and copied_arena[cx + (i + 1), cy] == -1: right = False
-
-                    if down: result[cx, cy + (i + 1)] += ENEMY_WEIGHT
-                    if up: result[cx, cy - (i + 1)] += ENEMY_WEIGHT
-                    if left: result[cx - (i + 1), cy] += ENEMY_WEIGHT
-                    if right: result[cx + (i + 1), cy] += ENEMY_WEIGHT
+            # TODO: Implement enemy hunting
+        #for c in self.player.foes:
+        #print(result)
 
         copied_arena[x, y] = 0
-        result_coords = np.where((result < 0) & ((copied_arena == 0) | (copied_arena == 3)))
+        result_coords = np.where((result > 0) & ((copied_arena == 0) | (copied_arena == 3)))
 
         stacked_result_coords = np.vstack(result_coords).T
         weights = np.zeros([result_coords[0].shape[0]])
         for i in range(result_coords[0].shape[0]):
             weights[i] = result[stacked_result_coords[i, 0],stacked_result_coords[i, 1]]
 
-        return stacked_result_coords, np.expand_dims(weights, axis = 1)
+        return stacked_result_coords, weights
 
 
     def d_best_bomb_dropping_dir(self):

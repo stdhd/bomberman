@@ -22,7 +22,6 @@ def main():
                                 'd4_is_safe_to_move_b_r',
                                 'd4_is_safe_to_move_c_u',
                                 'd4_is_safe_to_move_d_d',
-                                'dead_end_detect',
                                 'd_best_bomb_dropping_dir'
                                 ], None)
 

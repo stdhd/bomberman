@@ -714,6 +714,7 @@ class ObservationObject:
         :return: Boolean map: True for Free/Coin, False for Wall/Threatened/Crate
         """
         arena_bool = (self.arena == 0) | (self.arena == 3)
+        arena_bool[self.player.me_loc[0], self.player.me_loc[1]] = True
         for loc in self.bomb_locs:
             if loc == 0:
                 continue
@@ -751,7 +752,7 @@ class ObservationObject:
             return self._determine_direction(None, x, y)
         arena = self.arena
         # If agent is not on danger zone indicate this by turning off feature (return 4)
-        self.logger.info(f'On Danger Map: {not self.danger_map[x, y]}')
+        if self.logger: self.logger.info(f'On Danger Map: {not self.danger_map[x, y]}')
         if self.danger_map[x, y]:
             # if self.logger: self.logger.info(f'NOT ON DANGER ZONE')
             return self._determine_direction(None, x, y)
@@ -792,7 +793,7 @@ class ObservationObject:
         # self.logger.info(f'XY_BOMBS: {np.vstack((x_bombs, y_bombs)).T}')
         # self.logger.info(f'Free Space Coords: {free_space_coords}')
         # self.logger.info(f'Self: {x, y}')
-        self.logger.info(f'Best_step: {best_step}')
+        if self.logger: self.logger.info(f'Best_step: {best_step}')
         return self._determine_direction(best_step, x, y)
 
     def d4_is_safe_to_move_a_l(self):

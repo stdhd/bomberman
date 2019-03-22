@@ -112,9 +112,9 @@ def act(self):
                                                         self.obs_object.get_direction_sensitivity())
         self.last_observations = observations
         self.last_q_ind = []
-        # self.logger.info(f'BOMBS: {bombs}')
-        # self.logger.info(f'self: {[x, y]}')
-        # self.logger.info(f'Observation: {observation}')
+        self.logger.info(f'BOMBS: {bombs}')
+        self.logger.info(f'self: {[x, y]}')
+        self.logger.info(f'Observation: {observation}')
         # self.logger.info(f'OBSERVATIONS: {observations}')
 
         # Choose random action and if current observation is unknown add it and its rotations to observation_db

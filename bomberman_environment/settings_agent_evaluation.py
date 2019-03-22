@@ -35,7 +35,7 @@ settings = {
     'explosion_timer': 2,
 
     # Rules for agents
-    'timeout': 20.0,
+    'timeout': 2000.0,
     'reward_kill': 5,
     'reward_coin': 1,
     'reward_slow': -1,

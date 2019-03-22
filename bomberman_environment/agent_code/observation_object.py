@@ -30,6 +30,7 @@ Available Features:
         d4_is_safe_to_move_c_u
         d4_is_safe_to_move_d_d
         d_closest_enemy_dir
+        d_best_bomb_dropping_dir
 """
 
 
@@ -66,28 +67,29 @@ class ObservationObject:
 
 
         self.name_dict = {
-        "me_has_bomb": "mhb",
-        "closest_coin_dist": "ccdist",
-        "d_closest_coin_dir": "ccdir",
-        "d_closest_crate_dir": "ccrdir",
-        "closest_foe_dist": "cfdist",
-        "d_closest_foe_dir": "cfdir",
-        "closest_foe_has_bomb": "cfhb",
-        "dead_end_detect": "ded",
-        "nearest_foe_to_closest_coin": "nftcc",
-        "dist_to_center": "dtc",
-        "smallest_enemy_dist": "smd",
-        "remaining_enemies": "re",
-        "remaining_crates": "rcrates",
-        "remaining_coins": "rcoins",
-        "d_closest_safe_field_dir": "csfdir",
-        "closest_coin_old": "cco",
-        "d_closest_safe_field_dirNEW" : "csfdirN",
-        "d4_is_safe_to_move_a_l" : "ismal",
-        "d4_is_safe_to_move_b_r": "ismbr",
-        "d4_is_safe_to_move_c_u": "ismcu",
-        "d4_is_safe_to_move_d_d": "ismdd",
-        "d_closest_enemy_dir": "ced"
+            "me_has_bomb": "mhb",
+            "closest_coin_dist": "ccdist",
+            "d_closest_coin_dir": "ccdir",
+            "d_closest_crate_dir": "ccrdir",
+            "closest_foe_dist": "cfdist",
+            "d_closest_foe_dir": "cfdir",
+            "closest_foe_has_bomb": "cfhb",
+            "dead_end_detect": "ded",
+            "nearest_foe_to_closest_coin": "nftcc",
+            "dist_to_center": "dtc",
+            "smallest_enemy_dist": "smd",
+            "remaining_enemies": "re",
+            "remaining_crates": "rcrates",
+            "remaining_coins": "rcoins",
+            "d_closest_safe_field_dir": "csfdir",
+            "closest_coin_old": "cco",
+            "d_closest_safe_field_dirNEW" : "csfdirN",
+            "d4_is_safe_to_move_a_l" : "ismal",
+            "d4_is_safe_to_move_b_r": "ismbr",
+            "d4_is_safe_to_move_c_u": "ismcu",
+            "d4_is_safe_to_move_d_d": "ismdd",
+            "d_closest_enemy_dir": "ced",
+            "d_best_bomb_dropping_dir": "bbdd"
 
         }
 
@@ -127,8 +129,6 @@ class ObservationObject:
         # get (4 x 17) matrix of events for this step
         self.arena = self._make_window(8, 8, 8)
         self.danger_map = self._get_threat_map()
-
-
 
 
     def reset_killed_players(self):
@@ -291,6 +291,56 @@ class ObservationObject:
         if not choose:
             choose.append('except')
         return dirs[np.random.choice(np.array(choose))]
+
+    def _look_for_targets_weighted(self, free_space, start, targets, targets_weights, logger):
+        """Find direction of closest target that can be reached via free tiles.
+
+        Performs a breadth-first search of the reachable free tiles until a target is encountered.
+        If no target can be reached, the path that takes the agent closest to any target is chosen.
+
+        Args:
+            free_space: Boolean numpy array. True for free tiles and False for obstacles.
+            start: the coordinate from which to begin the search.
+            targets: list or array holding the coordinates of all target tiles.
+            targets_weights: array holding the targets' weights. The higher the weight the less important it is.
+            logger: optional logger object for debugging.
+        Returns:
+            coordinate of first step towards closest target or towards tile closest to any target.
+        """
+        if len(targets) == 0: return None
+        frontier = [start]
+        parent_dict = {start: start}
+        dist_so_far = {start: 0}
+        best = start
+        best_dist = np.sum(np.abs(np.subtract(targets, start) * targets_weights), axis=1).min()
+
+        while len(frontier) > 0:
+            current = frontier.pop(0)
+            # Find distance from current position to all targets, track closest
+            d = np.sum(np.abs(np.subtract(targets, current)), axis=1).min() # fixme:  * targets_weights
+            if d + dist_so_far[current] <= best_dist:
+                best = current
+                best_dist = d + dist_so_far[current]
+            if d == 0:
+                # Found path to a target's exact position, mission accomplished!
+                best = current
+                break
+            # Add unexplored free neighboring tiles to the queue in a random order
+            x, y = current
+            neighbors = [(x,y) for (x,y) in [(x+1,y), (x-1,y), (x,y+1), (x,y-1)] if free_space[x,y]]
+            shuffle(neighbors)
+            for neighbor in neighbors:
+                if neighbor not in parent_dict:
+                    frontier.append(neighbor)
+                    parent_dict[neighbor] = current
+                    dist_so_far[neighbor] = dist_so_far[current] + 1
+        if logger: logger.debug(f'Suitable target found at {best}')
+        # Determine the first step towards the best found target tile
+        current = best
+        while True:
+            if parent_dict[current] == start: return current
+            current = parent_dict[current]
+
     
     def _look_for_targets(self, free_space, start, targets, logger):
         """Find direction of closest target that can be reached via free tiles.
@@ -523,27 +573,6 @@ class ObservationObject:
         player = self.player
         return self._get_path_dir(self.player_locs[player.player_index], self.player_locs[player.closest_coin])
 
-    def d_closest_safe_field_dirNEW(self):
-        """
-        :return: Direction to take towards nearest field which is not threatened by bomb explosion
-        """
-        x, y = self.player.me_loc[0], self.player.me_loc[1]
-
-        # Is agent already within safe zone?
-        threat_map = self._get_threat_map()
-        bool = threat_map[x,y]
-        if not bool:
-            targets = np.where(threat_map)
-            target_coords = np.vstack((targets[0], targets[1])).T
-            free_space = np.copy(threat_map)
-            free_space[x, y] = True
-            best_step = self._look_for_targets(free_space, (x, y), target_coords, None)
-            if best_step == (x, y):
-                return 4
-            else:
-                temp = self._determine_direction(best_step,x,y)
-                return self._determine_direction(best_step,x,y)
-        return 4 # By default return 4: There is no explosion threatening current field
 
     def _get_threat_map(self):
         """
@@ -688,6 +717,74 @@ class ObservationObject:
         # counts dead ends within killing radius from this point
 
         return int(len(nearby_dead_ends) > 0)
+
+    def _get_bomb_place_value_map(self):
+        """
+        Gives coordiantes and a weight map for every field of the arena. The smaller numbers are, the more this field is
+        worth placing a bomb there. The output can be used to feed the _look_for_tarrgets_weighted function.
+        :return: tuple(coordinates of the targets as [n,2] array, integer map of the arena's dimensions)
+        """
+        copied_arena = np.copy(self.arena)  # Copy as we will modify it
+        result = np.zeros(copied_arena.shape)
+        crate_ind = np.where(copied_arena == 1)
+        crate_coords = np.vstack((crate_ind[0], crate_ind[1])).T
+        x, y = self.player.me_loc[0], self.player.me_loc[1]
+        CRATE_WEIGHT = -0.2
+        ENEMY_WEIGHT = -1
+
+        for c in crate_coords:
+            temp = 0
+            cx, cy = c[0], c[1]
+            down, up, left, right = True, True, True, True
+            for i in range(3):
+                if down and copied_arena[cx, cy + (i + 1)] == -1: down = False
+                if up and copied_arena[cx, cy - (i + 1)] == -1: up = False
+                if left and copied_arena[cx - (i + 1), cy] == -1: left = False
+                if right and copied_arena[cx + (i + 1), cy] == -1: right = False
+
+                if down: result[cx, cy + (i + 1)] += CRATE_WEIGHT
+                if up: result[cx, cy - (i + 1)] += CRATE_WEIGHT
+                if left: result[cx - (i + 1), cy] += CRATE_WEIGHT
+                if right: result[cx + (i + 1), cy] += CRATE_WEIGHT
+
+            # As the break is removed, killing foes will contribute to fields' values as well
+            # TODO: After test, remove the 'break'
+            for c in self.player.foes:
+                break
+
+                cx, cy = index_to_x_y(c)
+                down, up, left, right = True, True, True, True
+                for i in range(3):
+                    if down and copied_arena[cx, cy + (i + 1)] == -1: down = False
+                    if up and copied_arena[cx, cy - (i + 1)] == -1: up = False
+                    if left and copied_arena[cx - (i + 1), cy] == -1: left = False
+                    if right and copied_arena[cx + (i + 1), cy] == -1: right = False
+
+                    if down: result[cx, cy + (i + 1)] += ENEMY_WEIGHT
+                    if up: result[cx, cy - (i + 1)] += ENEMY_WEIGHT
+                    if left: result[cx - (i + 1), cy] += ENEMY_WEIGHT
+                    if right: result[cx + (i + 1), cy] += ENEMY_WEIGHT
+
+        copied_arena[x, y] = 0
+        result_coords = np.where((result < 0) & ((copied_arena == 0) | (copied_arena == 3)))
+
+        stacked_result_coords = np.vstack(result_coords).T
+        weights = np.zeros([result_coords[0].shape[0]])
+        for i in range(result_coords[0].shape[0]):
+            weights[i] = result[stacked_result_coords[i, 0],stacked_result_coords[i, 1]]
+
+        return stacked_result_coords, np.expand_dims(weights, axis = 1)
+
+
+    def d_best_bomb_dropping_dir(self):
+        target_coords, weights = self._get_bomb_place_value_map()
+        x, y = self.player.me_loc[0], self.player.me_loc[1]
+        free_space = (self.arena == 0) | (self.arena == 3)
+        free_space[x, y] = True
+        best_field = self._look_for_targets_weighted(free_space, (x, y), target_coords, weights, None)
+
+        return self._determine_direction(best_field, x, y)
+
 
     def _is_lethal_dead_end(self, x, y, bomb_x, bomb_y):
         """

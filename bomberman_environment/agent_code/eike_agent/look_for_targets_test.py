@@ -268,7 +268,7 @@ def _look_for_targets_safe_field(free_space, start, targets, logger):
     dist_so_far = {start: 0}
     best = start
     best_dist = np.sum(np.abs(np.subtract(targets, start)), axis=1).min()
-
+    targets_reachable = False
     while len(frontier) > 0:
         current = frontier.pop(0)
         # Find distance from current position to all targets, track closest
@@ -278,6 +278,7 @@ def _look_for_targets_safe_field(free_space, start, targets, logger):
             best_dist = d + dist_so_far[current]
         if d == 0:
             # Found path to a target's exact position, mission accomplished!
+            targets_reachable = True
             best = current
             break
         # Add unexplored free neighboring tiles to the queue in a random order
@@ -292,14 +293,14 @@ def _look_for_targets_safe_field(free_space, start, targets, logger):
     if logger: logger.debug(f'Suitable target found at {best}')
     # Determine the first step towards the best found target tile
     current = best
-    targets_not_reachable = True
-    for t in targets:
-        if (not tuple(t) in dist_so_far):
-            continue
-        else:
-            targets_not_reachable = False
-            break
-    if targets_not_reachable:
+    # targets_not_reachable = True
+    # for t in targets:
+    #     if (not tuple(t) in dist_so_far):
+    #         continue
+    #     else:
+    #         targets_not_reachable = False
+    #         break
+    if (not targets_reachable):
         return 10
     while True:
         if current == start: print("Komisch", current)
@@ -363,7 +364,7 @@ def d_closest_safe_field_dir(self):
         free_space = (arena == 0) | (arena == 3)
         free_space_ind = np.where(self.danger_map == True)
         free_space_coords = np.vstack((free_space_ind[0], free_space_ind[1])).T
-        best_step = _look_for_targets(free_space, (x, y), free_space_coords, None)
+        best_step = _look_for_targets_safe_field(free_space, (x, y), free_space_coords, None)
         # If not safe field is reachable search again with ignored explosion fields
         if best_step == 10:
             free_space = (arena == 0) | (arena == 3) | (arena == -2) | (arena == -4)
@@ -392,7 +393,7 @@ def d_closest_safe_field_dir(self):
 
             free_space_ind = np.where(danger_map_without_explosions == True)
             free_space_coords = np.vstack((free_space_ind[0], free_space_ind[1])).T
-            best_step = _look_for_targets(free_space, (x, y), free_space_coords, None)
+            best_step = _look_for_targets_safe_field(free_space, (x, y), free_space_coords, None)
         # self.logger.info(f'XY_BOMBS: {np.vstack((x_bombs, y_bombs)).T}')
         # self.logger.info(f'Free Space Coords: {free_space_coords}')
         # self.logger.info(f'Self: {x, y}')

@@ -30,8 +30,7 @@ def setup(self):
                                                         "d4_is_safe_to_move_b_r", 
                                                         "d4_is_safe_to_move_c_u", 
                                                         "d4_is_safe_to_move_d_d", 
-                                                        "me_has_bomb", 
-                                                        "dead_end_detect"], self.logger)
+                                                        "me_has_bomb"], self.logger)
     # Used for plotting
     self.total_steps_over_episodes = 0
     self.total_deaths_over_episodes = 0

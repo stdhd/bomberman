@@ -220,7 +220,7 @@ def x_y_to_index(x, y):
     x = int(x)
     y = int(y)
 
-    if x >= ncols - 1 or x <= 0 or y >= nrows - 1 or y <= 0:
+    if x >= 17 - 1 or x <= 0 or y >= 17 - 1 or y <= 0:
         raise ValueError("Coordinates outside of game grid")
     if (x + 1) * (y + 1) % 2 == 1:
         raise ValueError("Received wall coordinates!")
@@ -401,40 +401,177 @@ def d_closest_safe_field_dir(self):
 
         return _determine_direction(best_step, x, y)
 
-arena = np.array(
- [[-1., -1., -1., -1., -1., -1., -1., -1., -1., -1., -1., -1., -1., -1., -1., -1., -1.],
-  [-1.,  0.,  0.,  0.,  0.,  0.,  0.,  0.,  0.,  0.,  1.,  0.,  0.,  0.,  0.,  0., -1.],
-  [-1.,  0., -1.,  0., -1.,  0., -1.,  0., -1.,  0., -1.,  1., -1.,  0., -1.,  0., -1.],
-  [-1.,  0.,  0.,  0.,  0.,  0.,  0.,  0.,  0.,  0.,  0.,  0.,  0.,  0.,  0.,  0., -1.],
-  [-1.,  0., -1.,  0., -1.,  0., -1.,  0., -1.,  0., -1.,  0., -1.,  0., -1.,  0., -1.],
-  [-1.,  0.,  0.,  0.,  0.,  0.,  0., -2.,  0.,  0.,  0.,  0.,  0.,  0.,  0.,  0., -1.],
-  [-1.,  0., -1.,  0., -1.,  0., -1., -2., -1.,  1., -1.,  1., -1.,  0., -1.,  0., -1.],
-  [-1.,  0.,  0.,  0.,  0.,  0.,  0., -2.,  0.,  4.,  0.,  0.,  1.,  0.,  0.,  0., -1.],
-  [-1.,  0., -1.,  0., -1.,  0., -1., -2., -1.,  1., -1.,  1., -1.,  0., -1.,  0., -1.],
-  [-1.,  0.,  0.,  0.,  0.,  0.,  0., -2.,  0.,  0.,  0.,  0.,  0.,  0.,  0.,  0., -1.],
-  [-1.,  0., -1.,  0., -1.,  0., -1.,  0., -1.,  0., -1.,  0., -1.,  0., -1.,  0., -1.],
-  [-1.,  0.,  0.,  0.,  0.,  0.,  0.,  0.,  0.,  0.,  0.,  0.,  0.,  0.,  0.,  0., -1.],
-  [-1.,  0., -1.,  0., -1.,  0., -1.,  0., -1.,  0., -1.,  0., -1.,  0., -1.,  0., -1.],
-  [-1.,  0.,  0.,  0.,  0.,  0.,  0.,  0.,  0.,  0.,  0.,  0.,  0.,  0.,  0.,  0., -1.],
-  [-1.,  0., -1.,  0., -1.,  0., -1.,  0., -1.,  0., -1.,  0., -1.,  0., -1.,  0., -1.],
-  [-1.,  0.,  0.,  0.,  0.,  0.,  0.,  0.,  0.,  0.,  0.,  0.,  0.,  0.,  0.,  0., -1.],
-  [-1., -1., -1., -1., -1., -1., -1., -1., -1., -1., -1., -1., -1., -1., -1., -1., -1.]])
+def _get_bomb_place_value_map(self):
+        """
+        Gives coordiantes and a weight map for every field of the arena. The smaller numbers are, the more this field is
+        worth placing a bomb there. The output can be used to feed the _look_for_tarrgets_weighted function.
+        :return: tuple(coordinates of the targets as [n,2] array, integer map of the arena's dimensions)
+        """
+        copied_arena = np.copy(self.arena)  # Copy as we will modify it
+        result = np.zeros(copied_arena.shape)
+        crate_ind = np.where(copied_arena == 1)
+        crate_coords = np.vstack((crate_ind[0], crate_ind[1])).T
+        x, y = self.player.me_loc[0], self.player.me_loc[1]
+
+        for c in crate_coords:
+            cx, cy = c[0], c[1]
+            down, up, left, right = True, True, True, True
+            for i in range(3):
+                if down and copied_arena[cx, cy + (i + 1)] == -1: down = False
+                if up and copied_arena[cx, cy - (i + 1)] == -1: up = False
+                if left and copied_arena[cx - (i + 1), cy] == -1: left = False
+                if right and copied_arena[cx + (i + 1), cy] == -1: right = False
+
+                if down: result[cx, cy + (i + 1)] += 1
+                if up: result[cx, cy - (i + 1)] += 1
+                if left: result[cx - (i + 1), cy] += 1
+                if right: result[cx + (i + 1), cy] += 1
+
+            # As the break is removed, killing foes will contribute to fields' values as well
+            # TODO: Implement enemy hunting
+        # for c in self.player.foes:
+        # print(result)
+
+        copied_arena[x, y] = 0
+        result_coords = np.where((result > 0) & ((copied_arena == 0) | (copied_arena == 3)))
+        stacked_result_coords = np.vstack(result_coords).T
+
+        weights = np.zeros([result_coords[0].shape[0]])
+        for i in range(result_coords[0].shape[0]):
+            weights[i] = result[stacked_result_coords[i, 0], stacked_result_coords[i, 1]]
+
+        return stacked_result_coords, weights
+
+
+def _look_for_targets_weighted(free_space, start, targets, targets_weights, logger):
+        if len(targets) == 0: return None
+        frontier = [start]
+        parent_dict = {start: start}
+        dist_so_far = {start: 0}
+        best = start
+        # best_dist = (np.sum(np.abs(np.subtract(targets, start)), axis=1) / targets_weights).min()
+        best_dist = (np.sum(np.abs(np.subtract(targets, start)), axis=1)).min()
+        best_candidates_with_bomb_value = {}
+        while len(frontier) > 0:
+            current = frontier.pop(0)
+            # Find distance from current position to all targets, track closest
+            # d = (np.sum(np.abs(np.subtract(targets, current)), axis=1) / targets_weights).min()  # fixme:  * targets_weights
+            d = (np.sum(np.abs(np.subtract(targets, current)), axis=1)).min()  # fixme:  * targets_weights
+            if d + dist_so_far[current] <= best_dist:
+                best = current
+                best_dist = d + dist_so_far[current]
+            if d == 0:
+                # Find all possible crate bombing positions
+                best = current
+                cand_ind = np.where((targets == best).all(axis=1))[0][0]
+                best_candidates_with_bomb_value[best] = targets_weights[cand_ind]
+            # Add unexplored free neighboring tiles to the queue in a random order
+            x, y = current
+            neighbors = [(x, y) for (x, y) in [(x + 1, y), (x - 1, y), (x, y + 1), (x, y - 1)] if free_space[x, y]]
+            shuffle(neighbors)
+            for neighbor in neighbors:
+                if neighbor not in parent_dict:
+                    frontier.append(neighbor)
+                    parent_dict[neighbor] = current
+                    dist_so_far[neighbor] = dist_so_far[current] + 1
+        if logger: logger.debug(f'Suitable target found at {best}')
+        max_value = 0
+        # Choose best crate bombing position by selecting max of bomb_value/(dist+1)
+        bomb_value_keys =  list(best_candidates_with_bomb_value.keys())      # Python 3; use keys = d.keys() in Python 2
+        shuffle(bomb_value_keys)
+        best_candidates_with_bomb_value_list = [(key, best_candidates_with_bomb_value[key]) for key in bomb_value_keys]
+
+        for cand in best_candidates_with_bomb_value_list:
+            cand_value = cand[1] / (dist_so_far[cand[0]] + 1) # Avoid dividing by 0
+            if cand_value > max_value:
+                max_value = cand_value
+                current = cand[0]
+        # Determine the first step towards the best found target tile
+        while True:
+            if parent_dict[current] == start: return current
+            current = parent_dict[current]
+
+# arena = np.array(
+#  [[-1., -1., -1., -1., -1., -1., -1., -1., -1., -1., -1., -1., -1., -1., -1., -1., -1.],
+#   [-1.,  0.,  0.,  0.,  0.,  0.,  0.,  0.,  0.,  0.,  1.,  0.,  0.,  0.,  0.,  0., -1.],
+#   [-1.,  0., -1.,  0., -1.,  0., -1.,  0., -1.,  0., -1.,  1., -1.,  0., -1.,  0., -1.],
+#   [-1.,  0.,  0.,  0.,  0.,  0.,  0.,  0.,  0.,  0.,  0.,  0.,  0.,  0.,  0.,  0., -1.],
+#   [-1.,  0., -1.,  0., -1.,  0., -1.,  0., -1.,  0., -1.,  0., -1.,  0., -1.,  0., -1.],
+#   [-1.,  0.,  0.,  0.,  0.,  0.,  0., -2.,  0.,  0.,  0.,  0.,  0.,  0.,  0.,  0., -1.],
+#   [-1.,  0., -1.,  0., -1.,  0., -1., -2., -1.,  1., -1.,  1., -1.,  0., -1.,  0., -1.],
+#   [-1.,  0.,  0.,  0.,  0.,  0.,  0., -2.,  0.,  4.,  0.,  0.,  1.,  0.,  0.,  0., -1.],
+#   [-1.,  0., -1.,  0., -1.,  0., -1., -2., -1.,  1., -1.,  1., -1.,  0., -1.,  0., -1.],
+#   [-1.,  0.,  0.,  0.,  0.,  0.,  0., -2.,  0.,  0.,  0.,  0.,  0.,  0.,  0.,  0., -1.],
+#   [-1.,  0., -1.,  0., -1.,  0., -1.,  0., -1.,  0., -1.,  0., -1.,  0., -1.,  0., -1.],
+#   [-1.,  0.,  0.,  0.,  0.,  0.,  0.,  0.,  0.,  0.,  0.,  0.,  0.,  0.,  0.,  0., -1.],
+#   [-1.,  0., -1.,  0., -1.,  0., -1.,  0., -1.,  0., -1.,  0., -1.,  0., -1.,  0., -1.],
+#   [-1.,  0.,  0.,  0.,  0.,  0.,  0.,  0.,  0.,  0.,  0.,  0.,  0.,  0.,  0.,  0., -1.],
+#   [-1.,  0., -1.,  0., -1.,  0., -1.,  0., -1.,  0., -1.,  0., -1.,  0., -1.,  0., -1.],
+#   [-1.,  0.,  0.,  0.,  0.,  0.,  0.,  0.,  0.,  0.,  0.,  0.,  0.,  0.,  0.,  0., -1.],
+#   [-1., -1., -1., -1., -1., -1., -1., -1., -1., -1., -1., -1., -1., -1., -1., -1., -1.]])
+
+arena =  np.array(
+   [[-1.,-1.,-1.,-1.,-1.,-1.,-1.,-1.,-1.,-1.,-1.,-1.,-1.,-1.,-1.,-1.,-1.],
+    [-1., 0., 0., 1., 1., 1., 1., 1., 1., 1., 1., 0., 1., 1., 0., 0.,-1.],
+    [-1 , 0.,-1., 0.,-1., 1.,-1., 1.,-1., 1.,-1., 0.,-1., 1.,-1., 0.,-1.],
+    [-1., 1., 1., 1., 1., 0., 0., 1., 1., 1., 1., 0., 0., 0., 0., 1.,-1.],
+    [-1., 1.,-1., 0.,-1., 0.,-1., 0.,-1., 1.,-1., 1.,-1., 1.,-1., 1.,-1.],
+    [-1., 1., 1., 1., 1., 1., 1., 1., 0., 1., 1., 1., 0., 1., 1., 1.,-1.],
+    [-1., 1.,-1., 0.,-1., 1.,-1., 1.,-1., 0.,-1., 1.,-1., 0.,-1., 1.,-1.],
+    [-1., 1., 1., 0., 0., 0., 1., 0., 1., 1., 1., 1., 0., 0., 1., 0.,-1.],
+    [-1., 1.,-1., 0.,-1., 1.,-1., 1.,-1., 1.,-1., 1.,-1., 1.,-1., 1.,-1.],
+    [-1., 1., 1., 1., 1., 0., 0., 1., 1., 1., 1., 1., 1., 1., 1., 1.,-1.],
+    [-1., 1.,-1., 1.,-1., 0.,-1., 1.,-1., 1.,-1., 1.,-1., 1.,-1., 1.,-1.],
+    [-1., 1., 0., 1., 1., 0., 1., 1., 1., 1., 0., 1., 0., 1., 1., 0.,-1.],
+    [-1., 0.,-1., 1.,-1., 1.,-1., 0.,-1., 1.,-1., 0.,-1., 0.,-1., 1.,-1.],
+    [-1., 1., 1., 1., 1., 0., 1., 1., 1., 0., 0., 0., 1., 1., 0., 0.,-1.],
+    [-1., 0.,-1., 1.,-1., 1.,-1., 1.,-1., 1.,-1., 1.,-1., 1.,-1., 0.,-1.],
+    [-1., 5., 0., 0., 1., 0., 1., 1., 1., 1., 1., 0., 0., 0., 0., 0.,-1.],
+    [-1.,-1.,-1.,-1.,-1.,-1.,-1.,-1.,-1.,-1.,-1.,-1.,-1.,-1.,-1.,-1.,-1.]])
+
+x, y = 13, 15
+player_pos = [x,y]
+abcd = SimpleNamespace(
+            arena=arena, 
+            player=SimpleNamespace(me_loc = player_pos))
+
+pos_to_place_bomb, weights = _get_bomb_place_value_map(abcd)
+
+# crates = np.array([[ 1,  1],[ 1,  2],[ 1, 11],[ 1, 14],[ 1, 15],[ 2,  1],[ 2,  3],[ 2, 11],[ 2, 15],[ 3,  5],[ 3,  6],[ 3, 11],[ 3, 12],[ 3, 13],[ 3, 14],[ 4,  3],[ 4,  5],[ 4,  7],[ 5,  8],[ 5, 12],[ 6,  3],
+#         [ 6,  9],[ 6, 13],[ 7,  3],[ 7,  4],[ 7,  5],[ 7,  7],[ 7, 12],[ 7, 13],[ 7, 15],[ 8,  3],[ 9,  5],[ 9,  6],[10,  5],[11,  2],[11,  5],[11, 10],[11, 12],[11, 15],[12,  1],[12,  7],[12, 11],
+#         [12, 13],[12, 15],[13,  5],[13,  9],[13, 10],[13, 11],[13, 14],[14,  1],[14, 15],[15,  1],[15,  2],[15,  3],[15,  5],[15, 11],[15, 14]])
+
+# weights = np.array([4., 3., 6., 2., 4., 3., 3., 2., 3., 9., 5., 6., 3., 6., 1., 3., 4.,
+#        5., 6., 6., 3., 6., 4., 6., 3., 6., 9., 4., 8., 7., 4., 8., 5., 2.,
+#        3., 8., 5., 4., 6., 4., 6., 4., 6., 3., 8., 9., 4., 6., 3., 2., 1.,
+#        2., 1., 5., 6., 6., 2.])
+
+
+free_space = (arena == 0) | (arena == 3)
+free_space[x, y] = True
+
+
+output = _look_for_targets_weighted(free_space, (x, y), pos_to_place_bomb, weights, None)
+print(output)
 
 # coins = np.array([[4, 3], [ 1,  9], [ 2, 11], [ 8,  1],[ 6, 9], [ 9,13], [15,  1], [11,  8], [14, 13]])
 # coins = np.array([[1, 11]])
 # crate = np.array([[1, 12]])
 
-bombs = np.array([99,0,0,0])
-player_pos = [7,9]
-abcd = SimpleNamespace(
-            bomb_locs=bombs, 
-            arena=arena, 
-            player=SimpleNamespace(me_loc = player_pos))
+# bombs = np.array([99,0,0,0])
+# player_pos = [7,9]
+# abcd = SimpleNamespace(
+#             bomb_locs=bombs, 
+#             arena=arena, 
+#             player=SimpleNamespace(me_loc = player_pos))
 
-abcd.danger_map = _get_threat_map(abcd)
+# abcd.danger_map = _get_threat_map(abcd)
 
-output = d_closest_safe_field_dir(abcd)
-print(output)
+# output = d_closest_safe_field_dir(abcd)
+# print(output)
+
+
+
 
 
 # free_space = (arena == 0) | (arena == 3)

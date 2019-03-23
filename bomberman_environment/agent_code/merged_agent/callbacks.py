@@ -6,7 +6,6 @@ from state_functions.state_representation import *
 from Q.Oktett_Training import *
 from agent_code.observation_object import ObservationObject
 import os
-
 from settings import s
 
 def setup(self):
@@ -18,14 +17,15 @@ def setup(self):
     You can also use the self.logger object at any time to write to the log
     file for debugging (see https://docs.python.org/3.7/library/logging.html).
     """
-    self.learning_rate = 0.3
+    self.learning_rate = 0.5
     self.discount = 0.7
-    self.epsilon = 0.05
+    self.epsilon = 0.1
     self.train_flag = True
     self.obs_radius = 0
     self.obs_object = ObservationObject(self.obs_radius, ["d_closest_coin_dir", 
                                                         "d_closest_crate_dir", 
                                                         "d_closest_safe_field_dir", 
+                                                        "d_best_bomb_dropping_dir",
                                                         "d4_is_safe_to_move_a_l",
                                                         "d4_is_safe_to_move_b_r", 
                                                         "d4_is_safe_to_move_c_u", 
@@ -158,6 +158,8 @@ def act(self):
                     self.last_q_ind.append(np.where((self.observation_db == obs).all(axis=1))[0][0])
     # self.logger.info(f'self.last_action_ind: {self.last_action_ind}')
     self.next_action = ['LEFT', 'RIGHT', 'UP', 'DOWN', 'WAIT', 'BOMB'][self.last_action_ind]
+    if s.turn_based:
+        self.next_action = self.game_state['user_input']
 
 def reward_update(self):
     """Called once per step to allow intermediate rewards based on game events.
@@ -236,7 +238,7 @@ def _getReward(obs_object, events, old_observation, logger):
     ismbr_feature_ind = obs_object.get_feature_index("d4_is_safe_to_move_b_r")
     ismcu_feature_ind = obs_object.get_feature_index("d4_is_safe_to_move_c_u")
     ismdd_feature_ind = obs_object.get_feature_index("d4_is_safe_to_move_d_d")
-    # logger.info(f'ISMAL: {ismal_feature_ind}')
+    bbdd_feature_ind = obs_object.get_feature_index("d_best_bomb_dropping_dir") 
     # logger.info(f'CCDIR: {ccdir_feature_ind}')
     if 0 in events: # Left
         if csfdir_feature_ind != None and old_observation[csfdir_feature_ind] == 0: reward += 800 # Reward when agent chooses direction safe field
@@ -293,8 +295,8 @@ def _getReward(obs_object, events, old_observation, logger):
     if 10 in events: reward += 0 # Coin found
     if 11 in events: reward += 500 # Coin collected
     if 12 in events: reward += 500 # Killed opponent
-    if 13 in events: reward -= 1000 # Killed self
-    if 14 in events: reward -= 0 # Got killed either by himself or by enemy
+    if 13 in events: reward -= 500 # Killed self
+    if 14 in events: reward -= 500 # Got killed either by himself or by enemy
     if 15 in events: reward -= 0 # Opponent eliminated
     if 16 in events: reward -= 0 # Survived round
         

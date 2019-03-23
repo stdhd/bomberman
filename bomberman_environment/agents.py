@@ -92,7 +92,7 @@ class AgentProcess(mp.Process):
                     self.wlogger.debug(f'Received event queue {self.fake_self.events}')
                     try:
                         if self.fake_self.game_state['step'] > 1:
-                            self.wlogger.info('Process intermediate rewards')
+                            # self.wlogger.info('Process intermediate rewards')
                             self.code.reward_update(self.fake_self)
                     except Exception as e:
                         self.wlogger.exception(f'Error in callback function: {e}')

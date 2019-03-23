@@ -24,7 +24,6 @@ Available Features:
         remaining_coins,
         closest_coin_old,
         d_closest_safe_field_dir
-        d_closest_safe_field_dirNEW
         d4_is_safe_to_move_a_l
         d4_is_safe_to_move_b_r
         d4_is_safe_to_move_c_u
@@ -83,7 +82,6 @@ class ObservationObject:
         "remaining_coins": "rcoins",
         "d_closest_safe_field_dir": "csfdir",
         "closest_coin_old": "cco",
-        "d_closest_safe_field_dirNEW" : "csfdirN",
         "d4_is_safe_to_move_a_l" : "ismal",
         "d4_is_safe_to_move_b_r": "ismbr",
         "d4_is_safe_to_move_c_u": "ismcu",
@@ -129,11 +127,9 @@ class ObservationObject:
         # get (4 x 17) matrix of events for this step
         self.arena = self._make_window(8, 8, 8)
         self.danger_map = self._get_threat_map()
-        if self.logger: 
-            # danger_ind = np.where(self.danger_map == True)
-            # danger_coords = np.vstack((danger_ind[0], danger_ind[1])).T
-            self.logger.info(f'DANGER MAP: {1*self.danger_map}')
-            self.logger.info(f'ARENA: {self.arena}')
+        # if self.logger: 
+            # self.logger.info(f'DANGER MAP: {1*self.danger_map}')
+            # self.logger.info(f'ARENA: {self.arena}')
 
 
     def reset_killed_players(self):
@@ -414,25 +410,36 @@ class ObservationObject:
             coordinate of first step towards closest target or towards tile closest to any target.
         """
         if len(targets) == 0: return None
+        # Check if it is safe to place a bomb at the current position. If not delete current position from targets.
+        bombs = np.copy(self.bomb_locs)
+        bombs[0] = x_y_to_index(start[0], start[1])
+        np.array([99,0,0,0])
+        safe_field_dir = self.d_closest_safe_field_dir(bombs)
+        if self.logger: self.logger.info(f'safe_field_dir wighted {safe_field_dir}')
+        if safe_field_dir == 6:
+            self.logger.info(f'Deleted: {targets[np.where((targets == np.array([start[0], start[1]])).all(axis=1))[0]]}')
+            current_pos_ind = np.where((targets == np.array([start[0], start[1]])).all(axis=1))[0]
+            if current_pos_ind.shape[0] != 0:
+                targets = np.delete(targets, current_pos_ind[0], axis=0)
+        if self.logger: self.logger.info(f'Targetts {targets}')
         frontier = [start]
         parent_dict = {start: start}
         dist_so_far = {start: 0}
         best = start
-        best_dist = (np.sum(np.abs(np.subtract(targets, start)), axis=1) / targets_weights).min()
-        targets_reachable = False
+        best_dist = (np.sum(np.abs(np.subtract(targets, start)), axis=1)).min()
+        best_candidates_with_bomb_value = {}
         while len(frontier) > 0:
             current = frontier.pop(0)
             # Find distance from current position to all targets, track closest
-            d = (np.sum(np.abs(np.subtract(targets, current)),
-                        axis=1) / targets_weights).min()  # fixme:  * targets_weights
+            d = (np.sum(np.abs(np.subtract(targets, current)), axis=1)).min()  # fixme:  * targets_weights
             if d + dist_so_far[current] <= best_dist:
                 best = current
                 best_dist = d + dist_so_far[current]
             if d == 0:
-                # Found path to a target's exact position, mission accomplished!
+                # Find all possible crate bombing positions
                 best = current
-                targets_reachable = True
-                break
+                cand_ind = np.where((targets == best).all(axis=1))[0][0]
+                best_candidates_with_bomb_value[best] = targets_weights[cand_ind]
             # Add unexplored free neighboring tiles to the queue in a random order
             x, y = current
             neighbors = [(x, y) for (x, y) in [(x + 1, y), (x - 1, y), (x, y + 1), (x, y - 1)] if free_space[x, y]]
@@ -443,10 +450,18 @@ class ObservationObject:
                     parent_dict[neighbor] = current
                     dist_so_far[neighbor] = dist_so_far[current] + 1
         if logger: logger.debug(f'Suitable target found at {best}')
-        if (not targets_reachable):
-            return None
+        max_value = 0
+        # Choose best crate bombing position by selecting max of bomb_value/(dist+1)
+        if len(best_candidates_with_bomb_value) == 0: return None
+        bomb_value_keys =  list(best_candidates_with_bomb_value.keys())      # Python 3; use keys = d.keys() in Python 2
+        shuffle(bomb_value_keys)
+        best_candidates_with_bomb_value_list = [(key, best_candidates_with_bomb_value[key]) for key in bomb_value_keys]
+        for cand in best_candidates_with_bomb_value_list:
+            cand_value = cand[1] / (dist_so_far[cand[0]] + 1) # Avoid dividing by 0
+            if cand_value > max_value:
+                max_value = cand_value
+                current = cand[0]
         # Determine the first step towards the best found target tile
-        current = best
         while True:
             if parent_dict[current] == start: return current
             current = parent_dict[current]
@@ -687,35 +702,16 @@ class ObservationObject:
         player = self.player
         return self._get_path_dir(self.player_locs[player.player_index], self.player_locs[player.closest_coin])
 
-    def d_closest_safe_field_dirNEW(self):
-        """
-        :return: Direction to take towards nearest field which is not threatened by bomb explosion
-        """
-        x, y = self.player.me_loc[0], self.player.me_loc[1]
 
-        # Is agent already within safe zone?
-        threat_map = self._get_threat_map()
-        bool = threat_map[x,y]
-        if not bool:
-            targets = np.where(threat_map)
-            target_coords = np.vstack((targets[0], targets[1])).T
-            free_space = np.copy(threat_map)
-            free_space[x, y] = True
-            best_step = self._look_for_targets(free_space, (x, y), target_coords, None)
-            if best_step == (x, y):
-                return 4
-            else:
-                temp = self._determine_direction(best_step,x,y)
-                return self._determine_direction(best_step,x,y)
-        return 4 # By default return 4: There is no explosion threatening current field
-
-    def _get_threat_map(self):
+    def _get_threat_map(self, arena_bool=None, bomb_locs=None):
         """
         :return: Boolean map: True for Free/Coin, False for Wall/Threatened/Crate
         """
-        arena_bool = (self.arena == 0) | (self.arena == 3)
-        arena_bool[self.player.me_loc[0], self.player.me_loc[1]] = True
-        for loc in self.bomb_locs:
+        if arena_bool is None:
+            arena_bool = (self.arena == 0) | (self.arena == 3) | (self.arena == 5)
+        if bomb_locs is None:
+            bomb_locs = self.bomb_locs
+        for loc in bomb_locs:
             if loc == 0:
                 continue
             tx,ty = index_to_x_y(loc)
@@ -738,54 +734,63 @@ class ObservationObject:
                 arena_bool[tx - (i + 1), ty] = False
         return arena_bool
 
-    def d_closest_safe_field_dir(self):
+    def d_closest_safe_field_dir(self, bomb_locs=None):
         """
         Direction to next safe field. If no field is found try again without considering explosions.
-        Bomb on arena: (16), 8, 4, 2
-        Bomb and enemy on arena: 80, 40, 20, 10
+        bomb_locs can be passed in for the case to check wheter a closest_safe_field is available for a special case
         """
+        danger_map = np.copy(self.danger_map)
         x, y = self.player.me_loc[0], self.player.me_loc[1]
+        
+        # TODO: Make functions more reusable so that this ugly piece of code disappears
+        if bomb_locs is None:
+            bomb_locs = self.bomb_locs
+        else: # Case when closest_safe_field_dir is called from _look_for_targets_weighted with virtual bomb
+            free_space = (self.arena == 0) | (self.arena == 3)
+            danger_map = self._get_threat_map(free_space, bomb_locs)
+            
+        
         # If there are no bombs on the field the direction should indicate this by turning off this feature (return 4)
         # if self.logger: self.logger.info(f'CHECK BOMBS: {self.bomb_locs, self.bomb_locs.any()}')
-        if (not self.bomb_locs.any()): 
+        if (not bomb_locs.any()): 
             # if self.logger: self.logger.info(f'NO BOMBS')
             return self._determine_direction(None, x, y)
-        arena = self.arena
         # If agent is not on danger zone indicate this by turning off feature (return 4)
-        if self.logger: self.logger.info(f'On Danger Map: {not self.danger_map[x, y]}')
-        if self.danger_map[x, y]:
+        # if self.logger: self.logger.info(f'On Danger Map: {not self.danger_map[x, y]}')
+        if danger_map[x, y]:
             # if self.logger: self.logger.info(f'NOT ON DANGER ZONE')
             return self._determine_direction(None, x, y)
-        free_space = (arena == 0) | (arena == 3)
-        free_space_ind = np.where(self.danger_map == True)
+        free_space = (self.arena == 0) | (self.arena == 3)
+        free_space_ind = np.where(danger_map == True)
         free_space_coords = np.vstack((free_space_ind[0], free_space_ind[1])).T
         best_step = self._look_for_targets_safe_field(free_space, (x, y), free_space_coords, None)
          # If not safe field is reachable search again with ignored explosion fields
         if best_step == 10:
             # Explosion convention: -1 * 3^(coin_is_present) * 2^(explosion timer if explosion timer is greater than 0)
-            free_space = (arena == 0) | (arena == 3) | (arena == -2) | (arena == -4) | (arena == -6) | (arena == -12)
+            free_space = (self.arena == 0) | (self.arena == 3) | (self.arena == -2) | (self.arena == -4) | (self.arena == -6) | (self.arena == -12)
             danger_map_without_explosions = np.copy(free_space)
-            for loc in self.bomb_locs:
-                if loc == 0:
-                    continue
-                tx,ty = index_to_x_y(loc)
-                danger_map_without_explosions[tx, ty] = False
-                for i in range(3):
-                    if arena[tx, ty + (i + 1)] == -1:
-                        break
-                    danger_map_without_explosions[tx, ty + (i + 1)] = False
-                for i in range(3):
-                    if arena[tx, ty - (i + 1)] == -1:
-                        break
-                    danger_map_without_explosions[tx, ty - (i + 1)] = False
-                for i in range(3):
-                    if arena[tx + (i + 1), ty] == -1:
-                        break
-                    danger_map_without_explosions[tx + (i + 1), ty] = False
-                for i in range(3):
-                    if arena[tx - (i + 1), ty] == -1:
-                        break
-                    danger_map_without_explosions[tx - (i + 1), ty] = False
+            danger_map_without_explosions = self._get_threat_map(danger_map_without_explosions, bomb_locs)
+            # for loc in bomb_locs:
+            #     if loc == 0:
+            #         continue
+            #     tx,ty = index_to_x_y(loc)
+            #     danger_map_without_explosions[tx, ty] = False
+            #     for i in range(3):
+            #         if self.arena[tx, ty + (i + 1)] == -1:
+            #             break
+            #         danger_map_without_explosions[tx, ty + (i + 1)] = False
+            #     for i in range(3):
+            #         if self.arena[tx, ty - (i + 1)] == -1:
+            #             break
+            #         danger_map_without_explosions[tx, ty - (i + 1)] = False
+            #     for i in range(3):
+            #         if self.arena[tx + (i + 1), ty] == -1:
+            #             break
+            #         danger_map_without_explosions[tx + (i + 1), ty] = False
+            #     for i in range(3):
+            #         if self.arena[tx - (i + 1), ty] == -1:
+            #             break
+            #         danger_map_without_explosions[tx - (i + 1), ty] = False
 
             free_space_ind = np.where(danger_map_without_explosions == True)
             free_space_coords = np.vstack((free_space_ind[0], free_space_ind[1])).T
@@ -793,7 +798,7 @@ class ObservationObject:
         # self.logger.info(f'XY_BOMBS: {np.vstack((x_bombs, y_bombs)).T}')
         # self.logger.info(f'Free Space Coords: {free_space_coords}')
         # self.logger.info(f'Self: {x, y}')
-        if self.logger: self.logger.info(f'Best_step: {best_step}')
+        # if self.logger: self.logger.info(f'Best_step: {best_step}')
         return self._determine_direction(best_step, x, y)
 
     def d4_is_safe_to_move_a_l(self):
@@ -918,9 +923,11 @@ class ObservationObject:
         # print(result)
 
         copied_arena[x, y] = 0
-        result_coords = np.where((result > 0) & ((copied_arena == 0) | (copied_arena == 3)))
-
+        if self.logger: self.logger.info(f'danger_map type: {type(self.danger_map)}')
+        if self.logger: self.logger.info(f'danger_map: {self.danger_map * 1}')
+        result_coords = np.where((result > 0) & ((copied_arena == 0) | (copied_arena == 3)) & (self.danger_map))
         stacked_result_coords = np.vstack(result_coords).T
+
         weights = np.zeros([result_coords[0].shape[0]])
         for i in range(result_coords[0].shape[0]):
             weights[i] = result[stacked_result_coords[i, 0], stacked_result_coords[i, 1]]
@@ -931,6 +938,9 @@ class ObservationObject:
         target_coords, weights = self._get_bomb_place_value_map()
         x, y = self.player.me_loc[0], self.player.me_loc[1]
         free_space = (self.arena == 0) | (self.arena == 3)
+        # if self.logger: 
+        #     self.logger.info(f'TARGET COORDS, WEIGHTS: {target_coords, weights}')
+        #     self.logger.info(f'arena: {self.arena}')
         free_space[x, y] = True
         best_field = self._look_for_targets_weighted(free_space, (x, y), target_coords, weights, None)
 

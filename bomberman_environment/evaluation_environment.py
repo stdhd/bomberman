@@ -104,7 +104,7 @@ class EvaluationEnvironment:
 
     def return_q_length(self, filepath):
 
-        files = [f for f in listdir(self.save_directory) if isfile(join(self.save_directory, f))]
+        files = [f for f in listdir(filepath) if isfile(join(filepath, f))]
 
         for file in files:
             if file[:2] == "q_":

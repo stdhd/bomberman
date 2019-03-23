@@ -168,7 +168,7 @@ def q_train_from_games_jakob(train_data, tables_logs_output_path, obs:Observatio
             np.save(tables_logs_output_path + '/q_table-' + filename, QTABLE)
             np.save(tables_logs_output_path + '/quantity-' + filename, QUANTITY)
 
-            filecount, steps_count = 0, 0
+            steps_count = 0
             current_trained_batch.clear()
 
         if stop:

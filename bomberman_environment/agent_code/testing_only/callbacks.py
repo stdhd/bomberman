@@ -127,7 +127,7 @@ def act(self):
         self.logger.debug(str(('LEFT', 'RIGHT', 'UP', 'DOWN', 'WAIT', 'BOMB')))
         self.last_action_ind = 4
         best_action_score = -10000
-        print("--------")
+        print("UNKNOWN OBSERVATION")
         # for i in range(6):
         #     try_obs = np.append(np.copy(observation), i)
         #     try_obs = try_obs[np.newaxis, :]

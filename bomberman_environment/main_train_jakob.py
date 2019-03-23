@@ -15,7 +15,7 @@ def main():
     os.chdir(os.path.dirname(__file__))
     cwd = os.getcwd()
 
-    obs = ObservationObject(1, ['d_closest_coin_dir',
+    obs = ObservationObject(0, ['d_closest_coin_dir',
                                 'd_closest_safe_field_dir',
                                 'me_has_bomb',
                                 'dead_end_detect',

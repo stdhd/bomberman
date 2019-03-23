@@ -35,7 +35,7 @@ Because run profiling in the initial course of our experimentations revealed tha
 This was initially a reasonable solution, but this was only due to the fact that we did not intend on using vision fields with a radius larger than 2, anyway. Because our working solutions always used radius 1, our Q Tables always converged to a size less than 1e5, which meant that we were able to train models "overnight" and didn't have to worry about time taken. 
 
 
-Compounding this was the psychological effect of finally seeing an agent do reasonable things: Because agents always started behaving in clever ways at about 5e4 steps trained with, which was achievable in about 45 minutes and at which point updating the Q Table was still rather fast, we were too thrilled with the quality of our solution (compared to the failures and mistakes that plagued our initial implementations) to think a step ahead and question how performance would be impacted at another order of magnitude of training data. In hindsight, we should have tried harder to make accessing the Q Table more efficient; because Q Table length convergence sets in relatively quickly for small radii, expanding the table is not the main source of trouble. But because np.where searches the entire table, even though we only seek 8 matches, this means that merely looking up existing entries in the course of training also requires superlinear effort, even with sublinear growth in table size. 
+Compounding this was the psychological effect of finally seeing an agent do reasonable things: Because agents always started behaving in clever ways at about 5e4 steps trained with, which was achievable in about 45 minutes and at which point updating the Q Table was still rather fast, we were too thrilled with the quality of our solution (compared to the failures and mistakes that plagued our initial implementations) to think a step ahead and question how performance would be impacted at another order of magnitude of training data. In hindsight, we should have tried harder to make accessing the Q Table more efficient; because Q Table length convergence sets in relatively quickly for small radii, expanding the table is not the main source of trouble. But because np.where searches the entire table even though we only seek 8 matches, this means that if table growth is approximately O(n^(1/2)), the effort of merely looking up existing entries over the course of training grows in O(n^(3/2)). 
 
 
 Because most states are seldomly visited and a small number of states are visited very often, table index caching would have been a great speed boost and would not have required sophisticated changes to our implementation. We could probably also have hashed all indices to grant constant-time access, but, because of the psychological errors described above, we didn't fully consider the importance of doing this early on and were too busy, by the end, to implement it. 
@@ -54,7 +54,7 @@ The approach we settled on was to evaluate the quality of an agent by playing it
 
 Evaluating in this way has the direct advantage that it tests for ability to maximize reward against test data that are very similar to training data. It should, in theory, demonstrate the gradual improvement of the agent on test data through training and demonstrate the asymptotic maximization of reward by the Q Learning algorithm. 
 
-To implement this evaluation framework, we wrote a script to alternatingly train from a set number of games and then run a suite of evaluations, noting the age of the model, the model's survival time against the simple agents, and the occurence of each event for our model in each game. 
+To implement this evaluation framework, we wrote a script to alternatingly train from a set number of games and then run a suite of evaluations, noting the age of the model at the time of evaluation, the model's survival time against the simple agents, and the occurence of each event for our model in each game. 
 
 We had written this script to support generating new training data through self-play, but encountered a mysterious and currently unexplained error which resulted in drastically slowed training speeds when alternating between training and evaluation, while leaving training speeds on the same data unaffected when calling the same function from a different script. This was disappointing and forced us to abandon large-scale training through self-play, but the framework was still useful in automating and systematizing the process of training and evaluating and agent from stored games.
 
@@ -77,7 +77,7 @@ There were two main approaches we considered for this task: Either using kernel 
 
 The advantage of the former is that it is better equipped, in principle, to deal with sparse Q Tables. If only certain actions have been tried often under a certain observation (for instance, those actions an epsilon simple agent does most often), then the other actions will not have been updated sufficiently to function as training data for learning the Q function. Regression gets around this by simply using only those actions which have been tried often enough to have a reliably correct Q value and be useful as training data. A classification algorithm would falter here, because one could not trust that it would know the correct arg max, since most of an observation's Q values have not converged, yet. 
 
-We implemented these constraints using a running record of update counts for our Q table. When applying regression, we used all entries above a certain threshold of updates as inputs. For applying classification, we demanded that all actions in a Q table entry had been tried a minimum number of times.
+We implemented these constraints using a running record of update counts for our Q table. When applying regression, we used all (observation, action) tuples above a certain threshold of updates, along with their associated Q(o, a) values, as training data. For applying classification, we demanded that all actions in an observation's Q table entry had been tried a minimum number of times before adding it to the training set.
 
 In practice, classification of the table's arg max significantly outperformed regression. It should be noted, though, that the team did not perform a very sophisticated analysis to discover the right hyperparameters of the kernel regression. We tried a few kernels and parameters and found the results disappointing. 
 
@@ -85,45 +85,6 @@ In practice, classification of the table's arg max significantly outperformed re
 ** Insert charts showing example agent's median rewards vs classification vs regression**. 
 
 
-Forcing the agent to use only classification/regression results in moderately and significantly worse performance, respectively. Keep in mind that these example data come from a 3x3 agent with 9 features. Performance of the classification algorithm would probably be comparatively dreadful if we used a Q table that had been updated so sparsely as to encounter unknown observations frequently. 
-
+Forcing the agent to use only classification/regression results in moderately and significantly worse performance, respectively. Keep in mind that these example data come from a well-trained 3x3 agent with 9 features. Performance of the classification algorithm would probably be comparatively dreadful if we used a Q table that had been updated so sparsely as to encounter unknown observations frequently, as would be the case for larger vision radii. 
 
 In short, only classification worked passably, and even then it only worked in those cases where training was mature enough for classification to no longer be necessary. 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-

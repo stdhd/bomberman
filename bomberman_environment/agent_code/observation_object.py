@@ -415,13 +415,13 @@ class ObservationObject:
         bombs[0] = x_y_to_index(start[0], start[1])
         np.array([99,0,0,0])
         safe_field_dir = self.d_closest_safe_field_dir(bombs)
-        if self.logger: self.logger.info(f'safe_field_dir wighted {safe_field_dir}')
+        # if self.logger: self.logger.info(f'safe_field_dir wighted {safe_field_dir}')
         if safe_field_dir == 6:
             # self.logger.info(f'Deleted: {targets[np.where((targets == np.array([start[0], start[1]])).all(axis=1))[0]]}')
             current_pos_ind = np.where((targets == np.array([start[0], start[1]])).all(axis=1))[0]
             if current_pos_ind.shape[0] != 0:
                 targets = np.delete(targets, current_pos_ind[0], axis=0)
-        if self.logger: self.logger.info(f'Targetts {targets}')
+        # if self.logger: self.logger.info(f'Targetts {targets}')
         frontier = [start]
         parent_dict = {start: start}
         dist_so_far = {start: 0}
@@ -573,12 +573,20 @@ class ObservationObject:
 
         # remove myself from arena
         arena[x, y] = 0
-
-        enemy_ind = np.where(arena == 5)
-        enemy_coords = np.vstack((enemy_ind[0], enemy_ind[1])).T
-        free_space = (arena == 0) | (arena == 3)
-        best_step = self._look_for_targets(free_space, (x, y), enemy_coords, None)
-        return self._determine_direction(best_step, x, y)
+        # Switch feature on when there are less than 11 crates on the field
+        if np.sum(arena == 1) < 11:
+            # enemy_ind = np.where((arena == 5) | (arena == 80) | (arena == 40) | (arena == 20) | (arena == 10))
+            # enemy_coords = np.vstack((enemy_ind[0], enemy_ind[1])).T
+            if self.logger: self.logger.info(f'ENEMY: {self.player.foes}')
+            free_space = (arena == 0) | (arena == 3)
+            enemy_coords = []
+            for enemy in self.player.foes:
+                enemy_coords.append([*index_to_x_y(enemy)])
+            if self.logger: self.logger.info(f'ENEMY targets: {enemy_coords}')
+            best_step = self._look_for_targets(free_space, (x, y), np.array(enemy_coords), None)
+            return self._determine_direction(best_step, x, y)
+        else:
+            return self._determine_direction(None, x, y)
 
     def d_closest_crate_dir(self):
         """
@@ -923,8 +931,8 @@ class ObservationObject:
         # print(result)
 
         copied_arena[x, y] = 0
-        if self.logger: self.logger.info(f'danger_map type: {type(self.danger_map)}')
-        if self.logger: self.logger.info(f'danger_map: {self.danger_map * 1}')
+        # if self.logger: self.logger.info(f'danger_map type: {type(self.danger_map)}')
+        # if self.logger: self.logger.info(f'danger_map: {self.danger_map * 1}')
         result_coords = np.where((result > 0) & ((copied_arena == 0) | (copied_arena == 3)) & (self.danger_map))
         stacked_result_coords = np.vstack(result_coords).T
 
@@ -935,16 +943,19 @@ class ObservationObject:
         return stacked_result_coords, weights
 
     def d_best_bomb_dropping_dir(self):
-        target_coords, weights = self._get_bomb_place_value_map()
         x, y = self.player.me_loc[0], self.player.me_loc[1]
-        free_space = (self.arena == 0) | (self.arena == 3)
-        # if self.logger: 
-        #     self.logger.info(f'TARGET COORDS, WEIGHTS: {target_coords, weights}')
-        #     self.logger.info(f'arena: {self.arena}')
-        free_space[x, y] = True
-        best_field = self._look_for_targets_weighted(free_space, (x, y), target_coords, weights, None)
-
-        return self._determine_direction(best_field, x, y)
+        # Switch off when 10 or less crates are on the field
+        if np.sum(self.arena == 1) > 10:
+            target_coords, weights = self._get_bomb_place_value_map()
+            free_space = (self.arena == 0) | (self.arena == 3)
+            # if self.logger: 
+            #     self.logger.info(f'TARGET COORDS, WEIGHTS: {target_coords, weights}')
+            #     self.logger.info(f'arena: {self.arena}')
+            free_space[x, y] = True
+            best_step = self._look_for_targets_weighted(free_space, (x, y), target_coords, weights, None)
+            return self._determine_direction(best_step, x, y)
+        else:
+            return self._determine_direction(None, x, y)
 
 
     def _name_player_events(self):

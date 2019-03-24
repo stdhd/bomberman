@@ -33,7 +33,7 @@ def setup(self):
 
     self.clf = None
 
-    # with open("data/qtables/"+self.obs_object.get_file_name_string()+"/dt.p", "rb") as f:
+    # with open("data/qtables/" + self.obs_object.get_file_name_string() + "/dt.p", "rb") as f:
     #     self.clf = pickle.load(f)  # FIXME load regression model
 
     self.FORCE_REGRESSION = False  # FIXME

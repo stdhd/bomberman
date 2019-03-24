@@ -423,7 +423,11 @@ class ObservationObject:
         safe_field_dir = self.d_closest_safe_field_dir(bombs)
         # if self.logger: self.logger.info(f'safe_field_dir wighted {safe_field_dir}')
         if safe_field_dir == 6:
+
+            if self.logger: self.logger.info(f'Deleted: {targets[np.where((targets == np.array([start[0], start[1]])).all(axis=1))[0]]}')
+
             # self.logger.info(f'Deleted: {targets[np.where((targets == np.array([start[0], start[1]])).all(axis=1))[0]]}')
+
             current_pos_ind = np.where((targets == np.array([start[0], start[1]])).all(axis=1))[0]
             if current_pos_ind.shape[0] != 0:
                 targets = np.delete(targets, current_pos_ind[0], axis=0)

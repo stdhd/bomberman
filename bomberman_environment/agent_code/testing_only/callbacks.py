@@ -28,8 +28,7 @@ def setup(self):
                                 'd4_is_safe_to_move_c_u',
                                 'd4_is_safe_to_move_d_d',
                                 'd_best_bomb_dropping_dir',
-                                #'d_closest_enemy_dir'
-                                #'d_closest_crate_dir',
+                                'd_closest_enemy_dir'
                                 ], None)
 
     self.clf = None
@@ -107,18 +106,6 @@ def act(self):
         self.last_action_ind = np.random.choice(
             np.flatnonzero(self.q_table[observation_ind[0]] == self.q_table[observation_ind[0]].max()))
 
-        # Deadlock detection:
-        self.last_visited = np.append(self.last_visited, np.array([[x, y]]),axis=0)
-
-        if (self.last_visited[-1] == self.last_visited[-3]).all() and (self.last_visited[-2] == self.last_visited[-4]).all() \
-                and (self.last_visited[-1] != self.last_visited[-2]).all():
-            alternatives = np.argsort(self.q_table[observation_ind[0]])
-            self.logger.info("DEADLOCK DETECTED. DO " + str(self.repeated_deadlock) + " BEST ALTERNATIVE NOW")
-            print("DEADLOCK DETECTED. DO " + str(self.repeated_deadlock) + " BEST ALTERNATIVE NOW")
-            self.repeated_deadlock += 1
-            self.last_action_ind = alternatives[-np.min(np.array([self.repeated_deadlock, 4]))]
-        else:
-            self.repeated_deadlock = 1
 
     # If test mode and observation_db has no entry
     else:
@@ -129,7 +116,7 @@ def act(self):
         self.logger.debug(str(('LEFT', 'RIGHT', 'UP', 'DOWN', 'WAIT', 'BOMB')))
         self.last_action_ind = 4
         best_action_score = -10000
-        print("--------")
+        print("UNKNOWN OBSERVATION")
         # for i in range(6):
         #     try_obs = np.append(np.copy(observation), i)
         #     try_obs = try_obs[np.newaxis, :]
@@ -143,6 +130,28 @@ def act(self):
         try_obs = np.copy(observation)[np.newaxis, :]
         self.last_action_ind = self.clf.predict(try_obs)[0]
         print("Chose action", self.last_action_ind)
+
+    # Deadlock detection:
+    self.last_visited = np.append(self.last_visited, np.array([[x, y]]), axis=0)
+    if (self.last_visited[-1] == self.last_visited[-3]).all() and (
+            self.last_visited[-2] == self.last_visited[-4]).all() \
+            and (self.last_visited[-1] != self.last_visited[-2]).all():
+
+        # Case: Q Table has entry for observation
+        if observation_ind.shape[0] != 0:
+            self.logger.info("DEADLOCK DETECTED. DO " + str(self.repeated_deadlock) + " BEST ALTERNATIVE NOW")
+            print("DEADLOCK DETECTED. DO " + str(self.repeated_deadlock) + " BEST ALTERNATIVE NOW")
+            alternatives = np.argsort(self.q_table[observation_ind[0]])
+            self.last_action_ind = alternatives[-np.min(np.array([self.repeated_deadlock, 3]))]
+
+        # Case: No Q Table entry, so random action is chosen
+        else:
+            self.last_action_ind = np.random.choice(np.array([[0, 1, 2, 3]]))
+        self.repeated_deadlock += 1
+
+    # Case: No deadlock -> reset
+    else:
+        self.repeated_deadlock = 1
 
     self.next_action = ['LEFT', 'RIGHT', 'UP', 'DOWN', 'WAIT', 'BOMB'][self.last_action_ind]
     self.logger.info("Next action: " + self.next_action)

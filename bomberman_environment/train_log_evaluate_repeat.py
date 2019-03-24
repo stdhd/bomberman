@@ -11,7 +11,7 @@ from settings import s
 from settings_agent_evaluation import s as sae_s
 
 
-def main(data_path='data/games/four_players_esa_0_2_cratedens_0_75', train_iterations = 20, train_batch_size = 10): # ='data/games/four_players_esa_0_2_cratedens_0_75/'):
+def main(data_path='data/games/four_players_esa_0_2_cratedens_0_75', train_iterations = 40, train_batch_size = 10): # ='data/games/four_players_esa_0_2_cratedens_0_75/'):
     """
     Train an agent from the ground up and evaluate their performance every few games.
     Saves all files in a subdirectory of the agent's folder.
@@ -24,10 +24,10 @@ def main(data_path='data/games/four_players_esa_0_2_cratedens_0_75', train_itera
     :return:
     """
 
-    obs = ObservationObject(1, ['d_closest_coin_dir',
+    obs = ObservationObject(0, ['d_closest_coin_dir',
                                 'd_closest_safe_field_dir',
-                                #'d_best_bomb_dropping_dir',
-                                'd_closest_crate_dir',
+                                'd_best_bomb_dropping_dir',
+                                #'d_closest_crate_dir',
                                 'me_has_bomb',
                                 'd4_is_safe_to_move_a_l',
                                 'd4_is_safe_to_move_b_r',

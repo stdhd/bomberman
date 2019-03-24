@@ -13,7 +13,33 @@ def main():
     :return:
     """
 
-    obs = ObservationObject(1, ['d_closest_coin_dir',
+    obs0 = ObservationObject(0, ['d_closest_coin_dir',
+                                'd_closest_safe_field_dir',
+                                'd_best_bomb_dropping_dir',
+                                'me_has_bomb',
+                                'd4_is_safe_to_move_a_l',
+                                'd4_is_safe_to_move_b_r',
+                                'd4_is_safe_to_move_c_u',
+                                'd4_is_safe_to_move_d_d',
+                                'dead_end_detect',
+                                #'d_closest_crate_dir',
+                                #'d_closest_enemy_dir'
+                                ], None)
+
+    obs1 = ObservationObject(1, ['d_closest_coin_dir',
+                                'd_closest_safe_field_dir',
+                                'd_best_bomb_dropping_dir',
+                                'me_has_bomb',
+                                'd4_is_safe_to_move_a_l',
+                                'd4_is_safe_to_move_b_r',
+                                'd4_is_safe_to_move_c_u',
+                                'd4_is_safe_to_move_d_d',
+                                'dead_end_detect',
+                                # 'd_closest_crate_dir',
+                                'd_closest_enemy_dir'
+                                ], None)
+
+    obs3 = ObservationObject(3, ['d_closest_coin_dir',
                                 'd_closest_safe_field_dir',
                                 #'d_best_bomb_dropping_dir',
                                 'me_has_bomb',
@@ -21,26 +47,39 @@ def main():
                                 'd4_is_safe_to_move_b_r',
                                 'd4_is_safe_to_move_c_u',
                                 'd4_is_safe_to_move_d_d',
-                                'dead_end_detect',
-                                'd_closest_crate_dir'
+                                #'dead_end_detect',
+                                # 'd_closest_crate_dir',
+                                #'d_closest_enemy_dir'
                                 ], None)
 
-    filepath = "data/qtables/" + obs.get_file_name_string()+"/"
+    obss = [obs0, obs1, obs3]
+    feats = [(0, 6, 3), (1, 6, 4), (3, 5, 2)]
 
-    db = view_db(filepath+"observation-"+obs.get_file_name_string()+".npy")
+    for ind, obs in enumerate(obss):
 
-    set_progress_chart(filepath)
+        filepath = "data/qtables/" + obs.get_file_name_string()+"/"
 
-    plt.xlabel("Number of steps seen")
-    plt.ylabel("Length of Q Table")
+        # db = view_db(filepath+"observation-"+obs.get_file_name_string()+".npy")
 
-    plt.show()
+        set_progress_chart(filepath)
 
-    set_quantities_histogram(filepath + "quantity-" + obs.get_file_name_string() + ".npy")
-    plt.xlabel("Observation frequency")
-    plt.ylabel("Count")
+        radius, binary, dir = feats[ind]
 
-    plt.show()
+        title = "Radius "+str(radius) + " with " + str(binary) + " binary features and " + str(dir) + \
+                " directional features"
+
+        plt.title(title)
+        plt.xlabel("Number of steps seen")
+        plt.ylabel("Length of Q Table")
+
+        plt.show()
+
+        plt.title(title)
+        set_quantities_histogram(filepath + "quantity-" + obs.get_file_name_string() + ".npy")
+        plt.xlabel("Observation frequency")
+        plt.ylabel("Count")
+
+        plt.show()
 
 def view_db(filepath:str):
     """

@@ -9,7 +9,7 @@ from evaluation_environment import EvaluationEnvironment
 
 def main():
     env = EvaluationEnvironment(["testing_only"], "data/games/SELFPLAYr1_ismal_ismbr_ismcu_ismdd_ccdir_ccrdir_csfdir_ded_mhb/ITERATION_1")
-    # env.run_trials(add_folder=True)
+    env.run_trials(add_folder=True)
     _, _, events_path, durations_path = env.analyze_games()
 
     events = np.load(events_path)
@@ -17,7 +17,7 @@ def main():
 
     rewards = [np.sum(player_events * event_rewards ) for player_events in events]
 
-    ret = env.get_rewards_progress("data/qtables/r1_ismal_ismbr_ismcu_ismdd_ccdir_ccrdir_csfdir_ded_mhb/evaluategames2019-03-23 16-39-55")
+    ret = env.get_rewards_progress("data/qtables/r0_ismal_ismbr_ismcu_ismdd_bbdd_ccdir_csfdir_ded_mhb/evaluategames2019-03-24 01-17-40")
 
     plt.plot(ret[:, 0], ret[:, 2])
 

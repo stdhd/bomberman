@@ -575,7 +575,6 @@ class ObservationObject:
         arena[x, y] = 0
         # Switch feature on when there are less than 11 crates on the field
         if np.sum(arena == 1) < 11:
-            # enemy_ind = np.where((arena == 5) | (arena == 80) | (arena == 40) | (arena == 20) | (arena == 10))
             # enemy_coords = np.vstack((enemy_ind[0], enemy_ind[1])).T
             if self.logger: self.logger.info(f'ENEMY: {self.player.foes}')
             free_space = (arena == 0) | (arena == 3)
@@ -772,7 +771,7 @@ class ObservationObject:
         free_space_ind = np.where(danger_map == True)
         free_space_coords = np.vstack((free_space_ind[0], free_space_ind[1])).T
         best_step = self._look_for_targets_safe_field(free_space, (x, y), free_space_coords, None)
-         # If not safe field is reachable search again with ignored explosion fields
+         # If no safe field is reachable search again with ignored explosion fields
         if best_step == 10:
             # Explosion convention: -1 * 3^(coin_is_present) * 2^(explosion timer if explosion timer is greater than 0)
             free_space = (self.arena == 0) | (self.arena == 3) | (self.arena == -2) | (self.arena == -4) | (self.arena == -6) | (self.arena == -12)

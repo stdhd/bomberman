@@ -17,23 +17,23 @@ def setup(self):
     You can also use the self.logger object at any time to write to the log
     file for debugging (see https://docs.python.org/3.7/library/logging.html).
     """
-    self.learning_rate = 0.4
+    self.learning_rate = 0.7
     self.discount = 0.7
-    self.epsilon = 0.05
+    self.epsilon = 0.4
     self.train_flag = True
-    self.obs_radius = 0
-    self.obs_object = ObservationObject(self.obs_radius, [
-                                                        "d_closest_enemy_dir",
-                                                        # "d_closest_coin_dir", 
-                                                        # "d_closest_safe_field_dir", 
-                                                        "d_best_bomb_dropping_dir"
-                                                        # "dead_end_detect",
-                                                        # "d4_is_safe_to_move_a_l",
-                                                        # "d4_is_safe_to_move_b_r", 
-                                                        # "d4_is_safe_to_move_c_u", 
-                                                        # "d4_is_safe_to_move_d_d", 
-                                                        # "me_has_bomb"
-                                                        ], self.logger)
+    self.obs_radius = 1
+    self.parameter_change_border = 50
+    self.obs_object = ObservationObject(self.obs_radius, ['d_closest_coin_dir',
+                                                    'd_closest_safe_field_dir',
+                                                    'me_has_bomb',
+                                                    'dead_end_detect',
+                                                    'd4_is_safe_to_move_a_l',
+                                                    'd4_is_safe_to_move_b_r',
+                                                    'd4_is_safe_to_move_c_u',
+                                                    'd4_is_safe_to_move_d_d',
+                                                    'd_best_bomb_dropping_dir',
+                                                    'd_closest_enemy_dir'
+                                                    ], None)
     # Used for plotting
     self.total_steps_over_episodes = 0
     self.total_deaths_over_episodes = 0
@@ -115,15 +115,15 @@ def act(self):
                                                         self.obs_object.get_direction_sensitivity())
         self.last_observations = observations
         self.last_q_ind = []
-        self.logger.info(f'BOMBS: {bombs}')
-        self.logger.info(f'self: {[x, y]}')
-        self.logger.info(f'Observation: {observation}')
+        # self.logger.info(f'BOMBS: {bombs}')
+        # self.logger.info(f'self: {[x, y]}')
+        # self.logger.info(f'Observation: {observation}')
         # self.logger.info(f'OBSERVATIONS: {observations}')
 
         # Choose random action and if current observation is unknown add it and its rotations to observation_db
         if self.epsilon > np.random.uniform(0,1):
             self.last_action_ind = np.random.randint(0,6)
-            self.logger.info(f'RANDOM EPSILON')
+            # self.logger.info(f'RANDOM EPSILON')
             # self.logger.info(f'RANDOM ACTION: {observation_ind.shape[0]}')
             if observation_ind.shape[0] == 0:
                 # observations = np.unique(observations, axis=0)
@@ -142,7 +142,7 @@ def act(self):
             # If observation is unknown it and its rotations have to be added to observation_db and a random action is chosen.
             if observation_ind.shape[0] == 0:
                 self.last_action_ind = np.random.randint(0,6)
-                self.logger.info(f'RANDOM UNKNOWN')
+                # self.logger.info(f'RANDOM UNKNOWN')
                 # observations, indices = np.unique(observations, axis=0, return_index=True)
                 for obs in observations: 
                     obs_ind = np.where((self.observation_db == obs).all(axis=1))[0]
@@ -189,7 +189,7 @@ def reward_update(self):
     # self.logger.info(f'Q-TABLE BEFORE: {self.q_table[self.last_q_ind[7]]}')
     # event_to_qtable_action_ind = np.array([2,3,0,1,4,5])
     reward = _getReward(self.obs_object, self.events, self.last_observation, self.logger)
-    self.logger.info(f'REWARD: {reward}')
+    # self.logger.info(f'REWARD: {reward}')
     for ind, rotation in enumerate(self.last_action_rotations):
         # self.logger.info(f'last_action_rotations: {self.last_action_rotations}')
         # self.logger.info(f'last_action_ind : {self.last_action_ind}')
@@ -229,7 +229,10 @@ def end_of_episode(self):
     self.total_steps_over_episodes += self.game_state['step']
     if 13 in self.events or 14 in self.events: self.total_deaths_over_episodes += 1
     self.number_of_episode += 1
-    if self.number_of_episode % 50 == 0: 
+    if self.number_of_episode % self.parameter_change_border == 0: 
+        self.epsilon = self.epsilon * 0.9
+        if self.learning_rate > 0.4: self.learning_rate = self.learning_rate * 0.95
+        self.logger.info(f'EPSILON: {self.epsilon}')
         self.logger.info(f'Episode number, Total Steps and Deaths: {self.number_of_episode, self.total_steps_over_episodes, self.total_deaths_over_episodes}')
         self.total_steps_over_episodes, self.total_deaths_over_episodes = 0, 0
 

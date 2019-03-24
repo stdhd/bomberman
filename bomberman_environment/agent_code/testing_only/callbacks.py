@@ -19,7 +19,7 @@ def setup(self):
     """
     # self.logger.setLevel("DEBUG")
     self.train_flag = False
-    self.obs_object = ObservationObject(1, ['d_closest_coin_dir',
+    self.obs_object = ObservationObject(0, ['d_closest_coin_dir',
                                 'd_closest_safe_field_dir',
                                 'me_has_bomb',
                                 'dead_end_detect',
@@ -28,12 +28,13 @@ def setup(self):
                                 'd4_is_safe_to_move_c_u',
                                 'd4_is_safe_to_move_d_d',
                                 'd_best_bomb_dropping_dir',
+                                #'d_closest_enemy_dir'
                                 #'d_closest_crate_dir',
                                 ], None)
 
     self.clf = None
 
-    # with open("data/qtables/"+self.obs_object.get_file_name_string()+"/dt.p", "rb") as f:
+    # with open("data/qtables/" + self.obs_object.get_file_name_string() + "/dt.p", "rb") as f:
     #     self.clf = pickle.load(f)  # FIXME load regression model
 
     self.FORCE_REGRESSION = False  # FIXME

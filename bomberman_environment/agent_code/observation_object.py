@@ -198,10 +198,9 @@ class ObservationObject:
 
         for ind, bomb_loc in enumerate(self.bomb_locs):  # bombs have precedence over explosions and players
             if bomb_loc > 0:
-                if self.bomb_timers[ind] <= 0:  # FIXME bomb timer 0 => explosion
-                    self.set_window(window, bomb_loc, center_x, center_y, radius_custom, -4)
-                elif self.bomb_timers[ind] == 1:
-                    self.set_window(window, bomb_loc, center_x, center_y, radius_custom, 2)
+                if self.bomb_timers[ind] <= 1:
+                    self.set_window(window, bomb_loc, center_x, center_y, radius_custom, 2)  # FIXME revert change
+                    # FIXME bombs with 1 or 0 now indicate 2
                 else:
                     self.set_window(window, bomb_loc, center_x, center_y, radius_custom, 4)
 

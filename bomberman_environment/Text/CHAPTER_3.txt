@@ -13,7 +13,7 @@ Training our agents generally takes place in two stages: First, one creates trai
 Both the time taken to save a game and the time taken to train from a stored file depend on the step count of the game and the length of the Q Table; on a standard-issue laptop, training a long (> 250 steps) game for a short Q Table takes about 3-4 seconds, which can grow to around 20 seconds as the Q Table converges to its full size (around 8e4 entries for an agent like the one submitted). Playing and saving a game usually takes about 3 seconds.
 
 
-**Insert graphics here - Radius 3 growth vs. growth of final model**
+**Hier in dieser Reihenfolge nebeneinander aufgereiht: r0qtablecurve, r1qtablecurve, r3qtablecurve **
 
 
 
@@ -37,6 +37,8 @@ This was initially a reasonable solution, but this was only due to the fact that
 
 Compounding this was the psychological effect of finally seeing an agent do reasonable things: Because agents always started behaving in clever ways at about 5e4 steps trained with, which was achievable in about 45 minutes and at which point updating the Q Table was still rather fast, we were too thrilled with the quality of our solution (compared to the failures and mistakes that plagued our initial implementations) to think a step ahead and question how performance would be impacted at another order of magnitude of training data. In hindsight, we should have tried harder to make accessing the Q Table more efficient; because Q Table length convergence sets in relatively quickly for small radii, expanding the table is not the main source of trouble. But because np.where searches the entire table even though we only seek 8 matches, this means that if table growth is approximately O(n^(1/2)), the effort of merely looking up existing entries over the course of training grows in O(n^(3/2)). 
 
+
+** Insert obsfreqdist here **
 
 Because most states are seldomly visited and a small number of states are visited very often, table index caching would have been a great speed boost and would not have required sophisticated changes to our implementation. We could probably also have hashed all indices to grant constant-time access, but, because of the psychological errors described above, we didn't fully consider the importance of doing this early on and were too busy, by the end, to implement it. 
 
@@ -85,7 +87,7 @@ In practice, classification of the table's arg max significantly outperformed re
 ** Insert charts showing example agent's median rewards vs classification vs regression**. 
 
 
-Forcing the agent to make decisions using only classification/regression results in moderately and significantly worse performance, respectively. Keep in mind that these example data come from a well-trained 3x3 agent with 9 features. Performance of regression/classification would probably be comparatively dreadful if we had trained from a Q table that had been updated so sparsely as to encounter unknown observations frequently, as would be the case for larger vision radii. 
+Forcing the agent to make decisions using only classification/regression results in moderately and significantly worse performance, respectively. Keep in mind that these example data come from a well-trained **3x3 agent with 9 features**. Performance of regression/classification would probably be comparatively dreadful if we had trained from a Q table that had been updated so sparsely as to encounter unknown observations frequently, as would be the case for larger vision radii. 
 
 In short, only classification worked as a passable substitute for the Q table, and even then it only worked in those cases where training was mature enough for classification to no longer be necessary. 
 

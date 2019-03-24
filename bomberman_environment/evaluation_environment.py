@@ -45,7 +45,7 @@ class EvaluationEnvironment:
         Analyze all games in a directory and save a new .json summary file there.
         :param destroy_data: If True, delete games after analysis
         :param print_steps_trained_with: If not None, print the current number of steps the model has trained with.
-        :return:
+        :return: event_count_by_game, game_durations, events_path, durations_path
         """
         files = [f for f in listdir(self.save_directory) if isfile(join(self.save_directory, f))]
 

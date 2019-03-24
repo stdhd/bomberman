@@ -2,6 +2,7 @@
 import json
 import numpy as np
 from state_functions.rewards import event_rewards
+import matplotlib.pyplot as plt
 
 from evaluation_environment import EvaluationEnvironment
 
@@ -15,6 +16,13 @@ def main():
     durations = np.load(durations_path)
 
     rewards = [np.sum(player_events * event_rewards ) for player_events in events]
+
+    ret = env.get_rewards_progress("data/qtables/r1_ismal_ismbr_ismcu_ismdd_ccdir_ccrdir_csfdir_ded_mhb/evaluategames2019-03-23 16-39-55")
+
+    plt.plot(ret[:, 0], ret[:, 2])
+
+    plt.show()
+
     print()
 
 

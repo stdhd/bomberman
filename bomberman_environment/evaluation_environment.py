@@ -136,20 +136,18 @@ class EvaluationEnvironment:
         for dir in subdirs:
 
             stepcount_file = dir + "/" + "current_steps.json"
-            events_file = dir + "/" + "events.json"
-            durations_file = dir + "/" + "durations.json"
+            events_file = dir + "/" + "events.npy"
+            durations_file = dir + "/" + "durations.npy"
 
             with open(stepcount_file, 'r') as f:
                 steps_trained = json.load(f)
 
-            with open(events_file, 'r') as f:
-                events = json.load(f)
+            events = np.load(events_file)
 
-            with open(durations_file, 'r') as f:
-                durations = json.load(f)
+            durations = np.load(durations_file)
 
             median_rewards = np.median(np.array([np.sum(player_events * event_rewards) for player_events in events]))
-            median_durations = np.median(np.array(durations))
+            median_durations = np.median(durations)
 
             ret.append(np.array([steps_trained, median_durations, median_rewards]))
 

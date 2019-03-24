@@ -1,4 +1,7 @@
 
+from datetime import datetime
+import datetime
+from time import time
 
 from Q.Oktett_Training import q_train_from_games_jakob
 from agent_code.observation_object import ObservationObject
@@ -23,7 +26,8 @@ def main(data_path='data/games/four_players_esa_0_2_cratedens_0_75', train_itera
 
     obs = ObservationObject(1, ['d_closest_coin_dir',
                                 'd_closest_safe_field_dir',
-                                'd_best_bomb_dropping_dir',
+                                #'d_best_bomb_dropping_dir',
+                                'd_closest_crate_dir',
                                 'me_has_bomb',
                                 'd4_is_safe_to_move_a_l',
                                 'd4_is_safe_to_move_b_r',
@@ -39,7 +43,9 @@ def main(data_path='data/games/four_players_esa_0_2_cratedens_0_75', train_itera
         create_data = False
         _data_path = None
 
-    evaluation_data_path = 'data/qtables/' + obs.get_file_name_string() + "/evaluategames"  # where to put the evaluation games
+    evaluation_data_path = 'data/qtables/' + obs.get_file_name_string() + "/evaluategames" + datetime.datetime.fromtimestamp(time()).strftime('%Y-%m-%d %H-%M-%S')
+
+    # where to put the evaluation games
 
     for i in range(train_iterations):
 
@@ -79,7 +85,7 @@ def main(data_path='data/games/four_players_esa_0_2_cratedens_0_75', train_itera
 
             env.run_trials()
 
-            env.analyze_games(destroy_data=False, print_q_length=q_table_loc)  # save an analysis in iter_output,
+            env.analyze_games(destroy_data=False, print_steps_trained_with=q_table_loc)  # save an analysis in iter_output,
             #  including q Table length
 
 

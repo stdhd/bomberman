@@ -23,7 +23,8 @@ def main():
                                 'd4_is_safe_to_move_b_r',
                                 'd4_is_safe_to_move_c_u',
                                 'd4_is_safe_to_move_d_d',
-                                'd_best_bomb_dropping_dir'
+                                #'d_best_bomb_dropping_dir',
+                                'd_closest_crate_dir'
                                 ], None)
 
     write_path = 'data/qtables/' + obs.get_file_name_string()

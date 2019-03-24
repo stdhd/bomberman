@@ -52,7 +52,10 @@ class ObservationObject:
 
         self.window_size = (2 * radius + 1)
         self.NUM_FEATURES = len(self.features)
-        self.obs_length = self.window_size ** 2 + self.NUM_FEATURES
+        if radius == -1:
+            self.obs_length = self.NUM_FEATURES
+        else:
+            self.obs_length = self.window_size ** 2 + self.NUM_FEATURES
 
         self.state, self.board, self.player_locs, self.coin_locs, self.player_distance_matrix = None, None, None, None, None
 
@@ -153,7 +156,10 @@ class ObservationObject:
         features = self._get_features(AGENTS)  # find features for all agents
         for count, player_index in enumerate(AGENTS):  # construct the window for all agents
             player_x, player_y = index_to_x_y(self.player_locs[int(player_index)])
-            window = self._make_window(radius, player_x, player_y)
+            if self.radius == -1:
+                window = np.array([])
+            else:
+                window = self._make_window(radius, player_x, player_y)
             observations[count] = np.concatenate((window.flatten(), features[count]))  # concatenate window and features
         return observations
 

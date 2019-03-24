@@ -30,6 +30,7 @@ Available Features:
         d4_is_safe_to_move_d_d
         d_closest_enemy_dir
         d_best_bomb_dropping_dir
+        enemy_in_bomb_area
 """
 
 
@@ -90,8 +91,8 @@ class ObservationObject:
         "d4_is_safe_to_move_c_u": "ismcu",
         "d4_is_safe_to_move_d_d": "ismdd",
         "d_closest_enemy_dir": "ced",
-        "d_best_bomb_dropping_dir":"bbdd"
-
+        "d_best_bomb_dropping_dir":"bbdd",
+        "enemy_in_bomb_area":"eiba"
         }
 
     def set_state(self, state):
@@ -130,6 +131,7 @@ class ObservationObject:
         # get (4 x 17) matrix of events for this step
         self.arena = self._make_window(8, 8, 8)
         self.danger_map = self._get_threat_map()
+        self.number_of_remaining_crates = np.sum(self.arena == 1)
         # if self.logger: 
             # self.logger.info(f'DANGER MAP: {1*self.danger_map}')
             # self.logger.info(f'ARENA: {self.arena}')
@@ -165,7 +167,10 @@ class ObservationObject:
 
     def get_feature_index(self, feature_name):
         try:
-            return self.features.index(feature_name) + 2 * self.radius + 1
+            if radius == -1:
+                return self.features.index(feature_name)
+            else:
+                return self.features.index(feature_name) + 2 * self.radius + 1
         except Exception as e:
             return None
 
@@ -595,14 +600,14 @@ class ObservationObject:
         # remove myself from arena
         arena[x, y] = 0
         # Switch feature on when there are less than 11 crates on the field
-        if np.sum(arena == 1) < 11:
+        if self.number_of_remaining_crates < 11:
             # enemy_coords = np.vstack((enemy_ind[0], enemy_ind[1])).T
-            if self.logger: self.logger.info(f'ENEMY: {self.player.foes}')
+            # if self.logger: self.logger.info(f'ENEMY: {self.player.foes}')
             free_space = (arena == 0) | (arena == 3)
             enemy_coords = []
             for enemy in self.player.foes:
                 enemy_coords.append([*index_to_x_y(enemy)])
-            if self.logger: self.logger.info(f'ENEMY targets: {enemy_coords}')
+            # if self.logger: self.logger.info(f'ENEMY targets: {enemy_coords}')
             best_step = self._look_for_targets(free_space, (x, y), np.array(enemy_coords), None)
             return self._determine_direction(best_step, x, y)
         else:
@@ -633,6 +638,25 @@ class ObservationObject:
         player.closest_foe = int(np.argmin(player.foe_dists))  # player index of closest foe
         player.closest_foe += 1 if player.closest_foe >= player.player_index else 0  # me not in foe_dists
         return np.min(player.foe_dists)
+
+    def enemy_in_bomb_area(self):
+        """
+        Return 1 if enemy is in 5 field radius and less than 11 crates are on the field
+        Return 0 otherwise
+        """
+        # if self.logger: self.logger.info(f'FsOES: {self.player.foes}')
+        if self.player.foes.shape[0] != 0:
+            enemy_coords = []
+            for enemy in self.player.foes:
+                enemy_coords.append([*index_to_x_y(enemy)])
+            best_dist = np.sum(np.abs(np.subtract(np.array(enemy_coords), self.player.me_loc)), axis=1).min()
+        else:
+            return 0
+        # if self.logger: self.logger.info(f'ENEMY CORDS: {np.array(enemy_coords)}')
+        if best_dist < 6 & self.number_of_remaining_crates < 11:
+            return 1
+        else:
+            return 0
 
     def d_closest_foe_dir(self):
         """

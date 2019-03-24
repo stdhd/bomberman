@@ -212,7 +212,6 @@ def get_transformations(obs, radius, direction_sensitive):
         all_transformed[i][new_rest == 6] = 6
 
     transformed_rest = np.zeros([7, new_rest.shape[0]])
-    results = np.zeros([8, obs.shape[0]])
     for i in range(7):
         transformed_rest[i] = np.where(direction_sensitive == 1, all_transformed[i], new_rest)
         feat2_transformed = np.zeros([4])
@@ -228,6 +227,8 @@ def get_transformations(obs, radius, direction_sensitive):
                 to_skip = 3
             else:
                 to_skip -= 1
+
+    results = np.zeros([8, obs.shape[0]])
     if radius == -1:
         for i in range(7):
             results[i] = transformed_rest[i]
@@ -250,18 +251,18 @@ def get_transformations(obs, radius, direction_sensitive):
 
     return results, direction_change
 
-def get_transformed_events(original_events):
-    original_events = np.array(original_events)
-    # Read like 2 (up) --> 0 (down)
-    # Diagonal (upper left to down right), vertical, horizontal, rotation right, rotation left, horizontal & vertical, Diagonal (down left to upper right)
-    transformations = np.array(
-        [[2, 3, 0, 1], [1, 0, 2, 3], [0, 1, 3, 2], [3, 2, 0, 1], [2, 3, 1, 0], [1, 0, 3, 2], [3, 2, 1, 0]])
-    transformed_events = np.empty([0, original_events.shape[0]])
-    for ind, trans in enumerate(transformations):
-        transformed_events = np.append(transformed_events, original_events[np.newaxis, :], axis=0)
-        transformed_events[ind][original_events == 0] = np.where(trans == 0)[0][0]
-        transformed_events[ind][original_events == 1] = np.where(trans == 1)[0][0]
-        transformed_events[ind][original_events == 2] = np.where(trans == 2)[0][0]
-        transformed_events[ind][original_events == 3] = np.where(trans == 3)[0][0]
-    transformed_events = np.append(transformed_events, original_events[np.newaxis, :], axis=0)
-    return transformed_events
+# def get_transformed_events(original_events):
+#     original_events = np.array(original_events)
+#     # Read like 2 (up) --> 0 (down)
+#     # Diagonal (upper left to down right), vertical, horizontal, rotation right, rotation left, horizontal & vertical, Diagonal (down left to upper right)
+#     transformations = np.array(
+#         [[2, 3, 0, 1], [1, 0, 2, 3], [0, 1, 3, 2], [3, 2, 0, 1], [2, 3, 1, 0], [1, 0, 3, 2], [3, 2, 1, 0]])
+#     transformed_events = np.empty([0, original_events.shape[0]])
+#     for ind, trans in enumerate(transformations):
+#         transformed_events = np.append(transformed_events, original_events[np.newaxis, :], axis=0)
+#         transformed_events[ind][original_events == 0] = np.where(trans == 0)[0][0]
+#         transformed_events[ind][original_events == 1] = np.where(trans == 1)[0][0]
+#         transformed_events[ind][original_events == 2] = np.where(trans == 2)[0][0]
+#         transformed_events[ind][original_events == 3] = np.where(trans == 3)[0][0]
+#     transformed_events = np.append(transformed_events, original_events[np.newaxis, :], axis=0)
+#     return transformed_events

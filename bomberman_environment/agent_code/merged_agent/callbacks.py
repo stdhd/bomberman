@@ -21,19 +21,20 @@ def setup(self):
     self.discount = 0.7
     self.epsilon = 0.4
     self.train_flag = True
-    self.obs_radius = 1
-    self.parameter_change_border = 50
+    self.obs_radius = -1
+    self.parameter_change_border = 100
     self.obs_object = ObservationObject(self.obs_radius, ['d_closest_coin_dir',
-                                                    'd_closest_safe_field_dir',
-                                                    'me_has_bomb',
-                                                    'dead_end_detect',
-                                                    'd4_is_safe_to_move_a_l',
-                                                    'd4_is_safe_to_move_b_r',
-                                                    'd4_is_safe_to_move_c_u',
-                                                    'd4_is_safe_to_move_d_d',
-                                                    'd_best_bomb_dropping_dir',
-                                                    'd_closest_enemy_dir'
-                                                    ], None)
+                                                        'd_closest_safe_field_dir',
+                                                        'me_has_bomb',
+                                                        'dead_end_detect',
+                                                        'd4_is_safe_to_move_a_l',
+                                                        'd4_is_safe_to_move_b_r',
+                                                        'd4_is_safe_to_move_c_u',
+                                                        'd4_is_safe_to_move_d_d',
+                                                        'd_best_bomb_dropping_dir',
+                                                        'd_closest_enemy_dir', 
+                                                        'enemy_in_bomb_area'
+                                                        ], None)
     # Used for plotting
     self.total_steps_over_episodes = 0
     self.total_deaths_over_episodes = 0
@@ -115,9 +116,11 @@ def act(self):
                                                         self.obs_object.get_direction_sensitivity())
         self.last_observations = observations
         self.last_q_ind = []
-        self.logger.info(f'BOMBS: {bombs}')
-        self.logger.info(f'self: {[x, y]}')
-        self.logger.info(f'Observation: {observation}')
+        # self.logger.info(f'BOMBS: {bombs}')
+        # self.logger.info(f'self: {[x, y]}')
+        # self.logger.info(f'Observation: {observation}')
+        # explosions = self.game_state['explosions']
+        # self.logger.info(f'Explosions: {explosions}')
         # self.logger.info(f'OBSERVATIONS: {observations}')
 
         # Choose random action and if current observation is unknown add it and its rotations to observation_db
@@ -188,6 +191,7 @@ def reward_update(self):
     # a = ["Diagonal (upper left to down right)", "vertical", "horizontal", "rotation right", "rotation left", "horizontal & vertical", "Diagonal (down left to upper right)", "Normal"]
     # self.logger.info(f'Q-TABLE BEFORE: {self.q_table[self.last_q_ind[7]]}')
     # event_to_qtable_action_ind = np.array([2,3,0,1,4,5])
+    # Reward is the same for all rotations
     reward = _getReward(self.obs_object, self.events, self.last_observation, self.logger)
     # self.logger.info(f'REWARD: {reward}')
     for ind, rotation in enumerate(self.last_action_rotations):

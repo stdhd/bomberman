@@ -1,3 +1,4 @@
+import os
 from os import listdir, remove
 from os.path import isfile, join
 import numpy as np
@@ -8,6 +9,7 @@ import json
 
 import main_evaluate_agents
 from agent_code.observation_object import ObservationObject
+from state_functions.rewards import event_rewards
 
 
 class EvaluationEnvironment:
@@ -38,11 +40,11 @@ class EvaluationEnvironment:
 
         main_evaluate_agents.main(self.agent_names, [""], save_dir) # run games and save them to output directory
 
-    def analyze_games(self, destroy_data:bool=False, print_q_length=None):
+    def analyze_games(self, destroy_data:bool=False, print_steps_trained_with=None):
         """
         Analyze all games in a directory and save a new .json summary file there.
         :param destroy_data: If True, delete games after analysis
-        :param print_q_length: If not None, print the current length of the Q Table in this folder.
+        :param print_steps_trained_with: If not None, print the current number of steps the model has trained with.
         :return:
         """
         files = [f for f in listdir(self.save_directory) if isfile(join(self.save_directory, f))]
@@ -82,14 +84,14 @@ class EvaluationEnvironment:
         event_count_by_game, game_durations = np.array([ec[0] for ec in event_count_by_game]), np.array(game_durations)
         events_path = self.save_directory + "/" + "events.npy"
         durations_path = self.save_directory + "/" + "durations.npy"
-        qlength_path = self.save_directory + "/" + "qlength.json"
 
         np.save(events_path, event_count_by_game)
         np.save(durations_path, game_durations)
 
-        if print_q_length is not None:
-            with open(qlength_path, "w") as f:
-                json.dump(self.return_q_length(print_q_length), f)
+        if print_steps_trained_with is not None:
+            steps_trained_path = self.save_directory + "/" + "current_steps.json"
+            with open(steps_trained_path, "w") as f:
+                json.dump(self.return_steps_trained_with(print_steps_trained_with), f)
 
         print("Wrote game info to", events_path, "and", durations_path)
 
@@ -101,16 +103,65 @@ class EvaluationEnvironment:
 
         return event_count_by_game, game_durations, events_path, durations_path
 
-
-    def return_q_length(self, filepath):
+    def return_steps_trained_with(self, filepath):
 
         files = [f for f in listdir(filepath) if isfile(join(filepath, f))]
 
         for file in files:
-            if file[:2] == "q_":
+            if file[:8] == "progress":
+                with open(filepath+ "/" + file, 'r') as f:
+                    steps, lengths = json.load(f)
 
-                qt = np.load(filepath+ "/" + file)
+                    for i, val in enumerate(steps):
+                        if i > 0:
+                            steps[i] += steps[i - 1]
 
-                return qt.shape[0]
+                return steps[-1]
+        raise RuntimeError("progress.json not found")
 
-        raise RuntimeError("Q Table not found")
+    def get_rewards_progress(self, evaluation_folder:str):
+        """
+        Examines each directory in evaluation folder and notes the results of the evaluations contained therein.
+
+        :param evaluation_folder:
+        :return: [[x, y1, y2], ... ] with x being number of steps the model has trained with at time of evaluation,
+        y1 being median survival time,
+        y2 being median rewards during evaluation at that point
+        """
+
+        subdirs = [os.path.join(evaluation_folder, o) for o in os.listdir(evaluation_folder) if os.path.isdir(os.path.join(evaluation_folder,o))]
+
+        ret = []
+
+        for dir in subdirs:
+
+            stepcount_file = dir + "/" + "current_steps.json"
+            events_file = dir + "/" + "events.json"
+            durations_file = dir + "/" + "durations.json"
+
+            with open(stepcount_file, 'r') as f:
+                steps_trained = json.load(f)
+
+            with open(events_file, 'r') as f:
+                events = json.load(f)
+
+            with open(durations_file, 'r') as f:
+                durations = json.load(f)
+
+            median_rewards = np.median(np.array([np.sum(player_events * event_rewards) for player_events in events]))
+            median_durations = np.median(np.array(durations))
+
+            ret.append(np.array([steps_trained, median_durations, median_rewards]))
+
+        return np.array(ret)
+
+
+
+
+
+
+
+
+
+
+

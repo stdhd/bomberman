@@ -5,7 +5,7 @@ import numpy as np
 import os
 
 from sklearn import tree, ensemble, kernel_ridge
-
+from agent_code.observation_object import ObservationObject
 
 def train_decision_tree(KNOWN_filepath:str, QTABLE_filepath:str, QUANTITIES_filepath:str, writepath:str, cutoff:int = 40):
     """
@@ -113,12 +113,25 @@ def main():
     :return:
     """
 
+    obs0 = ObservationObject(0, ['d_closest_coin_dir',
+                                 'd_closest_safe_field_dir',
+                                 'd_best_bomb_dropping_dir',
+                                 'me_has_bomb',
+                                 'd4_is_safe_to_move_a_l',
+                                 'd4_is_safe_to_move_b_r',
+                                 'd4_is_safe_to_move_c_u',
+                                 'd4_is_safe_to_move_d_d',
+                                 'dead_end_detect',
+                                 # 'd_closest_crate_dir',
+                                 # 'd_closest_enemy_dir'
+                                 ], None)
+
     os.chdir(os.path.dirname(__file__))
     cwd = os.getcwd()
 
-    path = cwd + "/data\\qtables\\r1_ismal_ismbr_ismcu_ismdd_ccdir_ccrdir_csfdir_ded_mhb/"
+    path = cwd + "/data\\qtables\\r1_ismal_ismbr_ismcu_ismdd_bbdd_ccdir_ced_csfdir_ded_mhb/"
 
-    name = "r1_ismal_ismbr_ismcu_ismdd_ccdir_ccrdir_csfdir_ded_mhb"
+    name = obs0.get_file_name_string()#"r1_ismal_ismbr_ismcu_ismdd_bbdd_ccdir_ced_csfdir_ded_mhb"
 
     obspath = path + "observation-" + name + ".npy"
     qpath = path + "q_table-" + name + ".npy"
@@ -130,8 +143,8 @@ def main():
 
     # params = (obspath, qpath, quantpath, outdir, cutoff)
 
-    # dt = train_decision_tree(obspath, qpath, quantpath, outdir + "/dt.p", cutoff)
-    df = train_decision_forest(obspath, qpath, quantpath, outdir + "/df.p", cutoff)
+    dt = train_decision_tree(obspath, qpath, quantpath, outdir + "/dt.p", cutoff)
+    #df = train_decision_forest(obspath, qpath, quantpath, outdir + "/df.p", cutoff)
     # kr = train_kernel_regression(obspath, qpath, quantpath, outdir + "/kr.p", cutoff)
 
     print()

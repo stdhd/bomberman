@@ -4,7 +4,7 @@ import numpy as np
 
 
 event_rewards = np.zeros(len(events))
-event_rewards[4] = 0       # WAITED
+event_rewards[4] = -5       # WAITED
 event_rewards[6] = -10000    # INVALID ACTION
 event_rewards[9] = 10          # DESTROYED CRATES
 event_rewards[10] = 0       # COIN FOUND

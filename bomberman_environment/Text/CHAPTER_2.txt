@@ -9,7 +9,7 @@ a) In order to test the efficacy of various machine learning approaches for our 
 
 The alternative to this approach - playing games and training models "live", without saving them to the disk somehow - has the disadvantage that all games played are "lost" and cannot be reused, and that one cannot compare the performance of different models to each other on the same data. Training this way also avoids the file access conflicts that might emerge when accessing Q Tables or databases in parallel, from separate processes. 
 
-For these reasons, the team chose to develop a vectorized representation of the game state which contains all information for a single game step. This implied a crucial design measure: Construction of observations would need to be based on the state vector representation, so that training from state vectors and live execution of the agent are based on the same framework. This was not without its difficulties, as explained below. 
+For these reasons, the team chose to develop a vectorized representation of the game state which contains all information for a single game step, und use this format to save games in bulk to train with, later on. This implied a crucial design measure: Construction of observations would need to be based on the state vector representation, so that training from state vectors and live execution of the agent are based on the same framework. This was not without its difficulties, as explained below. 
 
 
 b) A successful state representation is space-efficient and contains all game-characterizing events. To simplify the development of the format, we assumed that certain game parameters would remain immutable: For instance, that games would always have 4 players, that players could keep at most one bomb in inventory, and that wall squares would be distributed in characteristic checkers-board fashion. Other game design features, such as the size of the board or the number of events that can occur, do not affect the representability of the game state. In the following discussion, a standard board format of a 17 x 17 grid is assumed. The state representation takes the form of a numpy integer array and contains 3 separate parts:
@@ -57,7 +57,7 @@ At the end of the game (when end_round() is called), the list of saved states is
 
 2) State creation in callbacks.py
 
-The main drawback of the above approach for data generation is that at execution time, agents do not have access to the environment, so there is no immediate generate a state representation as used in training. 
+The main drawback of the above approach for data generation is that at execution time, agents do not have access to the environment, so there is no way generate a state representation as used in training. 
 
 To circumvent this, the team was forced to make the design choice of implementing a second, equivalent state saving function "derive_state_representation()" that is accessible to agent code at runtime, which constructs the state vector from the attributes available in the dictionary game_state. It proved to be a challenge, during development, to verify that both functions behave in equivalent ways. 
 

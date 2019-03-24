@@ -179,8 +179,13 @@ class ObservationObject:
         for i in np.arange(window_size_custom):
             for j in np.arange(window_size_custom):
                 try:
-                    window[i, j] = self.board[x_y_to_index(lower_x + i, lower_y + j) - 1] # note coins, crates, and free
+                    temp = self.board[x_y_to_index(lower_x + i, lower_y + j) - 1]  # note coins, crates, explosions, and free
 
+                    if temp == -2:  # FIXME ignore explosions with timer <= 1
+                        continue
+                    elif temp == -6:  # FIXME
+                        temp = 3
+                    window[i, j] = temp
                 except ValueError as e:  # wall squares throw exception
                     window[i, j] = -1
 
@@ -568,8 +573,13 @@ class ObservationObject:
         """
         Direction to player's nearest enemy.
         """
-        arena = np.copy(self.arena)
+
         x, y = self.player.me_loc[0], self.player.me_loc[1]
+
+        if self.player.foes.shape[0] == 0:
+            return self._determine_direction(None, x, y)  # FIXME deactivate when no enemies
+
+        arena = np.copy(self.arena)
 
         # remove myself from arena
         arena[x, y] = 0
@@ -926,7 +936,6 @@ class ObservationObject:
                 if right: result[cx + (i + 1), cy] += 1
 
             # As the break is removed, killing foes will contribute to fields' values as well
-            # TODO: Implement enemy hunting
         # for c in self.player.foes:
         # print(result)
 
@@ -945,7 +954,7 @@ class ObservationObject:
     def d_best_bomb_dropping_dir(self):
         x, y = self.player.me_loc[0], self.player.me_loc[1]
         # Switch off when 10 or less crates are on the field
-        if np.sum(self.arena == 1) > 10:
+        if self.player.foes.shape[0] == 0 or np.sum(self.arena == 1) > 10:  # FIXME no foes left
             target_coords, weights = self._get_bomb_place_value_map()
             free_space = (self.arena == 0) | (self.arena == 3)
             # if self.logger: 

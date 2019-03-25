@@ -167,7 +167,7 @@ class ObservationObject:
 
     def get_feature_index(self, feature_name):
         try:
-            if radius == -1:
+            if self.radius == -1:
                 return self.features.index(feature_name)
             else:
                 return self.features.index(feature_name) + 2 * self.radius + 1

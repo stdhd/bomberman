@@ -113,7 +113,7 @@ class AgentProcess(mp.Process):
                 # Send action and time taken back to main process
                 with IgnoreKeyboardInterrupt():
                     t = time() - t
-                    # self.wlogger.info(f'Chose action {self.fake_self.next_action} after {t:.3f}s of thinking')
+                    self.wlogger.info(f'Chose action {self.fake_self.next_action} after {t:.3f}s of thinking')
                     self.wlogger.debug('Send action and time to main process')
                     self.pipe_to_world.send((self.fake_self.next_action, t))
                     while self.ready_flag.is_set():

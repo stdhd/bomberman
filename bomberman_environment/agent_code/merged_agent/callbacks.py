@@ -17,12 +17,15 @@ def setup(self):
     You can also use the self.logger object at any time to write to the log
     file for debugging (see https://docs.python.org/3.7/library/logging.html).
     """
-    self.learning_rate = 0.7
     self.discount = 0.7
-    self.epsilon = 0.4
+    self.learning_rate = 0.8
+    self.learning_rate_discount = 0.97
+    self.epsilon = 0.3
+    self.epsilon_discount = 0.9
     self.train_flag = True
     self.obs_radius = -1
     self.parameter_change_border = 100
+    self.learning_rate_discount
     self.obs_object = ObservationObject(self.obs_radius, ['d_closest_coin_dir',
                                                         'd_closest_safe_field_dir',
                                                         'me_has_bomb',
@@ -119,6 +122,7 @@ def act(self):
         # self.logger.info(f'BOMBS: {bombs}')
         # self.logger.info(f'self: {[x, y]}')
         # self.logger.info(f'Observation: {observation}')
+
         # explosions = self.game_state['explosions']
         # self.logger.info(f'Explosions: {explosions}')
         # self.logger.info(f'OBSERVATIONS: {observations}')
@@ -234,78 +238,79 @@ def end_of_episode(self):
     if 13 in self.events or 14 in self.events: self.total_deaths_over_episodes += 1
     self.number_of_episode += 1
     if self.number_of_episode % self.parameter_change_border == 0: 
-        self.epsilon = self.epsilon * 0.9
-        if self.learning_rate > 0.4: self.learning_rate = self.learning_rate * 0.95
+        self.epsilon = self.epsilon * self.epsilon_discount
+        if self.learning_rate > 0.4: self.learning_rate = self.learning_rate * self.learning_rate_discount
         self.logger.info(f'EPSILON: {self.epsilon}')
         self.logger.info(f'Episode number, Total Steps and Deaths: {self.number_of_episode, self.total_steps_over_episodes, self.total_deaths_over_episodes}')
         self.total_steps_over_episodes, self.total_deaths_over_episodes = 0, 0
 
 def _getReward(obs_object, events, old_observation, logger):
     reward = 0
-    ccdir_feature_ind = obs_object.get_feature_index("d_closest_coin_dir")
-    ccrdir_feature_ind = obs_object.get_feature_index("d_closest_crate_dir")
-    csfdir_feature_ind = obs_object.get_feature_index("d_closest_safe_field_dir")
-    ismal_feature_ind = obs_object.get_feature_index("d4_is_safe_to_move_a_l")
-    ismbr_feature_ind = obs_object.get_feature_index("d4_is_safe_to_move_b_r")
-    ismcu_feature_ind = obs_object.get_feature_index("d4_is_safe_to_move_c_u")
-    ismdd_feature_ind = obs_object.get_feature_index("d4_is_safe_to_move_d_d")
-    bbdd_feature_ind = obs_object.get_feature_index("d_best_bomb_dropping_dir") 
-    # logger.info(f'CCDIR: {ccdir_feature_ind}')
+    ccdir_ind = obs_object.get_feature_index("d_closest_coin_dir")
+    ccrdir_ind = obs_object.get_feature_index("d_closest_crate_dir")
+    csfdir_ind = obs_object.get_feature_index("d_closest_safe_field_dir")
+    ismal_ind = obs_object.get_feature_index("d4_is_safe_to_move_a_l")
+    ismbr_ind = obs_object.get_feature_index("d4_is_safe_to_move_b_r")
+    ismcu_ind = obs_object.get_feature_index("d4_is_safe_to_move_c_u")
+    ismdd_ind = obs_object.get_feature_index("d4_is_safe_to_move_d_d")
+    bbdd_ind = obs_object.get_feature_index("d_best_bomb_dropping_dir")
+    eiba_ind = obs_object.get_feature_index("enemy_in_bomb_area") 
+    # logger.info(f'BB: {bbdd_ind, eiba_ind}')
     if 0 in events: # Left
-        if csfdir_feature_ind != None and old_observation[csfdir_feature_ind] == 0: reward += 800 # Reward when agent chooses direction safe field
-        if ismal_feature_ind != None and csfdir_feature_ind != None \
-            and old_observation[ismal_feature_ind] == 0 and old_observation[csfdir_feature_ind] > 3: reward -= 300 # Punish when agent chooses direction to danger zone, explosion or invalid action
-        if bbdd_feature_ind != None and ismal_feature_ind != None \
-            and old_observation[bbdd_feature_ind] == 0 and old_observation[ismal_feature_ind] == 1: reward += 400 # Reward if following closest crate feature
-        if ccdir_feature_ind != None and ismal_feature_ind != None \
-            and old_observation[ccdir_feature_ind] == 0 and old_observation[ismal_feature_ind] == 1: reward += 500 # Reward if following closest coin feature
+        if csfdir_ind != None and old_observation[csfdir_ind] == 0: reward += 800 # Reward when agent chooses direction safe field
+        if ismal_ind != None and csfdir_ind != None \
+            and old_observation[ismal_ind] == 0 and old_observation[csfdir_ind] > 3: reward -= 500 # Punish when agent chooses direction to danger zone, explosion or invalid action
+        if bbdd_ind != None and ismal_ind != None \
+            and old_observation[bbdd_ind] == 0 and old_observation[ismal_ind] == 1: reward += 350 # Reward if following closest crate feature
+        if ccdir_ind != None and ismal_ind != None \
+            and old_observation[ccdir_ind] == 0 and old_observation[ismal_ind] == 1: reward += 550 # Reward if following closest coin feature
         reward -= 50
     elif 1 in events: # Right
-        if csfdir_feature_ind != None and old_observation[csfdir_feature_ind] == 1: reward += 800
-        if ismbr_feature_ind != None and csfdir_feature_ind != None \
-            and old_observation[ismbr_feature_ind] == 0 and old_observation[csfdir_feature_ind] > 3: reward -= 300
-        if bbdd_feature_ind != None and ismbr_feature_ind != None \
-            and old_observation[bbdd_feature_ind] == 1 and old_observation[ismbr_feature_ind] == 1: reward += 400
-        if ccdir_feature_ind != None and ismbr_feature_ind != None \
-            and old_observation[ccdir_feature_ind] == 1 and old_observation[ismbr_feature_ind] == 1: reward += 500
+        if csfdir_ind != None and old_observation[csfdir_ind] == 1: reward += 800
+        if ismbr_ind != None and csfdir_ind != None \
+            and old_observation[ismbr_ind] == 0 and old_observation[csfdir_ind] > 3: reward -= 500
+        if bbdd_ind != None and ismbr_ind != None \
+            and old_observation[bbdd_ind] == 1 and old_observation[ismbr_ind] == 1: reward += 350
+        if ccdir_ind != None and ismbr_ind != None \
+            and old_observation[ccdir_ind] == 1 and old_observation[ismbr_ind] == 1: reward += 550
         reward -= 50
     elif 2 in events: # Up
-        if csfdir_feature_ind != None and old_observation[csfdir_feature_ind] == 2: reward += 800
-        if ismcu_feature_ind != None and csfdir_feature_ind != None \
-            and old_observation[ismcu_feature_ind] == 0 and old_observation[csfdir_feature_ind] > 3: reward -= 300
-        if bbdd_feature_ind != None and ismcu_feature_ind != None \
-            and old_observation[bbdd_feature_ind] == 2 and old_observation[ismcu_feature_ind] == 1: reward += 400
-        if ccdir_feature_ind != None and ismcu_feature_ind != None \
-            and old_observation[ccdir_feature_ind] == 2 and old_observation[ismcu_feature_ind] == 1: reward += 500
+        if csfdir_ind != None and old_observation[csfdir_ind] == 2: reward += 800
+        if ismcu_ind != None and csfdir_ind != None \
+            and old_observation[ismcu_ind] == 0 and old_observation[csfdir_ind] > 3: reward -= 500
+        if bbdd_ind != None and ismcu_ind != None \
+            and old_observation[bbdd_ind] == 2 and old_observation[ismcu_ind] == 1: reward += 350
+        if ccdir_ind != None and ismcu_ind != None \
+            and old_observation[ccdir_ind] == 2 and old_observation[ismcu_ind] == 1: reward += 550
         reward -= 50
     elif 3 in events: # Down
-        if csfdir_feature_ind != None and old_observation[csfdir_feature_ind] == 3: reward += 800
-        if ismdd_feature_ind != None and csfdir_feature_ind != None \
-            and old_observation[ismdd_feature_ind] == 0 and old_observation[csfdir_feature_ind] > 3: reward -= 300
-        if bbdd_feature_ind != None and ismdd_feature_ind != None \
-            and old_observation[bbdd_feature_ind] == 3 and old_observation[ismdd_feature_ind] == 1: reward += 400
-        if ccdir_feature_ind != None and ismdd_feature_ind != None \
-            and old_observation[ccdir_feature_ind] == 3 and old_observation[ismdd_feature_ind] == 1: reward += 500
+        if csfdir_ind != None and old_observation[csfdir_ind] == 3: reward += 800
+        if ismdd_ind != None and csfdir_ind != None \
+            and old_observation[ismdd_ind] == 0 and old_observation[csfdir_ind] > 3: reward -= 500
+        if bbdd_ind != None and ismdd_ind != None \
+            and old_observation[bbdd_ind] == 3 and old_observation[ismdd_ind] == 1: reward += 350
+        if ccdir_ind != None and ismdd_ind != None \
+            and old_observation[ccdir_ind] == 3 and old_observation[ismdd_ind] == 1: reward += 550
         reward -= 50
     if 4 in events: # Wait
-        if ismal_feature_ind != None and ismbr_feature_ind != None and ismcu_feature_ind != None and ismdd_feature_ind != None and csfdir_feature_ind != None\
-            and old_observation[ismal_feature_ind] == 0 and old_observation[ismbr_feature_ind] == 0 \
-            and old_observation[ismcu_feature_ind] == 0 and old_observation[ismdd_feature_ind] == 0 \
-            and old_observation[csfdir_feature_ind] == 4:
-            reward += 500
+        if ismal_ind != None and ismbr_ind != None and ismcu_ind != None and ismdd_ind != None and csfdir_ind != None\
+            and old_observation[ismal_ind] == 0 and old_observation[ismbr_ind] == 0 \
+            and old_observation[ismcu_ind] == 0 and old_observation[ismdd_ind] == 0 \
+            and old_observation[csfdir_ind] == 4:
+            reward += 600
         else:
             reward -= 500
     if 5 in events: reward -= 0 # Interrupted 
     if 6 in events: reward -= 1000 # Invalid action
     if 7 in events: # Bomb dropped
-        if bbdd_feature_ind != None and old_observation[bbdd_feature_ind] == 5: reward += 600 # Reward when agent sets bomb before crate
-        if bbdd_feature_ind != None and old_observation[bbdd_feature_ind] == 4: reward -= 300
-        reward -= 100
+        if bbdd_ind != None and old_observation[bbdd_ind] == 5: reward += 700 # Reward when agent sets bomb before crate
+        if eiba_ind != None and old_observation[eiba_ind] == 1: reward += 700 # Reward when second phase of game and enemy in 5 field radius
+        reward -= 300
     if 8 in events: reward += 0 # Bomb exploded
     if 9 in events: reward += 0 # Crate destroyed
     if 10 in events: reward += 0 # Coin found
     if 11 in events: reward += 500 # Coin collected
-    if 12 in events: reward += 500 # Killed opponent
+    if 12 in events: reward += 1000 # Killed opponent
     if 13 in events: reward -= 500 # Killed self
     if 14 in events: reward -= 500 # Got killed either by himself or by enemy
     if 15 in events: reward -= 0 # Opponent eliminated

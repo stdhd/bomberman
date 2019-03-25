@@ -83,7 +83,7 @@ class AgentProcess(mp.Process):
                     self.ready_flag.set()
                     self.wlogger.info('Received exit message for round')
                     break
-                self.wlogger.info(f'STARTING STEP {self.fake_self.game_state["step"]}')
+                # self.wlogger.info(f'STARTING STEP {self.fake_self.game_state["step"]}')
 
                 # Process game events for rewards if in training mode
                 if self.train_flag.is_set():

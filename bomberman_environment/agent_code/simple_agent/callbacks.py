@@ -92,11 +92,11 @@ def act(self):
 
     # Gather information about the game state
     arena = self.game_state['arena']
-    x, y, _, bombs_left = self.game_state['self']
+    x, y, _, bombs_left, score = self.game_state['self']
     bombs = self.game_state['bombs']
     bomb_xys = [(x,y) for (x,y,t) in bombs]
-    others = [(x,y) for (x,y,n,b) in self.game_state['others']]
-    coins = self.game_state['coins']
+    others = [(x,y) for (x,y,n,b,s) in self.game_state['others']]
+    coins = self.game_state['coin_locs']
     bomb_map = np.ones(arena.shape) * 5
     for xb,yb,t in bombs:
         for (i,j) in [(xb+h, yb) for h in range(-3,4)] + [(xb, yb+h) for h in range(-3,4)]:
@@ -115,7 +115,7 @@ def act(self):
     valid_tiles, valid_actions = [], []
     for d in directions:
         if ((arena[d] == 0) and
-            (self.game_state['explosions'][d] < 1) and
+            (self.game_state['explosions'][d] <= 1) and
             (bomb_map[d] > 0) and
             (not d in others) and
             (not d in bomb_xys)):
@@ -139,7 +139,7 @@ def act(self):
                     and ([arena[x+1,y], arena[x-1,y], arena[x,y+1], arena[x,y-1]].count(0) == 1)]
     crates = [(x,y) for x in range(1,16) for y in range(1,16) if (arena[x,y] == 1)]
     targets = coins + dead_ends + crates
-    # Add other agents as targets if in hunting mode or no crates/coins left
+    # Add other agents as targets if in hunting mode or no crates/coin_locs left
     if self.ignore_others_timer <= 0 or (len(crates) + len(coins) == 0):
         targets.extend(others)
 
@@ -204,6 +204,8 @@ def act(self):
         self.bomb_history.append((x,y))
 
 
+
+
 def reward_update(self):
     """Called once per step to allow intermediate rewards based on game events.
 
@@ -213,7 +215,9 @@ def reward_update(self):
     agent based on these events and your knowledge of the (new) game state. In
     contrast to act, this method has no time limit.
     """
+    print("joojno")
     self.logger.debug(f'Encountered {len(self.events)} game event(s)')
+
 
 
 def end_of_episode(self):

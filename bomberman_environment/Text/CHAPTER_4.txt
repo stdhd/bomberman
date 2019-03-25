@@ -1,0 +1,61 @@
+
+4. Outlook
+
+
+a) Retrospective evaluation of our approach
+
+
+Carrying out this project revealed that Q Learning is not in principle a bad choice for playing Bomberman. However, this assessment comes with some qualifications:
+
+
+1) Dimensionality
+
+
+As was shown above, the dimensionality of the Bomberman problem spirals out of control even when looking at less than a quarter of the playing field at one time. Any implementation of reinforcement learning that involves maintaining a database of observations is completely inadequate for the task of using the whole (or even a large portion of) the board state to make decisions. Even when disregarding the excessive amount of time spent training the model, the space in memory needed to hold the Q Table and observation database for a close-to-completely trained 7x7 agent would exceed 1 GB by at least an order of magnitude. 
+
+
+2) Feature selection
+
+
+Because of the above constraints, it became necessary to practice dimensionality reduction by looking at only a small subset of the field and enriching this view with hand-crafted features. 
+
+Here, we get to the crux of the problem with Q Learning for this task: The only way to keep dimensionality under control is to introduce handmade features, but the existence of those features presupposes that a domain expert is present and able to refine the complex feature space of Bomberman into a handful of features that correlate extremely well with in-game rewards. 
+
+In other words, the only way to solve Bomberman with Q Learning is to already know all the solutions. Training a bot to play Bomberman with the help of a few extremely compact and useful features is "nothing special"; the agent never actually develops any interesting internal representations of the game the way, for example, a deep neural network would. The problem is only tractable because there is a human there to provide strong cues for how to behave in-game. 
+
+An immediate example of this is the "dead end" problem: There are situations where placing a bomb and then moving in a certain direction guarantees (barring enemy interference) death. (For a more detailed explanation see **Features chapter**)
+
+What makes this problem tricky is that it is not possible to always avoid these situations unless the agent can see whether a path away from a bomb forms a dead end. Because bombs explode with radius 3, one would need to be able to see at least 4 coordinates in every direction to be able to verify whether a dead end situation is or is not present. To implement this, one would need to find a clever way to allow for this knowledge (e.g. by eliminating other parts of the view field), because simply setting the view radius to 4 would have unfeasible dimensionality problems, as explained above. 
+
+The solution we came up with is to check whether such a situation is present and indicate it with a boolean. As expected, the agent learned to follow our "direction to safe field" feature in those situations. But again, this approach is not a very inspiring solution, and wouldn't be an option in high-dimensional problems that the human administrator does not already understand. 
+
+Were one to omit these features and simply rely on a large window and expect the agent to develop its own statistical intuition for how to behave, one would need an extreme volume of training data, corresponding to the number of different states. Furthermore, many choices made only have consequences after a few steps, e.g. laying a bomb now will only in 4 moves cause an explosion and deliver a reward. To learn these temporally displaced associations, one needs to repeatedly carry out the actions in order for the reward to propagate backwards through the Q Table and create the association between dropping a bomb now and being rewarded for it later, further increasing the training volume necessary. 
+
+Here one can get around the problem (as we did with the **merged agent**) by immediately rewarding the agent when it follows a certain useful feature in an appropriate situation. This ensures that agents learn useful behaviors quickly, but it also means that the entire process of using Q Learning is redundant, because we not only define the features, but also their value. To be able to do this means the Bomberman problem is already solved and the application of Q Learning is reduced to something like a recreational exercise. 
+
+One could humorously speculate that one of the best features we could have constructed is simply a value in range(6) that encodes the decision a simple agent would make in the exact same situation - while it would probably not have been accepted as a solution, it's a fair elucidation of the whole feature selection problem. If Q Learning cannot be efficiently used to find new insights, why use it at all?
+
+
+b) Recommendations for improving the lecture
+
+Because the other sections have already explained some of the problems we encountered and the lessons we learned through hindsight, this section will focus mostly on the suitability of the task itself. 
+
+First of all, the team would like to thank the directors of the lecture for providing such an in-depth, rigorous, and challenging introduction to the field of machine learning. The idea of using a project of this sort is excellent; it trains teamwork, engineering skills, planning ability, ability to compare and contrast different approaches, and demands the ability to independently evaluate and understand what an algorithm actually does and how it is used, rather than memorizing this or that formula in oder to repeat it on an exam. 
+
+Bomberman itself is not a perfect choice for a game. As explained, one is forced, if using a reinforcement learning approach of the kind we used, to practice feature reduction to the extent that creating the agent essentially amounts to writing a bot and waiting for the table to learn its behavior. This kind of approach does not capture the beauty and potential machine learning is known for: Uncovering hidden structures and meaning in complex data. 
+
+If one doesn't want to use features of that sort, one has to train a model for a very long time, which can cause a crisis if a minor mistake is discovered at the last second, and the last 48 hours of training were wasted. Any solution demanded by a machine learning project should, in principle, not be primarily limited by time spent training. A good project would require ingenuity and cleverness, but not powerful servers and brute time training, as this would create an uneven competition right out of the gates between those with access to powerful computational resources and those without. 
+
+**Insert alternative ideas here**
+
+A tentative suggestion for an alternative game would be Super Smash Brothers: Melee. The reasoning here is that the feature space is, on the face of it, simpler. Combat between players is relatively simple; one has access to few actions, and the map is constant and unchanging. Players are easily described by their character, health and x, y coordinates. One could disable certain power-ups which might complicate gameplay unhelpfully. The fact that SSBM enjoys an avid competitive following suggests that there is sufficient depth and complexity to the game to make it an interesting task to solve.
+
+A choice such as this would have the advantage that students would be less incetivized to hand-craft features (as gameplay is less easily described using heuristics, and it's not very straightforward to determine the "next action", unlike in the game Bomberman, in which one can easily incentivize the agent to move to a particular square and drop a bomb there), while neither trivializing the feature space nor exposing it so such enormous dimensionality problems.
+
+The downside to this choice is that SSBM is a proprietary, most likely closed-source game and almost certainly doesn't expose APIs for easy access to game events. It might be legally "sketchy" or difficult to implement this, though the author hasn't fully researched the matter.   
+
+
+c) Conclusion **(write me)**
+
+
+

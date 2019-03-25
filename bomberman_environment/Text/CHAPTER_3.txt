@@ -1,0 +1,96 @@
+
+
+
+3. Experimental results and observations
+
+
+a) Training time
+
+
+Training our agents generally takes place in two stages: First, one creates training data, and secondly, one performs Q Table updates for every observation made in saved games. 
+
+
+Both the time taken to save a game and the time taken to train from a stored file depend on the step count of the game and the length of the Q Table; on a standard-issue laptop, training a long (> 250 steps) game for a short Q Table takes about 3-4 seconds, which can grow to around 20 seconds as the Q Table converges to its full size (around 8e4 entries for an agent like the one submitted). Playing and saving a game usually takes about 3 seconds.
+
+
+**Hier in dieser Reihenfolge nebeneinander aufgereiht: r0qtablecurve, r1qtablecurve, r3qtablecurve **
+
+
+
+The length of the Q Table in relation to the number of game steps trained with grows in an approximately square-root fashion, eventually converging to the maximum (finite) number of different states encounterable. During training, it became evident that the size of the vision field made a massive difference in the convergence of the Q Table. Setting the radius to 3, combined with 5 binary features and 2 directional features, meant that even with less than 10 percent of the training data, **(5e5 5e4 6.5e4 6e5)** the Q Table already reached the eightfold size of a Q Table with vision radius 1 and an additional binary and directional feature, growing in length in an almost perfectly linear fashion, with no sign of slowing growth.
+
+
+This makes sense from a theoretical perspective: If all vision squares have approximately similar variance, this means that if there are n different in-game combinations for a 3x3 = 9 vision field, then for a 7x7 = 49 vision field there are n^(49/9) ~~ n^5 times as many vision field combinations. If we assume (conservatively) n to be on the order of magnitude of about 1e2, then this gives us about 1e10, or multiple billions of combinations. The icing on the cake, as explained in the following paragraph, is that the implementation of our Q Tables was already rather inefficient to begin with, which meant that training a 7x7 model very rapidly slowed to a crawl and had to be abandoned. 
+
+
+During the course of development of the project, we debated whether we want to store the observation database in a sorted fashion, to make access more efficient (logarithmic time). Our implementation stores tables as numpy arrays, which are not dynamic and can therefore only be expanded by copying. We realized that, with linear growth in the number of new observations, the effort to maintain an expanding Q Table would grow quadratically. In addition, finding an observation in the table took linear time, due to our use of np.where to locate the observation vector in the databse. 
+
+
+An initial effort was made to store the Q table in a sorted way and to use a dynamic data structure in working memory to simplify the addition of new observations, but we ran into two difficulties: We did not find any "dynamic" numpy array-like data structures, as we had hoped to use, and did not want to give up the convenience and efficiency of only using numpy objects and methods. In addition, to our surprise, numpy did not seem to support "sorting" multidimensional arrays (in our case: Sort a matrix by its rows - first order rows by their first column's value, then order any equivalent rows by their second column's value, etc.), meaning we would have to have implemented this, ourselves, which seemed like a risky and error-prone approach. 
+
+
+Because run profiling in the initial course of our experimentations revealed that numpy functions of all kinds only took up a small fraction of total runtime, we came to the conclusion that our time would be better spent optimizing features and developing evaluation/training scripts rather than trying to improve the already acceptable speed of our implementation. 
+
+
+This was initially a reasonable solution, but this was only due to the fact that we did not intend on using vision fields with a radius larger than 2, anyway. Because our working solutions always used radius 1, our Q Tables always converged to a size less than 1e5, which meant that we were able to train models "overnight" and didn't have to worry about time taken. 
+
+
+Compounding this was the psychological effect of finally seeing an agent do reasonable things: Because agents always started behaving in clever ways at about 5e4 steps trained with, which was achievable in about 45 minutes and at which point updating the Q Table was still rather fast, we were too thrilled with the quality of our solution (compared to the failures and mistakes that plagued our initial implementations) to think a step ahead and question how performance would be impacted at another order of magnitude of training data. In hindsight, we should have tried harder to make accessing the Q Table more efficient; because Q Table length convergence sets in relatively quickly for small radii, expanding the table is not the main source of trouble. But because np.where searches the entire table even though we only seek 8 matches, this means that if table growth is approximately O(n^(1/2)), the effort of merely looking up existing entries over the course of training grows in O(n^(3/2)). 
+
+
+** Insert obsfreqdist here **
+
+Because most states are seldomly visited and a small number of states are visited very often, table index caching would have been a great speed boost and would not have required sophisticated changes to our implementation. We could probably also have hashed all indices to grant constant-time access, but, because of the psychological errors described above, we didn't fully consider the importance of doing this early on and were too busy, by the end, to implement it. 
+
+
+
+b) Agent quality
+
+** Insert graphics showing performance against simple agents vs steps trained with ** 
+
+The team was interested in deriving something like an objective benchmark for agent performance. The definition of a benchmark demands that any system of evaluations used is objective and repeatable. Playing an agent against itself is flawed for that reason.
+
+An alternative might be to place the agent on a board with no enemies and time how long it takes for all coins to be collected, but this would risk training an agent to a good coin-collector, without regard for its ability to hold its own against live enemies. 
+
+The approach we settled on was to evaluate the quality of an agent by playing it against 3 simple agents a set number of games, counting the occurence of each event, and then deriving the sum reward (as used in training) for that agent, for each game. The agent's score is the median reward earned over all trial games. 
+
+Evaluating in this way has the direct advantage that it tests for ability to maximize reward against test data that are very similar to training data. It should, in theory, demonstrate the gradual improvement of the agent on test data through training and demonstrate the asymptotic maximization of reward by the Q Learning algorithm. 
+
+To implement this evaluation framework, we wrote a script to alternatingly train from a set number of games and then run a suite of evaluations, noting the age of the model at the time of evaluation, the model's survival time against the simple agents, and the occurence of each event for our model in each game. 
+
+We had written this script to support generating new training data through self-play, but encountered a mysterious and currently unexplained error which resulted in drastically slowed training speeds when alternating between training and evaluation, while leaving training speeds on the same data unaffected when calling the same function from a different script. This was disappointing and forced us to abandon large-scale training through self-play, but the framework was still useful in automating and systematizing the process of training and evaluating and agent from stored games.
+
+
+**Insert evaluation results for example agent here**. 
+
+
+**** The results show clearly that agent performance improved over time and that Q learning delivered increasing reward quantities over time.
+
+
+c) Using regression for unknown observations
+
+When planning out this project initially, the team assumed that any model chosen would frequently encounter unknown states and would therefore benefit from being augmented with a regression/classification model trained from Q(observation, action) values, in order to make informed decisions in novel states.
+
+What this assumption oversaw was that a Q learning model that encounters unknown states frequently is most likely under-trained and would therefore need to be replaced with a simpler one. In practice, the working solutions we used and refined almost never encountered unknown states, whereas the models that more often encountered them were not suitable as a final submission and were discarded early.
+
+Therefore, regression models are mostly extraneous for the purpose of describing our agent's behavior. Nevertheless, because we devoted considerable planning to the task of selecting between regression models, it is worth briefly discussing their use for the task, here. 
+
+There were two main approaches we considered for this task: Either using kernel ridge regression to learn the (observation , action) -> Q(o, a) relationship and choosing the action that maximizes the value of the regression, or using a decision tree to map (observation) -> action, using the arg max of an observation's Q values as a training target. 
+
+The advantage of the former is that it is better equipped, in principle, to deal with sparse Q Tables. If only certain actions have been tried often under a certain observation (for instance, those actions an epsilon simple agent does most often), then the other actions will not have been updated sufficiently to function as training data for learning the Q function. Regression gets around this by simply using only those actions which have been tried often enough to have a reliably correct Q value and be useful as training data. A classification algorithm would falter here, because one could not trust that it would know the correct arg max, since most of an observation's Q values have not converged, yet. 
+
+We checked for these constraints using a running record of update counts for our Q table. When applying regression, we used all (observation, action) tuples above a certain threshold of updates, along with their associated Q(o, a) values, as training data. For applying classification, we demanded that all actions in an observation's Q table entry had been tried a minimum number of times before adding it to the training set.
+
+In practice, classification of the table's arg max significantly outperformed regression. It should be noted, though, that the team did not perform a very sophisticated analysis to discover the right hyperparameters of the kernel regression. We tried a few kernels and parameters and found the results disappointing. 
+
+
+** Insert charts showing example agent's median rewards vs classification vs regression**. 
+
+
+Forcing the agent to make decisions using only classification/regression results in moderately and significantly worse performance, respectively. Keep in mind that these example data come from a well-trained **3x3 agent with 9 features**. Performance of regression/classification would probably be comparatively dreadful if we had trained from a Q table that had been updated so sparsely as to encounter unknown observations frequently, as would be the case for larger vision radii. 
+
+In short, only classification worked as a passable substitute for the Q table, and even then it only worked in those cases where training was mature enough for classification to no longer be necessary. 
+
+
+
+

@@ -4,7 +4,10 @@ from Q.Oktett_Training import q_train_from_games_jakob
 
 import os
 
+os.chdir(os.path.dirname(__file__))
+
 from agent_code.observation_object import ObservationObject
+from evaluation_environment import EvaluationEnvironment
 
 
 def main():
@@ -34,8 +37,12 @@ def main():
 
     KNOWN, Q = q_train_from_games_jakob(cwd + "/" + 'data/games/four_players_esa_0_2_cratedens_0_75',
                                         write_path,
-                                        obs, a=0.8, g=0.7, save_every_n_files=5)
+                                        obs, a=0.5, g=0.7, save_every_n_files=5, stop_after_n_files=200)
 
+    env = EvaluationEnvironment(["testing_only"], write_path + "/evaluations" )
+    env.run_trials(add_folder=True)
+    env.analyze_games()
 
 if __name__ == '__main__':
-    main()
+    while True:
+        main()

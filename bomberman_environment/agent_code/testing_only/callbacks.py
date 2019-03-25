@@ -33,10 +33,11 @@ def setup(self):
 
     self.clf = None
 
-    # with open("data/qtables/" + self.obs_object.get_file_name_string() + "/dt.p", "rb") as f:
-    #     self.clf = pickle.load(f)  # FIXME load regression model
+    with open("data/qtables/" + self.obs_object.get_file_name_string() + "/3.dt.p", "rb") as f:
+        self.clf = pickle.load(f)  # FIXME load regression model
+        self.CLASSIFIER = True  #  Indicates whether we are using a classifier or a regressor
 
-    self.FORCE_REGRESSION = False  # FIXME
+    self.FORCE_REGRESSION = True  # FIXME
 
     self.logger.debug("Called setup")
     # Used for plotting
@@ -114,44 +115,48 @@ def act(self):
             (self.obs_object.window_size, self.obs_object.window_size)).T))
         self.logger.debug("Features: " + str(observation[self.obs_object.window_size**2:]))
         self.logger.debug(str(('LEFT', 'RIGHT', 'UP', 'DOWN', 'WAIT', 'BOMB')))
-        self.last_action_ind = 4
+        self.last_action_ind = np.random.randint(0, 6)
         best_action_score = -10000
-        print("UNKNOWN OBSERVATION")
-        # for i in range(6):
-        #     try_obs = np.append(np.copy(observation), i)
-        #     try_obs = try_obs[np.newaxis, :]
-        #     value = self.clf.predict(try_obs)
-        #
-        #     print("Action score for", i, value)
-        #
-        #     if value >= best_action_score:
-        #         best_action_score = value
-        #         self.last_action_ind = i
-        try_obs = np.copy(observation)[np.newaxis, :]
-        self.last_action_ind = self.clf.predict(try_obs)[0]
+        if not self.CLASSIFIER:
+            print("Using regression")
+            for i in range(6):
+                try_obs = np.append(np.copy(observation), i)
+                try_obs = try_obs[np.newaxis, :]
+                value = self.clf.predict(try_obs)
+
+                print("Action score for", i, value)
+
+                if value >= best_action_score:
+                    best_action_score = value
+                    self.last_action_ind = i
+        else:
+            print("Using classification")
+            try_obs = np.copy(observation)[np.newaxis, :]
+            self.last_action_ind = self.clf.predict(try_obs)[0]
         print("Chose action", self.last_action_ind)
 
-    # Deadlock detection:
-    self.last_visited = np.append(self.last_visited, np.array([[x, y]]), axis=0)
-    if (self.last_visited[-1] == self.last_visited[-3]).all() and (
-            self.last_visited[-2] == self.last_visited[-4]).all() \
-            and (self.last_visited[-1] != self.last_visited[-2]).all():
+    if not self.FORCE_REGRESSION:
+        # Deadlock detection:
+        self.last_visited = np.append(self.last_visited, np.array([[x, y]]), axis=0)
+        if (self.last_visited[-1] == self.last_visited[-3]).all() and (
+                self.last_visited[-2] == self.last_visited[-4]).all() \
+                and (self.last_visited[-1] != self.last_visited[-2]).all():
 
-        # Case: Q Table has entry for observation
-        if observation_ind.shape[0] != 0:
-            self.logger.info("DEADLOCK DETECTED. DO " + str(self.repeated_deadlock) + " BEST ALTERNATIVE NOW")
-            print("DEADLOCK DETECTED. DO " + str(self.repeated_deadlock) + " BEST ALTERNATIVE NOW")
-            alternatives = np.argsort(self.q_table[observation_ind[0]])
-            self.last_action_ind = alternatives[-np.min(np.array([self.repeated_deadlock, 3]))]
+            # Case: Q Table has entry for observation
+            if observation_ind.shape[0] != 0:
+                self.logger.info("DEADLOCK DETECTED. DO " + str(self.repeated_deadlock) + " BEST ALTERNATIVE NOW")
+                print("DEADLOCK DETECTED. DO " + str(self.repeated_deadlock) + " BEST ALTERNATIVE NOW")
+                alternatives = np.argsort(self.q_table[observation_ind[0]])
+                self.last_action_ind = alternatives[-np.min(np.array([self.repeated_deadlock, 3]))]
 
-        # Case: No Q Table entry, so random action is chosen
+            # Case: No Q Table entry, so random action is chosen
+            else:
+                self.last_action_ind = np.random.choice(np.array([[0, 1, 2, 3]]))
+            self.repeated_deadlock += 1
+
+        # Case: No deadlock -> reset
         else:
-            self.last_action_ind = np.random.choice(np.array([[0, 1, 2, 3]]))
-        self.repeated_deadlock += 1
-
-    # Case: No deadlock -> reset
-    else:
-        self.repeated_deadlock = 1
+            self.repeated_deadlock = 1
 
     self.next_action = ['LEFT', 'RIGHT', 'UP', 'DOWN', 'WAIT', 'BOMB'][self.last_action_ind]
     self.logger.info("Next action: " + self.next_action)

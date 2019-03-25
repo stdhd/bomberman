@@ -3,6 +3,10 @@
 
 3. Experimental results and observations
 
+The following discussion will focus on the training approach using stored data. For most of this project's lifetime, it was assumed that this was a viable way forward and would form the basis for our final submission. Due to complications that arose in the course of developing a framework that would allow our Q tables to generate their own training data (described in **b**) and the resultant time shortages, we eventually abandoned this approach and opted instead for a simpler implementation that used the rewarding framework provided by the game's code (see **merged agent**). 
+
+However, because this approach generated useful insights and data as well as working solutions and was conceptionally very similar to the training program with which we developed our final submission, we chose to use its outputs to create the graphs and statistics for this chapter. 
+
 
 a) Training time
 
@@ -14,7 +18,6 @@ Both the time taken to save a game and the time taken to train from a stored fil
 
 
 **Hier in dieser Reihenfolge nebeneinander aufgereiht: r0qtablecurve, r1qtablecurve, r3qtablecurve **
-
 
 
 The length of the Q Table in relation to the number of game steps trained with grows in an approximately square-root fashion, eventually converging to the maximum (finite) number of different states encounterable. During training, it became evident that the size of the vision field made a massive difference in the convergence of the Q Table. Setting the radius to 3, combined with 5 binary features and 2 directional features, meant that even with less than 10 percent of the training data, **(5e5 5e4 6.5e4 6e5)** the Q Table already reached the eightfold size of a Q Table with vision radius 1 and an additional binary and directional feature, growing in length in an almost perfectly linear fashion, with no sign of slowing growth.

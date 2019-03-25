@@ -42,9 +42,9 @@ class EvaluationEnvironment:
 
     def analyze_games(self, destroy_data:bool=False, print_steps_trained_with=None):
         """
-        Analyze all games in a directory and save a new .json summary file there.
+        Analyze all games in self.save_directory and save a new .json summary file there.
         :param destroy_data: If True, delete games after analysis
-        :param print_steps_trained_with: If not None, print the current number of steps the model has trained with.
+        :param print_steps_trained_with: If not None, print the current number of steps the model under this filepath has trained with.
         :return: event_count_by_game, game_durations, events_path, durations_path
         """
         files = [f for f in listdir(self.save_directory) if isfile(join(self.save_directory, f))]
@@ -95,7 +95,6 @@ class EvaluationEnvironment:
 
         print("Wrote game info to", events_path, "and", durations_path)
 
-
         if destroy_data:  # remove files from disk
             print("Removing game data")
             for file in files:
@@ -118,6 +117,7 @@ class EvaluationEnvironment:
 
                 return steps[-1]
         raise RuntimeError("progress.json not found")
+
 
     def get_rewards_progress(self, evaluation_folder:str):
         """
@@ -151,7 +151,11 @@ class EvaluationEnvironment:
 
             ret.append(np.array([steps_trained, median_durations, median_rewards]))
 
-        return np.array(ret)
+        ret = np.array(ret)
+
+        sort = np.argsort(ret[:, 0])
+
+        return ret[sort]
 
 
 
